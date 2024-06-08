@@ -20,3 +20,25 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.text-primary {
+  color: #e60000 !important;
+}
+
+.bg-primary {
+  background-color: #e60000 !important;
+}
+
+.bg-secondary {
+  background-color: #F8F9FA !important;
+}
+
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
