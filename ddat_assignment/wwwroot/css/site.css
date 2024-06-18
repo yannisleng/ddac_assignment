@@ -20,3 +20,24 @@ body {
     src: url(./Inter-VariableFont_slnt,wght.ttf);
 }
 
+body {
+  background-color: #F8F9FA !important;
+}
+
+.text-primary {
+  color: #e60000 !important;
+}
+
+.bg-primary, .btn-primary {
+    background-color: #e60000 !important;
+    border: none !important;
+}
+
+.bg-secondary {
+  background-color: #F8F9FA !important;;
+}
+
+.delivery-img {
+    max-width: 500px;
+    max-height: 500px;
+}
