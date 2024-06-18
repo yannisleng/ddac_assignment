@@ -17,6 +17,18 @@ public class ddat_assignmentContext : IdentityDbContext<ddat_assignmentUser>
 
     public DbSet<ParcelModel> ParcelModel { get; set; }
 
+    public DbSet<DriverModel> DriverModel { get; set; }
+
+    public DbSet<UserDetailsModel> UserDetailsModel { get; set; }
+
+    public DbSet<ShipmentSlotModel> ShipmentSlotModel { get; set; }
+
+    public DbSet<ShipmentModel> ShipmentModel { get; set; }
+
+    public DbSet<PaymentModel> PaymentModel { get; set; }
+
+    public DbSet<TransitionModel> TransitionModel { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
