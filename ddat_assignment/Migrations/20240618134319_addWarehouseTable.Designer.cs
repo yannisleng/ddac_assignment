@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ddat_assignment.Data;
 
@@ -11,9 +12,11 @@ using ddat_assignment.Data;
 namespace ddat_assignment.Migrations
 {
     [DbContext(typeof(ddat_assignmentContext))]
-    partial class ddat_assignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20240618134319_addWarehouseTable")]
+    partial class addWarehouseTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,29 +225,6 @@ namespace ddat_assignment.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.ParcelModel", b =>
-                {
-                    b.Property<int>("ParcelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParcelId"));
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ParcelId");
-
-                    b.ToTable("ParcelModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.WarehouseModel", b =>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ddat_assignment.Models;
 
 namespace ddat_assignment.Data;
 
@@ -11,6 +12,10 @@ public class ddat_assignmentContext : IdentityDbContext<ddat_assignmentUser>
         : base(options)
     {
     }
+
+    public DbSet<WarehouseModel> WarehouseModel { get; set; }
+
+    public DbSet<ParcelModel> ParcelModel { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
