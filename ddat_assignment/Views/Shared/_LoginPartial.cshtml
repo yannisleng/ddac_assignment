@@ -4,18 +4,18 @@
 @inject SignInManager<ddat_assignmentUser> SignInManager
 @inject UserManager<ddat_assignmentUser> UserManager
 
-<ul class="navbar-nav">
+<ul class="flex justify-between">
 @if (SignInManager.IsSignedIn(User))
 {
     @* <li class="nav-item">
         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
     </li> *@
-    <li class="nav-item">
-            <a id="profile" class="nav-link text-white">PROFILE</a>
+    <li>
+            <a id="profile" class="cursor-pointer hover:opacity-90">PROFILE</a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">LOGOUT</button>
+                <button id="logout" type="submit" class="border-0 ml-7 cursor-pointer hover:opacity-90">LOGOUT</button>
         </form>
     </li>
 }
@@ -24,8 +24,8 @@ else
     @* <li class="nav-item">
         <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li> *@
-    <li class="nav-item">
-        <a class="nav-link text-white" id="login" asp-area="Identity" asp-page="/Account/Login">LOGIN</a>
+    <li>
+          <a class="cursor-pointer hover:opacity-90" id="login" asp-area="Identity" asp-page="/Account/Login">LOGIN</a>
     </li>
 }
 </ul>
