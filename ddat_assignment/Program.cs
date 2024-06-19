@@ -65,6 +65,7 @@ public class Program
                 var user = new ddat_assignmentUser();
                 user.UserName = email;
                 user.Email = email;
+                user.Role = "Warehouse";
 
                 await userManager.CreateAsync(user, password);
 
