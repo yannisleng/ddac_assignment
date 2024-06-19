@@ -17,64 +17,57 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3 bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">OK Boss Express</a>
-                <div class="d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-white">SHIPMENT</a>
+        <nav class="bg-primary flex justify-between items-center text-white h-16 px-10">
+                <div class="flex">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="cursor-pointer hover:opacity-90">OK Boss Express</a>
+                    <ul class="flex justify-between ml-10">
+                    <li>
+                        <a class="cursor-pointer hover:opacity-90 hidden sm:block">SHIPMENT</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white">JOIN US</a>
+                    <li class="ml-7">
+                        <a class="cursor-pointer hover:opacity-90 hidden sm:block">JOIN US</a>
                         </li>
-                        @if (User.IsInRole("Warehouse"))
+                        @* @if (User.IsInRole("Warehouse"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-white">TESTING</a>
+                            <li>
+                            <a class="ml-7 cursor-pointer hover:opacity-90">TESTING</a>
                             </li>
-                        }
+                        } *@
                         @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li> *@
                     </ul>
-                    <partial name="_LoginPartial" />
                 </div>
-            </div>
+                <partial name="_LoginPartial" />    
         </nav>
     </header>
-    <div class="container">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="text-muted h-50 bg-white py-3">
-         <div class="container">
-            <div class="row mb-5">
-                <div class="col-md-4">
-                    <h4 class="mb-4">About</h4>
-                    <div class="footer-content">
+    <main class="min-h-screen">@RenderBody()</main>
+    <footer class="min-h-[55vh] bg-white py-3 flex flex-col">
+         <div>
+            <div class="flex flex-col lg:flex-row justify-around m-10">
+                <div>
+                    <h4 class="mb-4 font-bold text-lg lg:mt-0">About</h4>
+                    <div class="footer-content text-slate-500">
                         Ok Boss Express is your trusted partner in fast, reliable, and efficient delivery services,
                         ensuring your shipments arrive on time, every time, with a boss-level commitment to excellence.
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <h4 class="mb-4">Useful Links</h4>
-                    <div class="d-flex flex-column">
-                        <a href="/shipment" class="text-decoration-none text-muted mb-3">Shipment</a>
-                        <a href="/join-us" class="text-decoration-none text-muted mb-3">Join Us</a>
+                <div">
+                    <h4 class="mb-4 font-bold text-lg mt-7 lg:mt-0">Useful Links</h4>
+                    <div class="flex flex-col text-slate-500">
+                        <a href="/shipment" class="text-decoration-none text-muted mb-3 hover:opacity-90">Shipment</a>
+                        <a href="/join-us" class="text-decoration-none text-muted mb-3 hover:opacity-90">Join Us</a>
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <h4 class="mb-4">Contact</h4>
-                    <div class="footer-content mb-3">
+                <div>
+                <h4 class="mb-4 font-bold text-lg mt-7 lg:mt-0">Contact</h4>
+                <div class="footer-content mb-4 text-slate-500">
                         Asia Pacific University of Technology & Innovation (APU)<br />
                         Jalan Teknologi 5, Taman Teknologi Malaysia,<br />
                         57000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur
                     </div>
-                    <a href="mailto:info@apu.edu.my" class="text-decoration-none text-muted">
+                    <a href="mailto:info@apu.edu.my" class="flex text-decoration-none text-muted items-center font-light">
                         <svg t="1717820983620" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4301" 
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
                         <path d="M838.954667 234.666667H170.666667c-3.626667 0-7.168 0.448-10.56 1.322666l323.690666 323.669334a21.333333 21.333333 0 0 0 
@@ -86,9 +79,9 @@
                                  0 0 1-85.333334 85.333333H170.666667a85.333333 85.333333 0 0 1-85.333334-85.333333V277.333333a85.333333 85.333333 0 0 1 
                                  85.333334-85.333333z" fill="#6C747D" p-id="4302">
                         </path></svg>
-                        &nbsp;info@apu.edu.my
-                    </a><br />
-                    <a href="tel:03-8996 1000" class="text-decoration-none text-muted">
+                        &nbsp;&nbsp;&nbsp;info@apu.edu.my
+                    </a>
+                    <a href="tel:03-8996 1000" class="flex text-decoration-none text-muted items-center mt-2 font-light hover:text-secondary">
                         <svg t="1717821131832" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5917" 
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
                         <path d="M448 917.376C448 917.333333 576 917.333333 576 917.333333c0.085333 0 0-42.709333 0-42.709333C576 874.666667 448 874.666667 
@@ -104,13 +97,12 @@
                                  200.682666-135.424zM85.333333 554.666667c0.298667 133.589333 128 148.949333 128 148.949333V406.144s-128.298667 14.933333-128 
                                  148.522667z m853.333334 0c0.298667-133.589333-128-148.522667-128-148.522667v297.472s127.701333-15.36 128-148.949333z" 
                                  fill="#6C747D" p-id="5918"></path></svg>
-                        &nbsp;03-8996 1000
+                        &nbsp;&nbsp;&nbsp;03-8996 1000
                     </a>
                 </div>
             </div>
             <hr />
-            <h6>© 2024 OK Boss Express. All rights reserved.</h6>
-        </div>
+            <h6 class="ml-10 mt-3 font-light">© 2024 OK Boss Express. All rights reserved.</h6>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
