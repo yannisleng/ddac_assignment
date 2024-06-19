@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ddat_assignment.Data;
 
@@ -11,9 +12,11 @@ using ddat_assignment.Data;
 namespace ddat_assignment.Migrations
 {
     [DbContext(typeof(ddat_assignmentContext))]
-    partial class ddat_assignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20240618150739_updateParcelModel")]
+    partial class updateParcelModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,14 +182,17 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("IdentityCardNumber")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -214,6 +220,7 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Role")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -240,42 +247,6 @@ namespace ddat_assignment.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ddat_assignment.Models.DriverModel", b =>
-                {
-                    b.Property<int>("DriverId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DriverId"));
-
-                    b.Property<string>("LicenseId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<byte[]>("LicenseImage")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("VehiclePlateNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("VehicleType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("DriverId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DriverModel");
-                });
-
             modelBuilder.Entity("ddat_assignment.Models.ParcelModel", b =>
                 {
                     b.Property<int>("ParcelId")
@@ -299,188 +270,6 @@ namespace ddat_assignment.Migrations
                     b.HasKey("ParcelId");
 
                     b.ToTable("ParcelModel");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.PaymentModel", b =>
-                {
-                    b.Property<int>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentMethod")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PaymentStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("ShipmentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PaymentId");
-
-                    b.HasIndex("ShipmentId");
-
-                    b.ToTable("PaymentModel");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.ShipmentModel", b =>
-                {
-                    b.Property<int>("ShipmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipmentId"));
-
-                    b.Property<decimal?>("Cost")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<string>("DeliveryAddress")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("DeliveryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PickupAddress")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<byte[]>("ProofOfDelivery")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReceiverId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SenderId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ShipmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ShipmentSlotId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShipmentStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ShipmentId");
-
-                    b.HasIndex("DriverId");
-
-                    b.HasIndex("ReceiverId1");
-
-                    b.HasIndex("SenderId1");
-
-                    b.HasIndex("ShipmentSlotId");
-
-                    b.ToTable("ShipmentModel");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.ShipmentSlotModel", b =>
-                {
-                    b.Property<int>("ShipmentSlotId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipmentSlotId"));
-
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ShipmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SlotTime")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ShipmentSlotId");
-
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("ShipmentSlotModel");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.TransitionModel", b =>
-                {
-                    b.Property<int>("TransitionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransitionId"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("ShipmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("TransitionId");
-
-                    b.HasIndex("ShipmentId");
-
-                    b.ToTable("TransitionModel");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.UserDetailsModel", b =>
-                {
-                    b.Property<int>("UserDetailsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserDetailsId"));
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserDetailsId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("UserDetailsModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.WarehouseModel", b =>
@@ -553,84 +342,6 @@ namespace ddat_assignment.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.DriverModel", b =>
-                {
-                    b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.PaymentModel", b =>
-                {
-                    b.HasOne("ddat_assignment.Models.ShipmentModel", "Shipment")
-                        .WithMany()
-                        .HasForeignKey("ShipmentId");
-
-                    b.Navigation("Shipment");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.ShipmentModel", b =>
-                {
-                    b.HasOne("ddat_assignment.Models.DriverModel", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId1");
-
-                    b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId1");
-
-                    b.HasOne("ddat_assignment.Models.ShipmentSlotModel", "ShipmentSlot")
-                        .WithMany()
-                        .HasForeignKey("ShipmentSlotId");
-
-                    b.Navigation("Driver");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-
-                    b.Navigation("ShipmentSlot");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.ShipmentSlotModel", b =>
-                {
-                    b.HasOne("ddat_assignment.Models.DriverModel", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Driver");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.TransitionModel", b =>
-                {
-                    b.HasOne("ddat_assignment.Models.ShipmentModel", "Shipment")
-                        .WithMany()
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shipment");
-                });
-
-            modelBuilder.Entity("ddat_assignment.Models.UserDetailsModel", b =>
-                {
-                    b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
