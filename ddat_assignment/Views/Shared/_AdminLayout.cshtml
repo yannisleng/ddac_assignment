@@ -12,12 +12,12 @@
 <body>
     <div class="flex flex-row h-screen max-h-screen">
         <partial name="_AdminSidebar" />
-        <main role="main" class="p-8 xl:w-4/5 w-3/4 h-full">
+        <main role="main" class="p-8 xl:w-4/5 w-3/4 h-full max-h-screen overflow-hidden">
             @RenderBody()
         </main>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @* <script src="~/js/admin_sidebar.js" asp-append-version="true"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
