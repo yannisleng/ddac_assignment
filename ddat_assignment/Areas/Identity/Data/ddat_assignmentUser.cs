@@ -28,6 +28,14 @@ public class ddat_assignmentUser : IdentityUser
     public string ? IdentityCardNumber { get; set; }
 
     [PersonalData]
+    [StringLength(10)]
+    public string ? Gender { get; set; }
+
+    [PersonalData]
+    [DataType(DataType.Date)]
+    public DateTime ? DateOfBirth { get; set; }
+
+    [PersonalData]
     [StringLength(20)]
     public string ? Role { get; set; }
 }

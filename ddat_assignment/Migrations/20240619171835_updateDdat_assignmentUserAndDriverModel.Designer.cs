@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ddat_assignment.Data;
 
@@ -11,9 +12,11 @@ using ddat_assignment.Data;
 namespace ddat_assignment.Migrations
 {
     [DbContext(typeof(ddat_assignmentContext))]
-    partial class ddat_assignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20240619171835_updateDdat_assignmentUserAndDriverModel")]
+    partial class updateDdat_assignmentUserAndDriverModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,20 +316,15 @@ namespace ddat_assignment.Migrations
 
             modelBuilder.Entity("ddat_assignment.Models.ParcelModel", b =>
                 {
-                    b.Property<Guid>("ParcelId")
+                    b.Property<int>("ParcelId")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<string>("GoodsName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ParcelId"));
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Value")
                         .HasPrecision(10, 2)
@@ -354,7 +352,6 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("PaymentDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
@@ -365,8 +362,8 @@ namespace ddat_assignment.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("ShipmentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("ShipmentId")
+                        .HasColumnType("int");
 
                     b.HasKey("PaymentId");
 
@@ -377,10 +374,11 @@ namespace ddat_assignment.Migrations
 
             modelBuilder.Entity("ddat_assignment.Models.ShipmentModel", b =>
                 {
-                    b.Property<Guid>("ShipmentId")
+                    b.Property<int>("ShipmentId")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipmentId"));
 
                     b.Property<decimal?>("Cost")
                         .HasPrecision(5, 2)
@@ -394,11 +392,8 @@ namespace ddat_assignment.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DriverId")
+                    b.Property<int>("DriverId")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("ParcelId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PickupAddress")
                         .IsRequired()
@@ -408,40 +403,23 @@ namespace ddat_assignment.Migrations
                     b.Property<byte[]>("ProofOfDelivery")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("ReceiverId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
                     b.Property<string>("ReceiverId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ReceiverName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("ReceiverPhoneNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<int?>("SenderId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("int");
 
                     b.Property<string>("SenderId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SenderName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("SenderPhoneNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
                     b.Property<DateTime>("ShipmentDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ShipmentSlotId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("ShipmentSlotId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ShipmentStatus")
                         .IsRequired()
@@ -451,8 +429,6 @@ namespace ddat_assignment.Migrations
                     b.HasKey("ShipmentId");
 
                     b.HasIndex("DriverId");
-
-                    b.HasIndex("ParcelId");
 
                     b.HasIndex("ReceiverId1");
 
@@ -465,19 +441,20 @@ namespace ddat_assignment.Migrations
 
             modelBuilder.Entity("ddat_assignment.Models.ShipmentSlotModel", b =>
                 {
-                    b.Property<Guid>("ShipmentSlotId")
+                    b.Property<int>("ShipmentSlotId")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ShipmentDate")
-                        .ValueGeneratedOnAdd()
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipmentSlotId"));
+
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ShipmentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SlotTime")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -490,18 +467,19 @@ namespace ddat_assignment.Migrations
 
             modelBuilder.Entity("ddat_assignment.Models.TransitionModel", b =>
                 {
-                    b.Property<Guid>("TransitionId")
+                    b.Property<int>("TransitionId")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransitionId"));
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid>("ShipmentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -509,7 +487,6 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.HasKey("TransitionId");
@@ -636,11 +613,9 @@ namespace ddat_assignment.Migrations
                 {
                     b.HasOne("ddat_assignment.Models.DriverModel", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId");
-
-                    b.HasOne("ddat_assignment.Models.ParcelModel", "Parcel")
-                        .WithMany()
-                        .HasForeignKey("ParcelId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "Receiver")
                         .WithMany()
@@ -656,8 +631,6 @@ namespace ddat_assignment.Migrations
 
                     b.Navigation("Driver");
 
-                    b.Navigation("Parcel");
-
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
@@ -669,7 +642,9 @@ namespace ddat_assignment.Migrations
                 {
                     b.HasOne("ddat_assignment.Models.DriverModel", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Driver");
                 });

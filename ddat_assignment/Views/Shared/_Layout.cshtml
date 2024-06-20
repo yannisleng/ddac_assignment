@@ -26,7 +26,7 @@
                         <a class="cursor-pointer hover:opacity-90 hidden sm:block">SHIPMENT</a>
                         </li>
                     <li class="ml-7">
-                        <a class="cursor-pointer hover:opacity-90 hidden sm:block">JOIN US</a>
+                        <a class="cursor-pointer hover:opacity-90 hidden sm:block" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN US</a>
                         </li>
                         @* @if (User.IsInRole("Warehouse"))
                         {
@@ -106,6 +106,7 @@
             <h6 class="ml-10 mt-3 font-light">© 2024 OK Boss Express. All rights reserved.</h6>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
