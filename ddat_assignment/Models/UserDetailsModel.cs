@@ -13,7 +13,7 @@ namespace ddat_assignment.Models
         public string? Address { get; set; }
 
         [ForeignKey("ddat_assignmentUser")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public virtual ddat_assignmentUser User { get; set; }
     }

@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ddat_assignment.Models;
+using ddat_assignment.Data;
 
 namespace ddat_assignment.Areas.Identity.Pages.Account
 {
@@ -30,13 +32,18 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ddat_assignmentUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ddat_assignmentContext _context;
+
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 5;
 
         public RegisterModel(
             UserManager<ddat_assignmentUser> userManager,
             IUserStore<ddat_assignmentUser> userStore,
             SignInManager<ddat_assignmentUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ddat_assignmentContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +51,7 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -115,42 +123,92 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
+                if (CurrentPage == 1)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    user.FirstName = "John";
+                    user.LastName = "Doe";
+                    user.Gender = "Male";
+                    user.DateOfBirth = DateTime.Now;
+                    user.Role = "Driver";
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    CurrentPage++;
+                    return RedirectToPage("/Account/Register", new { page = CurrentPage });
+                }
+                else if (CurrentPage == 2)
+                {
+                    user.IdentityCardNumber = "1234567890";
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    CurrentPage++;
+                    return RedirectToPage("/Account/Register", new { page = CurrentPage });
+                }
+                else if (CurrentPage == 3)
+                {
+                    await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                    await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                    var result = await _userManager.CreateAsync(user, Input.Password);
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    if (result.Succeeded)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        await _userManager.UpdateAsync(user);
+
+                        var userDetails = new UserDetailsModel
+                        {
+                            Address = "123 Main St, Anytown, USA",
+                            UserId = user.Id,
+                            User = user
+                        };
+
+                        var driver = new DriverModel
+                        {
+                            LicenseId = "DL123456", // Sample license ID
+                            DrivingLicenseType = "Class C", // Sample driving license type
+                            DrivingLicenseExpiryDate = DateTime.Today.AddYears(5), // Sample expiry date
+                            VehicleType = "SUV", // Sample vehicle type
+                            VehiclePlateNumber = "ABC1234", // Sample vehicle plate number
+                            StartDate = DateTime.Today.AddDays(7), // Sample start date
+                            PreferredWorkingDay = "Monday", // Sample preferred working day
+                            PreferredWorkingLocation = "City Center", // Sample preferred working location
+                            EmergencyContactName = "Jane Doe", // Sample emergency contact name
+                            EmergencyContactPhone = "123-456-7890", // Sample emergency contact phone number
+                            EmergencyContactRelationship = "Spouse", // Sample emergency contact relationship
+                            User = user
+                        };
+
+                        // Save UserDetailsModel and DriverModel to database
+                        _context.UserDetailsModel.Add(userDetails);
+                        _context.DriverModel.Add(driver);
+                        await _context.SaveChangesAsync();
+
+                        _logger.LogInformation("User created a new account with password.");
+
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    else
+                    foreach (var error in result.Errors)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-
+             }
             // If we got this far, something failed, redisplay form
             return Page();
         }
