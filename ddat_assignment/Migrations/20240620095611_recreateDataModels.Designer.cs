@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ddat_assignment.Data;
 
@@ -11,9 +12,11 @@ using ddat_assignment.Data;
 namespace ddat_assignment.Migrations
 {
     [DbContext(typeof(ddat_assignmentContext))]
-    partial class ddat_assignmentContextModelSnapshot : ModelSnapshot
+    [Migration("20240620095611_recreateDataModels")]
+    partial class recreateDataModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,7 +276,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("DriverModel", (string)null);
+                    b.ToTable("DriverModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.ParcelModel", b =>
@@ -298,7 +301,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasKey("ParcelId");
 
-                    b.ToTable("ParcelModel", (string)null);
+                    b.ToTable("ParcelModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.PaymentModel", b =>
@@ -314,7 +317,6 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("PaymentDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
@@ -332,7 +334,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasIndex("ShipmentId");
 
-                    b.ToTable("PaymentModel", (string)null);
+                    b.ToTable("PaymentModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.ShipmentModel", b =>
@@ -397,7 +399,6 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<DateTime>("ShipmentDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ShipmentSlotId")
@@ -420,7 +421,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasIndex("ShipmentSlotId");
 
-                    b.ToTable("ShipmentModel", (string)null);
+                    b.ToTable("ShipmentModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.ShipmentSlotModel", b =>
@@ -433,8 +434,7 @@ namespace ddat_assignment.Migrations
                     b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ShipmentDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("ShipmentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SlotTime")
@@ -445,7 +445,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.ToTable("ShipmentSlotModel", (string)null);
+                    b.ToTable("ShipmentSlotModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.TransitionModel", b =>
@@ -469,14 +469,13 @@ namespace ddat_assignment.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.HasKey("TransitionId");
 
                     b.HasIndex("ShipmentId");
 
-                    b.ToTable("TransitionModel", (string)null);
+                    b.ToTable("TransitionModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.UserDetailsModel", b =>
@@ -501,7 +500,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("UserDetailsModel", (string)null);
+                    b.ToTable("UserDetailsModel");
                 });
 
             modelBuilder.Entity("ddat_assignment.Models.WarehouseModel", b =>
@@ -522,7 +521,7 @@ namespace ddat_assignment.Migrations
 
                     b.HasKey("WarehouseId");
 
-                    b.ToTable("WarehouseModel", (string)null);
+                    b.ToTable("WarehouseModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

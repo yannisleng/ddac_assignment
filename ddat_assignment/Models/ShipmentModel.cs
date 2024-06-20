@@ -7,29 +7,42 @@ namespace ddat_assignment.Models
 {
     public class ShipmentModel
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int ShipmentId { get; set; }
+        [StringLength(50)]
+        public Guid ShipmentId { get; set; }
+
 
         [ForeignKey("DriverModel")]
-        public int DriverId { get; set; }
+        public int? DriverId { get; set; }
 
-        public virtual DriverModel Driver { get; set; }
+        public virtual DriverModel? Driver { get; set; }
 
-        [ForeignKey("ddat_assignmentUser")]
-        public int ? SenderId { get; set; }
-        
-        [StringLength(100)]
-        public string ? SenderName { get; set; }
-
-        public virtual ddat_assignmentUser ? Sender { get; set; }
+        [ForeignKey("ParcelModel")]
+        public Guid ? ParcelId { get; set; }
+        public virtual ParcelModel? Parcel { get; set; }
 
         [ForeignKey("ddat_assignmentUser")]
-        public int ? ReceiverId { get; set; }
-        
-        [StringLength(100)]
-        public string ? ReceiverName { get; set; }
+        public int? SenderId { get; set; }
 
-        public virtual ddat_assignmentUser ? Receiver { get; set; }
+        [StringLength(100)]
+        public string? SenderName { get; set; }
+
+        [StringLength(15)]
+        public string? SenderPhoneNumber { get; set; }
+
+        public virtual ddat_assignmentUser? Sender { get; set; }
+
+        [ForeignKey("ddat_assignmentUser")]
+        public int? ReceiverId { get; set; }
+
+        [StringLength(100)]
+        public string? ReceiverName { get; set; }
+
+        [StringLength(15)]
+        public string? ReceiverPhoneNumber { get; set; }
+
+        public virtual ddat_assignmentUser? Receiver { get; set; }
 
         [StringLength(255)]
         public string PickupAddress { get; set; }
@@ -40,18 +53,19 @@ namespace ddat_assignment.Models
         [StringLength(50)]
         public string ShipmentStatus { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime ShipmentDate { get; set; }
 
         public DateTime? DeliveryDate { get; set; }
-        
-        public byte[] ? ProofOfDelivery { get; set; }
+
+        public byte[]? ProofOfDelivery { get; set; }
 
         [Precision(5, 2)]
-        public decimal ? Cost { get; set; }
+        public decimal? Cost { get; set; }
 
         [ForeignKey("ShipmentSlotModel")]
-        public int ? ShipmentSlotId { get; set; }
+        public Guid ? ShipmentSlotId { get; set; }
 
-        public virtual ShipmentSlotModel ? ShipmentSlot { get; set; }
+        public virtual ShipmentSlotModel? ShipmentSlot { get; set; }
     }
 }

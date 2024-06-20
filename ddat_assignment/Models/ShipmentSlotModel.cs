@@ -6,16 +6,18 @@ namespace ddat_assignment.Models
     public class ShipmentSlotModel
     {
         [Key]
-        public int ShipmentSlotId { get; set; }
+        [StringLength(50)]
+        public Guid ShipmentSlotId { get; set; }
 
-        public DateTime ShipmentDate { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime ? ShipmentDate { get; set; }
 
         [StringLength(50)]
-        public string SlotTime { get; set; }
+        public string? SlotTime { get; set; }
 
         [ForeignKey("DriverModel")]
-        public int DriverId { get; set; }
+        public int? DriverId { get; set; }
 
-        public virtual DriverModel Driver { get; set; }
+        public virtual DriverModel? Driver { get; set; }
     }
 }
