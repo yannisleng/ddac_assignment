@@ -16,14 +16,20 @@ namespace ddat_assignment.Models
         public virtual DriverModel Driver { get; set; }
 
         [ForeignKey("ddat_assignmentUser")]
-        public int SenderId { get; set; }
+        public int ? SenderId { get; set; }
+        
+        [StringLength(100)]
+        public string ? SenderName { get; set; }
 
-        public virtual ddat_assignmentUser Sender { get; set; }
+        public virtual ddat_assignmentUser ? Sender { get; set; }
 
         [ForeignKey("ddat_assignmentUser")]
-        public int ReceiverId { get; set; }
+        public int ? ReceiverId { get; set; }
+        
+        [StringLength(100)]
+        public string ? ReceiverName { get; set; }
 
-        public virtual ddat_assignmentUser Receiver { get; set; }
+        public virtual ddat_assignmentUser ? Receiver { get; set; }
 
         [StringLength(255)]
         public string PickupAddress { get; set; }
