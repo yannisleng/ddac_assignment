@@ -11,6 +11,9 @@ namespace ddat_assignment.Models
         [StringLength(50)]
         public Guid ParcelId { get; set; }
 
+        [StringLength(255)]
+        public string GoodsName { get; set; }
+
         [Precision(5, 2)]
         public decimal Weight { get; set; }
         [Precision(10, 2)]
