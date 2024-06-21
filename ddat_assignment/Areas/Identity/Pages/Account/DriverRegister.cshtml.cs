@@ -212,10 +212,11 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, "admin@123A");
+                var result = await _userManager.CreateAsync(user, Input.PhoneNumber + "@Ok");
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Driver");
                     await _userManager.UpdateAsync(user);
 
                     var userDetails = new UserDetailsModel
@@ -246,7 +247,7 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
                     _context.DriverModel.Add(driver);
                     await _context.SaveChangesAsync();
 
-                    SuccessMessage = "Registered as OK Boss's driver successfully!";
+                    SuccessMessage = "Registered as OK Boss's driver successfully! Your default password is your phone number + @Ok";
 
                     //_logger.LogInformation("User created a new account with password.");
 
