@@ -11,7 +11,12 @@ namespace ddat_assignment.Controllers
             return View();
         }
 
-        public IActionResult Dashboard()
+        public IActionResult Workspace()
+        {
+            return View();
+        }
+
+        public IActionResult StandardShipping()
         {
             return View();
         }

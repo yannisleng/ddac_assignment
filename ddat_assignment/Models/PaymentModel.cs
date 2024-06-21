@@ -10,19 +10,20 @@ namespace ddat_assignment.Models
         public int PaymentId { get; set; }
 
         [ForeignKey("ShipmentModel")]
-        public int ? ShipmentId { get; set; }
+        public Guid ? ShipmentId { get; set; }
 
-        public virtual ShipmentModel ? Shipment { get; set; }
+        public virtual ShipmentModel? Shipment { get; set; }
 
         [Precision(10, 2)]
         public decimal Amount { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime PaymentDate { get; set; }
 
         [StringLength(50)]
-        public string ? PaymentStatus { get; set; }
+        public string? PaymentStatus { get; set; }
 
         [StringLength(50)]
-        public string ? PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
     }
 }
