@@ -54,6 +54,31 @@ namespace ddat_assignment.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Shipment()
+        {
+            string searchQuery = Request.Query["searchQuery"]!;
+            Guid searchQueryUuid;
+            try
+            {
+                searchQueryUuid = Guid.Parse(searchQuery);
+            }
+            catch (Exception)
+            {
+                ViewData["error"] = "Invalid Shipment ID!";
+                return View();
+            }
+            ShipmentModel shipment = await _context.ShipmentModel.FirstOrDefaultAsync(s => s.ShipmentId == searchQueryUuid);
+            if (shipment != null)
+            {
+                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ",");
+                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ",");
+                shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
+            }
+            if (shipment == null) ViewData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
+            return View(shipment);
+        }
+
         public IActionResult FilterShipmentStatus(string parameter)
         {
             selectedStatus = parameter;
