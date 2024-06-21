@@ -19,14 +19,17 @@
 <body>
     <header>
         <nav class="bg-primary flex justify-between items-center text-white h-16 px-10">
-                <div class="flex">
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="cursor-pointer hover:opacity-90">OK Boss Express</a>
+                <div class="flex items-center">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="flex flex-row items-center gap-x-2" aria-label="Brand">
+                        <img class="w-10 h-10" src="~/images/ok-boss.svg" alt="Brand">
+                        OK Boss Express
+                    </a>
                     <ul class="flex justify-between ml-10">
                     <li>
-                        <a class="cursor-pointer hover:opacity-90 hidden sm:block">SHIPMENT</a>
+                        <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm">SHIPPING</a>
                         </li>
                     <li class="ml-7">
-                        <a class="cursor-pointer hover:opacity-90 hidden sm:block" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN US</a>
+                        <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN AS DRIVER</a>
                         </li>
                         @* @if (User.IsInRole("Warehouse"))
                         {
@@ -56,8 +59,8 @@
                 <div">
                     <h4 class="mb-4 font-bold text-lg mt-7 lg:mt-0">Useful Links</h4>
                     <div class="flex flex-col text-slate-500">
-                        <a href="/shipment" class="text-decoration-none text-muted mb-3 hover:opacity-90">Shipment</a>
-                        <a href="/join-us" class="text-decoration-none text-muted mb-3 hover:opacity-90">Join Us</a>
+                        <a href="/shipment" class="text-decoration-none text-muted mb-3 hover:text-ok-boss-6">Shipping</a>
+                        <a href="/join-us" class="text-decoration-none text-muted mb-3 hover:text-ok-boss-6">Join as Driver</a>
                     </div>
                 </div>
 

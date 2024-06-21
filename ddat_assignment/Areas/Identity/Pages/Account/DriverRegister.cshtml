@@ -2,9 +2,15 @@
 @model ddat_assignment.Areas.Identity.Pages.Account.DriverRegisterModel
 @{
     ViewData["Title"] = "Driver Registration";
+    List<String> genders = new List<String> { "Male", "Female", "Other" };
+    List<String> licenseTypes = new List<String> { "B2", "D", "E", "GDL" };
+    List<String> workingDays = new List<String> { "Weekday", "Weekend" };
+    List<String> vehicleTypes = new List<String> { "Motorcycle", "Car (5 Seats)", "Car (7 Seats)", "Van", "Lorry" };
+    List<String> states = new List<String> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
 }
 
-<div data-hs-stepper="" class="w-2/3 mx-auto py-20 min-h-screen">
+<div data-hs-stepper="" class="w-2/3 mx-auto px-20 py-10 min-h-screen">
+    <h1 class="text-4xl font-semibold mb-7">Driver Registration</h1>
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded flex justify-between" role="alert">
@@ -91,10 +97,12 @@
                                     <div class="mb-4">
                                         <label asp-for="Input.Gender" class="block text-sm font-medium mb-2 dark:text-white">Gender</label>
                                         <select asp-for="Input.Gender" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true">
-                                            <option value="">Select Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
+                                            @{
+                                                foreach (var gender in genders)
+                                                {
+                                                    <option value="@gender">@gender</option>    
+                                                }
+                                            }
                                         </select>
                                         <span asp-validation-for="Input.Gender" class="text-sm text-red-600 mt-2"></span>
                                     </div>
@@ -126,22 +134,15 @@
                                     <div class="mb-4">
                                         <label asp-for="Input.DrivingLicenseType" class="block text-sm font-medium mb-2 dark:text-white">License Type</label>
                                         <div class="flex gap-x-6">
-                                            <div class="flex">
-                                                <input asp-for="Input.DrivingLicenseType" type="radio" value="B2" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="license-type-car">
-                                                <label for="license-type-car" class="text-sm text-gray-500 ms-2 dark:text-neutral-400">B2</label>
-                                            </div>
-                                            <div class="flex">
-                                                <input asp-for="Input.DrivingLicenseType" type="radio" value="D" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="license-type-motorcycle">
-                                                <label for="license-type-motorcycle" class="text-sm text-gray-500 ms-2 dark:text-neutral-400">D</label>
-                                            </div>
-                                            <div class="flex">
-                                                <input asp-for="Input.DrivingLicenseType" type="radio" value="E" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="license-type-truck">
-                                                <label for="license-type-truck" class="text-sm text-gray-500 ms-2 dark:text-neutral-400">E</label>
-                                            </div>
-                                            <div class="flex">
-                                                <input asp-for="Input.DrivingLicenseType" type="radio" value="GDL" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="license-type-truck">
-                                                <label for="license-type-truck" class="text-sm text-gray-500 ms-2 dark:text-neutral-400">GDL</label>
-                                            </div>
+                                            @{
+                                                foreach (var type in licenseTypes)
+                                                {
+                                                    <div class="flex">
+                                                        <input asp-for="Input.DrivingLicenseType" type="radio" value="@type" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="license-type-truck">
+                                                        <label for="license-type-truck" class="text-sm text-gray-500 ms-2 dark:text-neutral-400">@type</label>
+                                                    </div>
+                                                }
+                                            }
                                         </div>
                                         <span asp-validation-for="Input.DrivingLicenseType" class="text-sm text-red-600 mt-2"></span>
                                     </div>
@@ -155,26 +156,15 @@
                                     <div class="mb-4">
                                         <label asp-for="Input.VehicleType" class="block text-sm font-medium mb-2 dark:text-white">Vehicle Type</label>
                                         <div class="grid sm:grid-cols-2 gap-2">
-                                            <label for="vehicle-motorcycle" class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.VehicleType" type="radio" value="Motor" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-motorcycle">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Motorcycle</span>
-                                            </label>
-                                            <label for="vehicle-car" class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.VehicleType" type="radio" value="Car (5 Seats)" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-car">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Car (5 Seats)</span>
-                                            </label>
-                                            <label for="vehicle-car" class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.VehicleType" type="radio" value="Car (7 Seats)" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-car">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Car (7 Seats)</span>
-                                            </label>
-                                            <label for="vehicle-truck" class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.VehicleType" type="radio" value="Van" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-truck">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Van</span>
-                                            </label>
-                                            <label for="vehicle-truck" class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.VehicleType" type="radio" value="Lorry" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-truck">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Lorry</span>
-                                            </label>
+                                            @{
+                                                foreach (var type in vehicleTypes)
+                                                {
+                                                    <label class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                                                        <input asp-for="Input.VehicleType" type="radio" value="@type" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-truck">
+                                                        <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">@type</span>
+                                                    </label>
+                                                }
+                                            }
                                         </div>
                                         <span asp-validation-for="Input.VehicleType" class="text-sm text-red-600 mt-2"></span>
                                     </div>
@@ -202,14 +192,15 @@
                                     <div class="mb-4">
                                         <label asp-for="Input.PreferredWorkingDay" class="block text-sm font-medium mb-2 dark:text-white">Preferred Working Day</label>
                                         <div class="grid sm:grid-cols-2 gap-2">
-                                            <label class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.PreferredWorkingDay" type="radio" value="Weekday" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-motorcycle">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Weekday</span>
-                                            </label>
-                                            <label class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                                                <input asp-for="Input.PreferredWorkingDay" type="radio" value="Weekend" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-car">
-                                                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Weekend</span>
-                                            </label>
+                                            @{
+                                                foreach (var day in workingDays)
+                                                {
+                                                    <label class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                                                        <input asp-for="Input.PreferredWorkingDay" type="radio" value="@day" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-car">
+                                                        <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">@day</span>
+                                                    </label>
+                                                }
+                                            }
                                         </div>
                                         <span asp-validation-for="Input.PreferredWorkingDay" class="text-sm text-red-600 mt-2"></span>
                                     </div>
@@ -217,21 +208,12 @@
                                     <div class="mb-4">
                                         <label asp-for="Input.PreferredWorkingLocation" class="block text-sm font-medium mb-2 dark:text-white">Preferred Working Location</label>
                                         <select asp-for="Input.PreferredWorkingLocation" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true">
-                                            <option value="">Select a state</option>
-                                            <option value="Johor">Johor</option>
-                                            <option value="Kedah">Kedah</option>
-                                            <option value="Kelantan">Kelantan</option>
-                                            <option value="Malacca">Malacca</option>
-                                            <option value="Negeri Sembilan">Negeri Sembilan</option>
-                                            <option value="Pahang">Pahang</option>
-                                            <option value="Penang">Penang</option>
-                                            <option value="Perak">Perak</option>
-                                            <option value="Perlis">Perlis</option>
-                                            <option value="Sabah">Sabah</option>
-                                            <option value="Sarawak">Sarawak</option>
-                                            <option value="Selangor">Selangor</option>
-                                            <option value="Terengganu">Terengganu</option>
-                                            <option value="Kuala Lumpur">Kuala Lumpur</option>
+                                            @{
+                                                foreach (var state in states)
+                                                {
+                                                    <option value="@state">@state</option>    
+                                                }
+                                            }
                                         </select>
                                         <span asp-validation-for="Input.PreferredWorkingLocation" class="text-sm text-red-600 mt-2"></span>
                                     </div>
