@@ -52,11 +52,9 @@ namespace ddat_assignment.Controllers.Admin
                     ShipmentStatus = "Pending",
                     ShipmentDate = DateTime.Now,
                 };
-                var pickupAddress = fc["sender-address-line-1"] + "||" +
-                    fc["sender-address-line-2"] ?? "" + (Convert.ToBoolean(fc["sender-address-line-2"]) ? "" : "" + "||") +
+                var pickupAddress = fc["sender-address-line-1"] + "||" + (Convert.ToBoolean(fc["sender-address-line-2"] == "") ? "" : fc["sender-address-line-2"] + "||") +
                     fc["sender-postcode"] + "||" + fc["sender-city"] + "||" + fc["sender-state"];
-                var deliveryAddress = fc["receiver-address-line-1"] + "||" +
-                    fc["receiver-address-line-2"] ?? "" + (Convert.ToBoolean(fc["receiver-address-line-2"]) ? "" : "" + "||") +
+                var deliveryAddress = fc["receiver-address-line-1"] + "||" + (Convert.ToBoolean(fc["receiver-address-line-2"] == "") ? "" : fc["receiver-address-line-2"] + "||") +
                     fc["receiver-postcode"] + "||" + fc["receiver-city"] + "||" + fc["receiver-state"];
                 shipment.PickupAddress = pickupAddress;
                 shipment.DeliveryAddress = deliveryAddress;

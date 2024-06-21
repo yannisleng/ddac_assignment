@@ -11,6 +11,7 @@ namespace ddat_assignment.Controllers
     public class AdminController : Controller
     {
         private readonly ddat_assignmentContext _context;
+        private static string selectedStatus = "All";
 
         public AdminController(ddat_assignmentContext context)
         {
@@ -18,16 +19,24 @@ namespace ddat_assignment.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            List<ShipmentModel> shipments = await _context.ShipmentModel.ToListAsync();
+            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.ToListAsync();
+            if (selectedStatus == "All")
+            { }
+            else
+            {
+                //filter the shipment by status
+                shipmentModels = shipmentModels.Where(s => s.ShipmentStatus == selectedStatus).ToList();
+            }
             //for each shipments, the address property replace the "||" with ","
-            foreach (ShipmentModel shipment in shipments)
+            foreach (ShipmentModel shipment in shipmentModels)
             {
                 shipment.PickupAddress = shipment.PickupAddress.Replace("||", ",");
                 shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ",");
                 shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
             }
-            shipments = shipments.OrderBy(s => s.ShipmentDate).ToList();
-            return View(shipments);
+            shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
+            ViewData["status"] = selectedStatus;
+            return View(shipmentModels);
         }
 
         public IActionResult Workspace()
@@ -43,6 +52,12 @@ namespace ddat_assignment.Controllers
         public IActionResult ManageDrivers()
         {
             return View();
+        }
+
+        public IActionResult FilterShipmentStatus(string parameter)
+        {
+            selectedStatus = parameter;
+            return RedirectToAction("Index");
         }
     }
 }
