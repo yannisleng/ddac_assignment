@@ -15,7 +15,7 @@ namespace ddat_assignment.Controllers.Admin
         {
             _context = context;
         }
-        
+
         public IActionResult Index()
         {
             return View();
@@ -28,44 +28,52 @@ namespace ddat_assignment.Controllers.Admin
             {
                 //create parcel model
                 var parcelId = Guid.NewGuid();
-                var parcel = new ParcelModel();
-                parcel.ParcelId = parcelId;
-                parcel.GoodsName = fc["goods-name"]!;
-                parcel.Weight = Convert.ToDecimal(fc["goods-weight"]);
-                parcel.Value = Convert.ToDecimal(fc["goods-value"]);
-                parcel.Type = fc["goods-type"]!;
+                var parcel = new ParcelModel
+                {
+                    ParcelId = parcelId,
+                    GoodsName = fc["goods-name"]!,
+                    Weight = Convert.ToDecimal(fc["goods-weight"]),
+                    Value = Convert.ToDecimal(fc["goods-value"]),
+                    Type = fc["goods-type"]!
+                };
                 _context.ParcelModel.Add(parcel);
 
                 //create shipment model
                 var shipmentId = Guid.NewGuid();
-                var shipment = new ShipmentModel();
-                shipment.ShipmentId = shipmentId;
-                shipment.ParcelId = parcelId;
-                shipment.SenderName = fc["sender-name"]!;
-                shipment.SenderPhoneNumber = fc["sender-phone-number"]!;
-                shipment.ReceiverName = fc["receiver-name"]!;
-                shipment.ReceiverPhoneNumber = fc["receiver-phone-number"]!;
+                var shipment = new ShipmentModel
+                {
+                    ShipmentId = shipmentId,
+                    ParcelId = parcelId,
+                    Parcel = parcel,
+                    SenderName = fc["sender-name"]!,
+                    SenderPhoneNumber = fc["sender-phone-number"]!,
+                    ReceiverName = fc["receiver-name"]!,
+                    ReceiverPhoneNumber = fc["receiver-phone-number"]!,
+                    ShipmentStatus = "Pending",
+                    ShipmentDate = DateTime.Now,
+                };
                 var pickupAddress = fc["sender-address-line-1"] + "||" +
-                    fc["sender-address-line-2"] ?? "" + (Convert.ToBoolean(fc["sender-address-line-2"]) ? "" : "" + "||" ) +
+                    fc["sender-address-line-2"] ?? "" + (Convert.ToBoolean(fc["sender-address-line-2"]) ? "" : "" + "||") +
                     fc["sender-postcode"] + "||" + fc["sender-city"] + "||" + fc["sender-state"];
                 var deliveryAddress = fc["receiver-address-line-1"] + "||" +
                     fc["receiver-address-line-2"] ?? "" + (Convert.ToBoolean(fc["receiver-address-line-2"]) ? "" : "" + "||") +
                     fc["receiver-postcode"] + "||" + fc["receiver-city"] + "||" + fc["receiver-state"];
                 shipment.PickupAddress = pickupAddress;
                 shipment.DeliveryAddress = deliveryAddress;
-                shipment.ShipmentStatus = "Pending";
-                shipment.ShipmentDate = DateTime.Now;
                 var parcelCost = Convert.ToDecimal(Convert.ToDouble(fc["goods-weight"]) * 4.5);
                 shipment.Cost = parcelCost;
                 _context.ShipmentModel.Add(shipment);
 
                 //create payment model
-                var payment = new PaymentModel();
-                payment.ShipmentId = shipmentId;
-                payment.Amount = parcelCost;
-                payment.PaymentStatus = "Pending";
-                payment.PaymentDate = DateTime.Now;
-                payment.PaymentMethod = fc["payment-method"]!;
+                var payment = new PaymentModel
+                {
+                    ShipmentId = shipmentId,
+                    Shipment = shipment,
+                    Amount = parcelCost,
+                    PaymentStatus = "Pending",
+                    PaymentDate = DateTime.Now,
+                    PaymentMethod = fc["payment-method"]!
+                };
                 _context.PaymentModel.Add(payment);
 
                 await _context.SaveChangesAsync();
