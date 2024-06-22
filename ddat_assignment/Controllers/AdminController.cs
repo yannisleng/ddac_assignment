@@ -1,14 +1,42 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ddat_assignment.Models;
+using ddat_assignment.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ddat_assignment.Controllers
 {
     [Authorize(Roles = "Warehouse")]
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        private readonly ddat_assignmentContext _context;
+        private static string selectedStatus = "All";
+
+        public AdminController(ddat_assignmentContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.ToListAsync();
+            if (selectedStatus == "All")
+            { }
+            else
+            {
+                //filter the shipment by status
+                shipmentModels = shipmentModels.Where(s => s.ShipmentStatus == selectedStatus).ToList();
+            }
+            //for each shipments, the address property replace the "||" with ","
+            foreach (ShipmentModel shipment in shipmentModels)
+            {
+                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ",");
+                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ",");
+                shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
+            }
+            shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
+            ViewData["status"] = selectedStatus;
+            return View(shipmentModels);
         }
 
         public IActionResult Workspace()
@@ -19,6 +47,42 @@ namespace ddat_assignment.Controllers
         public IActionResult StandardShipping()
         {
             return View();
+        }
+
+        public IActionResult ManageDrivers()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Shipment()
+        {
+            string searchQuery = Request.Query["searchQuery"]!;
+            Guid searchQueryUuid;
+            try
+            {
+                searchQueryUuid = Guid.Parse(searchQuery);
+            }
+            catch (Exception)
+            {
+                ViewData["error"] = "Invalid Shipment ID!";
+                return View();
+            }
+            ShipmentModel shipment = await _context.ShipmentModel.FirstOrDefaultAsync(s => s.ShipmentId == searchQueryUuid);
+            if (shipment != null)
+            {
+                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ",");
+                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ",");
+                shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
+            }
+            if (shipment == null) ViewData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
+            return View(shipment);
+        }
+
+        public IActionResult FilterShipmentStatus(string parameter)
+        {
+            selectedStatus = parameter;
+            return RedirectToAction("Index");
         }
     }
 }

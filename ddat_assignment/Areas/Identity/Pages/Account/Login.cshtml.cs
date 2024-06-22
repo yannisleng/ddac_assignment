@@ -116,6 +116,20 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    if (User.IsInRole("Warehouse"))
+                    {
+                        return LocalRedirect("~/Admin");
+                    }
+                    else if (User.IsInRole("Driver"))
+                    {
+                        return LocalRedirect("~/Driver");
+                    }
+                    else if (User.IsInRole("Customer"))
+                    {
+                        return LocalRedirect("~/Customer");
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

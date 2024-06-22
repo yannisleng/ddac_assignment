@@ -58,10 +58,6 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            /*[Required]
-            [StringLength(256)]
-            [Display(Name = "User Name")]
-            public string UserName { get; set; }*/
 
             [Required]
             [EmailAddress]
@@ -143,9 +139,7 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
             user.DateOfBirth = Input.DateOfBirth;
             user.Role = "Customer";
 
-            // Set UserName to FirstName + LastName
-            var userName = $"{Input.FirstName}{Input.LastName}";
-            await _userStore.SetUserNameAsync(user, userName, CancellationToken.None);
+            await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
             var result = await _userManager.CreateAsync(user, Input.Password);
@@ -154,15 +148,11 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
             {
                 _logger.LogInformation("User created a new account with password.");
 
-                if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                {
-                    return RedirectToPage("Login");
-                }
-                else
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
-                }
+                var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
+                await _userManager.UpdateAsync(user);
+
+                // Redirect to login or some other page
+                return RedirectToPage("Login");
             }
 
             foreach (var error in result.Errors)
@@ -172,6 +162,8 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
 
             return Page();
         }
+
+
 
         private ddat_assignmentUser CreateUser()
         {
