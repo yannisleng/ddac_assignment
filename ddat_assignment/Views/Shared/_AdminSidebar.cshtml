@@ -33,12 +33,12 @@
                 </a>
             </li>
 
-            @* <li>
-                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
+            <li>
+                <a asp-action="ParcelReturning" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
-                    Self Collection
+                    Parcel Returning
                 </a>
-            </li> *@
+            </li> 
 
             <li>
                 <a asp-action="StandardShipping" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
@@ -48,10 +48,12 @@
             </li>
 
             <li>
-                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
-                    Logout
-                </a>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = ""})">
+                        <button class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2 cursor-pointer w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
+                            Logout
+                        </button>
+                </form>
             </li>
         </ul>
     </nav>
@@ -62,6 +64,10 @@
     document.addEventListener('DOMContentLoaded', function (){
         let currentPath = window.location.pathname;
         const sidebarItems = document.querySelectorAll(".sidebar-item");
+        if (currentPath === "/Admin/Shipment") {
+            sidebarItems[0].classList.add("bg-ok-boss-2", "text-ok-boss-9", "hover:bg-ok-boss-3", "hover:text-ok-boss-7");
+            return;
+        }
         sidebarItems.forEach(link => {
             const href = link.getAttribute('href');
             if (currentPath === href) {
