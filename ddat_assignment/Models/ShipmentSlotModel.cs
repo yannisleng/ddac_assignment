@@ -19,5 +19,10 @@ namespace ddat_assignment.Models
         public int? DriverId { get; set; }
 
         public virtual DriverModel? Driver { get; set; }
+
+        [ForeignKey("ShipmentModel")]
+        public List<Guid>? ShipmentIds { get; set; }
+
+        public virtual List<ShipmentModel>? Shipments { get; set; }
     }
 }

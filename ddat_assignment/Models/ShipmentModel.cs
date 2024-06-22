@@ -62,10 +62,5 @@ namespace ddat_assignment.Models
 
         [Precision(5, 2)]
         public decimal? Cost { get; set; }
-
-        [ForeignKey("ShipmentSlotModel")]
-        public Guid ? ShipmentSlotId { get; set; }
-
-        public virtual ShipmentSlotModel? ShipmentSlot { get; set; }
     }
 }

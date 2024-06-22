@@ -49,9 +49,56 @@ namespace ddat_assignment.Controllers
             return View();
         }
 
+        public IActionResult ParcelReturning()
+        {
+            string searchQuery = Request.Query["searchQuery"];
+            if (searchQuery == null || searchQuery == "")
+            {
+                return View();
+            }
+            Guid searchQueryUuid;
+            try
+            {
+                searchQueryUuid = Guid.Parse(searchQuery);
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Invalid Shipment ID!";
+                return View();
+            }
+            ShipmentModel shipment = SearchShipment(searchQueryUuid).Result;
+            if (shipment == null)
+            {
+                TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
+                return View();
+            }
+            if (shipment.ShipmentStatus == "Returned")
+            {
+                TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " has been returned!";
+                return View();
+            }
+            if (shipment.ShipmentStatus != "Completed")
+            {
+                TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " haven't been completed!";
+                return View();
+            }
+            return View(shipment);
+        }
+
+        public async Task<List<DriverModel>> fetchDrivers()
+        {
+            List<DriverModel> driverModels = await _context.DriverModel.ToListAsync();
+            /*foreach (var driverModel in driverModels)
+            {
+                driverModel.User = await _context.Users.FirstOrDefaultAsync(user => user.Id == driverModel.User.Id);
+            }*/
+            return driverModels;
+        }
+
         public IActionResult ManageDrivers()
         {
-            return View();
+            List<DriverModel> driverModels = fetchDrivers().Result;
+            return View(driverModels);
         }
 
         [HttpGet]
@@ -65,18 +112,25 @@ namespace ddat_assignment.Controllers
             }
             catch (Exception)
             {
-                ViewData["error"] = "Invalid Shipment ID!";
+                TempData["error"] = "Invalid Shipment ID!";
                 return View();
             }
-            ShipmentModel shipment = await _context.ShipmentModel.FirstOrDefaultAsync(s => s.ShipmentId == searchQueryUuid);
+            ShipmentModel shipment = SearchShipment(searchQueryUuid).Result;
+            if (shipment == null) TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
+            return View(shipment);
+        }
+
+        public async Task<ShipmentModel> SearchShipment(Guid shipmentId)
+        {
+            ShipmentModel shipment = await _context.ShipmentModel.FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
             if (shipment != null)
             {
-                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ",");
-                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ",");
+                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
+                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
                 shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
+                return shipment;
             }
-            if (shipment == null) ViewData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
-            return View(shipment);
+            return null;
         }
 
         public IActionResult FilterShipmentStatus(string parameter)
