@@ -62,6 +62,10 @@
     document.addEventListener('DOMContentLoaded', function (){
         let currentPath = window.location.pathname;
         const sidebarItems = document.querySelectorAll(".sidebar-item");
+        if (currentPath === "/Admin/Shipment") {
+            sidebarItems[0].classList.add("bg-ok-boss-2", "text-ok-boss-9", "hover:bg-ok-boss-3", "hover:text-ok-boss-7");
+            return;
+        }
         sidebarItems.forEach(link => {
             const href = link.getAttribute('href');
             if (currentPath === href) {
