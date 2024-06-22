@@ -47,10 +47,10 @@
             <div class="text-[#86909c] font-medium">No shipments available</div>
         </div>
     }
-    <div class="flex flex-col gap-y-2 overflow-y-auto max-h-[80vh] pe-2 pb-6">
+    <div class="flex flex-col gap-y-2 overflow-y-auto max-h-[80vh] pe-2 pb-8">
         @foreach (var shipment in Model)
         {
-            <div class="border shadow rounded-md w-full p-4 bg-white">
+            <div class="border shadow rounded-md w-full p-4 bg-white cursor-pointer" onclick="shipmentCardOnClick('@(shipment.ShipmentId)')">
                 <div class="flex flex-row items-center justify-between mb-2">
                     <div class="text-lg text-ok-boss-8 font-semibold"># @shipment.ShipmentId</div>
                     <div class="text-[#86909c] text-xs">
@@ -82,3 +82,8 @@
         }
     </div>
 </div>
+<script>
+    function shipmentCardOnClick(shipmentId) {
+        window.location.href = "@Url.Action("Shipment","Admin")?searchQuery=" + shipmentId;
+    }
+</script>
