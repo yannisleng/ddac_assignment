@@ -5,7 +5,7 @@
 <div class="xl:w-1/5 w-1/4 h-full bg-white border-e border-gray-200">
 <div class="pt-7 pb-10 overflow-y-auto">
     <div class="px-4">
-        <a asp-action="Index" asp-controller="Admin" class="flex flex-row items-center gap-x-2 text-xl font-semibold text-ok-boss-5" aria-label="Brand">
+        <a asp-action="Index" asp-controller="Driver" class="flex flex-row items-center gap-x-2 text-xl font-semibold text-ok-boss-5" aria-label="Brand">
             <img class="w-10 h-10" src="~/images/ok-boss.svg" alt="Brand">
             OK Boss Express
         </a>
@@ -48,17 +48,20 @@
             </li>
             
             <li>
-                <a asp-action="Index" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
+                <a asp-area="Identity" asp-page="/Account/Manage/DriverProfile" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-cog"><path d="M2 21a8 8 0 0 1 10.434-7.62" /><circle cx="10" cy="8" r="5" /><circle cx="18" cy="18" r="3" /><path d="m19.5 14.3-.4.9" /><path d="m16.9 20.8-.4.9" /><path d="m21.7 19.5-.9-.4" /><path d="m15.2 16.9-.9-.4" /><path d="m21.7 16.5-.9.4" /><path d="m15.2 19.1-.9.4" /><path d="m19.5 21.7-.4-.9" /><path d="m16.9 15.2-.4-.9" /></svg>
                     Account
                 </a>
             </li>
 
             <li>
-                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
-                    Logout
-                </a>
+                <form id="logoutForm" class="py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2"
+                    asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area ="" })">
+                        <button type="submit" class="flex items-center gap-x-3.5 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
+                            Logout
+                        </button>
+                </form>
             </li>
         </ul>
     </nav>
