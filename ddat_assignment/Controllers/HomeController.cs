@@ -15,6 +15,19 @@ namespace ddat_assignment.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("Warehouse"))
+            {
+                return LocalRedirect("~/Admin");
+            }
+            else if (User.IsInRole("Driver"))
+            {
+                return LocalRedirect("~/Driver");
+            }
+            else if (User.IsInRole("Customer"))
+            {
+                return LocalRedirect("~/Customer");
+            }
+
             return View();
         }
 
