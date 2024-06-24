@@ -25,12 +25,26 @@
                         OK Boss Express
                     </a>
                     <ul class="flex justify-between ml-10">
-                    <li>
-                        <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm">SHIPPING</a>
-                        </li>
-                    <li class="ml-7">
-                        <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN AS DRIVER</a>
-                        </li>
+                    @{
+                        if (User.IsInRole("Driver"))
+                        {
+                            <li>
+                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-action="Index" asp-controller="Driver">DASHBOARD</a>
+                            </li>
+                            <li class="ml-7">
+                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-action="Shipment" asp-controller="Driver">SHIPMENT</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm">SHIPPING</a>
+                            </li>
+                            <li class="ml-7">
+                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN AS DRIVER</a>
+                            </li>
+                        }
+                    }
                         @* @if (User.IsInRole("Warehouse"))
                         {
                             <li>

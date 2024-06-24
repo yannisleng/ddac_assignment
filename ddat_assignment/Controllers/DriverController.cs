@@ -10,5 +10,10 @@ namespace ddat_assignment.Controllers
         {
             return View();
         }
+
+        public IActionResult Shipment()
+        {
+            return View();
+        }
     }
 }
