@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Shipment Tracking";
-    var error = ViewData["error"];
+    var error = TempData["error"];
     string formatDate(DateTime date)
     {
         return date.ToString("dd MMMM yyyy HH:mm:ss");

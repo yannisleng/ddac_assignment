@@ -37,6 +37,10 @@ public class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
+        app.MapControllerRoute(
+            name: "Admin",
+            pattern: "Admin/{controller}/{action=Index}/{id?}");
+
         app.MapRazorPages();
 
         using (var scope = app.Services.CreateScope())
