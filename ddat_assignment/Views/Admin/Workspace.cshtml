@@ -1,10 +1,149 @@
 ﻿
 @{
     ViewData["Title"] = "Workspace";
+    List<string> states = new List<string> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kuala Lumpur", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+    List<string> parcelStatus = new List<string> { "Pending", "In Transit" };
+    string selectedState = ViewBag.State;
+
+    string formatDate(DateTime date)
+    {
+        return date.ToString("dd MMMM yyyy HH:mm:ss");
+    };
+
+    string getTomorrowDate = DateTime.Now.AddDays(1).ToString("dd MMMM");
 }
+@model List<ShipmentModel>
 
 <h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">Workspace</h1>
 
 <div class="my-4 py-2">
-
+    <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 min-h-[85vh] h-full">
+        <div class="lg:col-span-2 col-span1 flex flex-col">
+            <form asp-action="Workspace" asp-controller="Admin" method="get" class="flex flex-row items-end gap-x-4 mb-4">
+                <div class="flex flex-col gap-y-1">
+                    <label for="filteredState" class="text-sm text-[#86909c]">Select a state</label>
+                    <select name="filteredState"
+                            class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                        @{
+                            foreach (var state in states)
+                            {
+                                <option value="@state" selected="@(state == selectedState)">@state</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="bg-ok-boss-4 text-white rounded-3xl py-3 px-6 font-medium text-sm hover:bg-ok-boss-6">Filter</button>
+            </form>
+            @if (Model.Count == 0)
+            {
+                <div>Currently no parcel need to be handle in this state.</div>
+            }
+            <div class="flex flex-col gap-y-2 overflow-y-auto max-h-[80vh] pe-2 pt-2 pb-8">
+                <div class="grid lg:grid-cols-2 grid-cols-1 gap-4">
+                    @{
+                        foreach (var shipment in Model)
+                        {
+                            <div class="checkbox-card border shadow p-4 rounded-lg bg-white cursor-pointer">
+                                <div class="flex flex-row w-full items-center gap-x-4">
+                                    <input type="checkbox" name="shipmentIds" value="@shipment.ShipmentId" />
+                                    <div class="flex flex-col gap-y-1 w-full">
+                                        <div>#Parcel ID:</div>
+                                        <div class="text-xs text-ok-boss-7">@shipment.ParcelId</div>
+                                        <div class="flex flex-row justify-between items-end mt-2">
+                                            <div class="text-xs text-[#86909c]">@formatDate(shipment.ShipmentDate)</div>
+                                            <div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-xs">@shipment.ShipmentStatus</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-span-1 flex flex-col gap-y-2 border bg-white rounded-lg h-full">
+            <div class="bg-ok-boss-2 rounded-t-lg px-4 py-2">
+                <div class="flex flex-row align-items-start justify-between">
+                    <span class="text-ok-boss-7 text-sm">Shipment slot for @getTomorrowDate</span>
+                </div>
+            </div>
+            <div class="flex flex-col h-full gap-y-2 justify-between px-4">
+                <div>
+                    <div class="flex flex-col gap-y-0.5 mb-1">
+                        <label for="selectedDriver" class="text-sm text-[#86909c]">Select a driver</label>
+                        <select name="selectedDriver"
+                                class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                            <option value="Lennon">Lennon</option>
+                        </select>
+                    </div>
+                    <div class="text-sm pb-1 border-b">Parcel list</div>
+                    <div id="shipments-container" class="flex flex-col pe-2 overflow-y-auto min-h-[55vh] max-h-[67.5vh] gap-y-1">
+                    </div>
+                </div>
+                <div class="flex flex-row justify-center pb-2">
+                    <button id="arrange-btn" type="submit" class="bg-ok-boss-4 text-white rounded-lg py-2.5 px-4 font-medium text-sm hover:bg-ok-boss-6" disabled>
+                        Arrange shipment slot
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+const shipmentsContainer = document.querySelector('#shipments-container');
+
+const templateCard = (parcelId) => {
+    return `
+        <div class="flex flex-row items-center py-2 gap-x-3" data-parcel-id="${parcelId}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
+            <div class="flex flex-col gap-y-0.5">
+                <div class="text-sm">#Parcel ID</div>
+                <div class="text-xs text-ok-boss-7">${parcelId}</div>
+            </div>
+        </div>
+    `;
+};
+
+const checkboxCards = document.querySelectorAll('.checkbox-card');
+checkboxCards.forEach(checkboxCard => {
+    checkboxCard.addEventListener('click', () => {
+        checkboxCard.classList.toggle('border-ok-boss-5');
+        const checkbox = checkboxCard.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        const parcelId = checkbox.value;
+        if (checkbox.checked) {
+            addParcelCard(parcelId);
+        } else {
+            removeParcelCard(parcelId);
+        }
+    });
+});
+
+function addParcelCard(parcelId) {
+    shipmentsContainer.innerHTML += templateCard(parcelId);
+}
+
+function removeParcelCard(parcelId) {
+    const parcelCard = shipmentsContainer.querySelector(`[data-parcel-id="${parcelId}"]`);
+    parcelCard.remove();
+}
+
+const arrangeButton = document.querySelector('#arrange-btn');
+shipmentsContainer.addEventListener('DOMSubtreeModified', () => {
+    if (shipmentsContainer.children.length > 0) {
+        arrangeButton.disabled = false;
+    } else {
+        arrangeButton.disabled = true;
+    }
+});
+arrangeButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const selectedDriver = document.querySelector('select[name="selectedDriver"]').value;
+    const shipmentIds = Array.from(document.querySelectorAll('input[name="shipmentIds"]'))
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value);
+    console.log(selectedDriver, shipmentIds);
+});
+
+</script>

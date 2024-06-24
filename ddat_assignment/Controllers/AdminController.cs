@@ -30,8 +30,8 @@ namespace ddat_assignment.Controllers
             //for each shipments, the address property replace the "||" with ","
             foreach (ShipmentModel shipment in shipmentModels)
             {
-                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ",");
-                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ",");
+                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
+                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
                 shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
             }
             shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
@@ -39,9 +39,18 @@ namespace ddat_assignment.Controllers
             return View(shipmentModels);
         }
 
-        public IActionResult Workspace()
+        [HttpGet]
+        public async Task<IActionResult> Workspace()
         {
-            return View();
+            string filteredState = Request.Query["filteredState"];
+            if (filteredState == null) filteredState = "Selangor";
+            ViewBag.State = filteredState;
+            
+            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.ToListAsync();
+            shipmentModels = shipmentModels.Where(s => s.ShipmentStatus == "In transit" || s.ShipmentStatus == "Pending").ToList();
+            shipmentModels = shipmentModels.Where(s => s.PickupAddress.Contains(filteredState)).ToList();
+            shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
+            return View(shipmentModels);
         }
 
         public IActionResult StandardShipping()
@@ -83,22 +92,6 @@ namespace ddat_assignment.Controllers
                 return View();
             }
             return View(shipment);
-        }
-
-        public async Task<List<DriverModel>> fetchDrivers()
-        {
-            List<DriverModel> driverModels = await _context.DriverModel.ToListAsync();
-            /*foreach (var driverModel in driverModels)
-            {
-                driverModel.User = await _context.Users.FirstOrDefaultAsync(user => user.Id == driverModel.User.Id);
-            }*/
-            return driverModels;
-        }
-
-        public IActionResult ManageDrivers()
-        {
-            List<DriverModel> driverModels = fetchDrivers().Result;
-            return View(driverModels);
         }
 
         [HttpGet]
