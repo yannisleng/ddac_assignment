@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ddat_assignment.Models;
+using Microsoft.EntityFrameworkCore;
+using ddat_assignment.Data; // Add this line to include your context
 
 namespace ddat_assignment.Areas.Identity.Pages.Account
 {
@@ -31,13 +33,15 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ddat_assignmentUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ddat_assignmentContext _context; // Add this line to declare the context
 
         public RegisterModel(
             UserManager<ddat_assignmentUser> userManager,
             IUserStore<ddat_assignmentUser> userStore,
             SignInManager<ddat_assignmentUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ddat_assignmentContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +49,7 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -149,7 +154,28 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
                 _logger.LogInformation("User created a new account with password.");
 
                 var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
+                if (!roleResult.Succeeded)
+                {
+                    _logger.LogError("Failed to assign the 'Customer' role to the user.");
+                    foreach (var error in roleResult.Errors)
+                    {
+                        _logger.LogError($"Error: {error.Description}");
+                    }
+                    ModelState.AddModelError(string.Empty, "Failed to assign the 'Customer' role.");
+                    return Page();
+                }
+
                 await _userManager.UpdateAsync(user);
+
+                // Create and save the UserDetailsModel
+                var userDetails = new UserDetailsModel
+                {
+                    UserId = user.Id,
+                    Address = null // Set address as null
+                };
+
+                _context.UserDetailsModel.Add(userDetails);
+                await _context.SaveChangesAsync();
 
                 // Redirect to login or some other page
                 return RedirectToPage("Login");
