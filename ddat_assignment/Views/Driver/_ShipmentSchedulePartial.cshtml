@@ -1,0 +1,43 @@
+﻿@model List<ShipmentSlotModel>
+@{
+    ViewData["Title"] = "_ShipmentSchedulePartial";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var slot in Model)
+    {
+		<div class="bg-ok-boss-2 text-ok-boss-9 rounded-md w-full p-4 mb-2">
+			<div class="flex flex-row items-center justify-between">
+				<div class="text-lg text-ok-boss-8 font-semibold">@slot.ShipmentDate?.ToString("ddd, dd MMM")</div>
+			</div>
+		</div>
+
+		<div class="border shadow rounded-md w-full p-4 bg-white mb-5">
+			<div class="flex flex-row items-center justify-between mb-3">
+				<div class="text-lg text-ok-boss-8 font-semibold"># @slot.ShipmentSlotId</div>
+			</div>
+			<div class="flex flex-row justify-between items-center">
+				<div class="flex flex-1 flex-row gap-x-6">
+					<div class="flex flex-col flex-1 gap-y-0.5">
+						<div class="text-xs text-[#86909c]">Start Time</div>
+						<div class="text-ok-boss-4 text-lg font-medium">@slot.SlotTime?.Split('-')[0].Trim()</div>
+					</div>
+					<div class="flex flex-col flex-1 gap-y-0.5">
+						<div class="text-xs text-[#86909c]">End Time</div>
+						<div class="text-ok-boss-4 text-lg font-medium">@slot.SlotTime?.Split('-')[1].Trim()</div>
+					</div>
+				</div>
+				<div class="flex-1 flex flex-row justify-end">
+					<div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-sm cursor-pointer" onclick="window.location.href='/Driver/Shipment'; return false;">
+						View Shipments
+					</div>
+				</div>
+			</div>
+		</div>
+    }
+}
+else
+{
+    <p>No shipments found.</p>
+}

@@ -1,4 +1,5 @@
-﻿
+﻿@model List<ShipmentSlotModel>
+
 @{
     ViewData["Title"] = "Driver Dashboard";
 }
@@ -7,11 +8,11 @@
     <div class="flex-shrink-0 group block">
         <div class="flex items-center">
             <span class="inline-flex items-center justify-center size-[62px] text-sm font-semibold leading-none rounded-full bg-ok-boss-2 text-ok-boss-9 dark:bg-red-800/30 dark:text-red-500">
-                ZY
+				@Model[0].Driver?.User?.FirstName?[0]@Model[0].Driver?.User?.LastName?[0]
             </span>
             <div class="ms-3">
                 <div class="flex items-center">
-					<h3 class="font-semibold text-gray-800 dark:text-white text-lg mr-1 pb-0.5">Hi Driver</h3>
+					<h3 class="font-semibold text-gray-800 dark:text-white text-lg mr-1 pb-0.5">Hi @Model[0].Driver?.User.FirstName</h3>
 					<a asp-area="Identity" asp-page="/Account/Manage/DriverProfile">
 						<svg t="1719168031726" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6012" width="18" height="18"><path d="M511 256.00000001m0-70.00000001a70 70 0 1 0 0 140 70 70 0 1 0 0-140Z" p-id="6013" fill="#1f2937"></path><path d="M511 513.5m0-70a70 70 0 1 0-1e-8 140 70 70 0 1 0 1e-8-140Z" p-id="6014" fill="#1f2937"></path><path d="M511 771m-1e-8-70a70 70 0 1 0 1e-8 140 70 70 0 1 0-1e-8-140Z" p-id="6015" fill="#1f2937"></path></svg>
 					</a>
@@ -27,10 +28,10 @@
 		<div class="flex flex-col pr-6">
 			<div class="mt-1 gap-x-2">
 				<h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-					VEP5676
+					@Model[0].Driver?.VehiclePlateNumber
 				</h3>
 				<span class="flex items-center gap-x-1 text-gray-500 text-[10px]">
-					car (5 seats)
+					@Model[0].Driver?.VehicleType
 				</span>
 			</div>
 		</div>
@@ -42,91 +43,114 @@
 		<div class="text-ok-boss-9 font-semibold">Shipment Schedule</div>
 		<hr class="my-3" />
 		<div class="flex justify-between items-center">
-			<button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-ok-boss-2 text-ok-boss-9 hover:bg-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none">
+			<button id="btnAll" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-ok-boss-2 text-ok-boss-9 hover:bg-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none">
 				All
 			</button>
 			<div class="w-px h-8 bg-[#e5e7eb] ml-3"></div>
 			<div class="w-full mx-3">
-				<input type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true" />
+				<input id="startDateInput" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true" />
 				<span class="text-xs sm:text-sm text-red-600 mt-2"></span>
 			</div>
-			<button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-[#73000b] text-ok-boss-9 hover:border-ok-boss-3 hover:text-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none dark:border-white dark:text-white dark:hover:text-neutral-300 dark:hover:border-neutral-300">
+			<div class="w-full mx-3">
+				<input id="endDateInput" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true" />
+				<span class="text-xs sm:text-sm text-red-600 mt-2"></span>
+			</div>
+			<button id="btnToday" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-[#73000b] text-ok-boss-9 hover:border-ok-boss-3 hover:text-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none dark:border-white dark:text-white dark:hover:text-neutral-300 dark:hover:border-neutral-300">
 				Today
 			</button>
 		</div>
 	</div>
-	<div class="overflow-y-auto h-4/5">
-		<div class="bg-ok-boss-2 text-ok-boss-9 rounded-md w-full p-4 mb-2">
-			<div class="flex flex-row items-center justify-between">
-				<div class="text-lg text-ok-boss-8 font-semibold">Mon, 24 Jun</div>
-			</div>
-		</div>
-
-		<div class="border shadow rounded-md w-full p-4 bg-white mb-5">
-			<div class="flex flex-row items-center justify-between mb-1">
-				<div class="text-lg text-ok-boss-8 font-semibold">Warehouse Selangor</div>
-			</div>
-			<div class="flex flex-row items-center gap-x-2 mb-4">
-				<svg t="1719210951866" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4287" width="24" height="24"><path d="M896 554.666667h-42.666667v298.666666H170.666667v-298.666666H128l384-384 384 384z m-640-8.533334V768h512v-221.866667l-256-256-256 256z m174.933333-76.8h170.666667v85.333334h-170.666667v-85.333334z" fill="#2b2b2b" p-id="4288"></path></svg>
-				<div class="text-sm">
-					20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
-					Taman Jinjang Baru, 52000 Kuala Lumpur.
-				</div>
-			</div>
-			<div class="flex flex-row justify-between items-center">
-				<div class="flex flex-1 flex-row gap-x-6">
-					<div class="flex flex-col flex-1 gap-y-0.5">
-						<div class="text-xs text-[#86909c]">Start Time</div>
-						<div class="text-ok-boss-4 text-lg font-medium">8.30 AM</div>
-					</div>
-					<div class="flex flex-col flex-1 gap-y-0.5">
-						<div class="text-xs text-[#86909c]">End Time</div>
-						<div class="text-ok-boss-4 text-lg font-medium">10.30 PM</div>
-					</div>
-				</div>
-				<div class="flex-1 flex flex-row justify-end">
-					<div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-sm cursor-pointer" onclick="window.location.href='/Driver/Shipment'; return false;">
-						View Shipments
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="bg-ok-boss-2 text-ok-boss-9 rounded-md w-full p-4 mb-2">
-			<div class="flex flex-row items-center justify-between">
-				<div class="text-lg text-ok-boss-8 font-semibold">Tue, 25 Jun</div>
-			</div>
-		</div>
-
-		<div class="border shadow rounded-md w-full p-4 bg-white mb-5">
-			<div class="flex flex-row items-center justify-between mb-1">
-				<div class="text-lg text-ok-boss-8 font-semibold">Warehouse Selangor</div>
-			</div>
-			<div class="flex flex-row items-center gap-x-2 mb-4">
-				<svg t="1719210951866" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4287" width="24" height="24"><path d="M896 554.666667h-42.666667v298.666666H170.666667v-298.666666H128l384-384 384 384z m-640-8.533334V768h512v-221.866667l-256-256-256 256z m174.933333-76.8h170.666667v85.333334h-170.666667v-85.333334z" fill="#2b2b2b" p-id="4288"></path></svg>
-				<div class="text-sm">
-					20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
-					Taman Jinjang Baru, 52000 Kuala Lumpur.
-				</div>
-			</div>
-			<div class="flex flex-row justify-between items-center">
-				<div class="flex flex-1 flex-row gap-x-6">
-					<div class="flex flex-col flex-1 gap-y-0.5">
-						<div class="text-xs text-[#86909c]">Start Time</div>
-						<div class="text-ok-boss-4 text-lg font-medium">8.30 AM</div>
-					</div>
-					<div class="flex flex-col flex-1 gap-y-0.5">
-						<div class="text-xs text-[#86909c]">End Time</div>
-						<div class="text-ok-boss-4 text-lg font-medium">10.30 PM</div>
-					</div>
-				</div>
-				<div class="flex-1 flex flex-row justify-end">
-					<div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-sm cursor-pointer" onclick="window.location.href='/Driver/Shipment'; return false;">
-						View Shipments
-					</div>
-				</div>
-			</div>
-		</div>
-
+	<div class="overflow-y-auto h-4/5" id="shipmentSchedule">
+		@Html.Partial("_ShipmentSchedulePartial", Model)
 	</div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // get the start date and end date of the week
+        function getStartAndEndOfWeek(date) {
+            let start = new Date(date);
+            let end = new Date(date);
+
+            start.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1));
+            end.setDate(date.getDate() - date.getDay() + 7);
+
+            return { start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
+        }
+
+        function loadShipmentSchedule(startDate, endDate) {
+            $.ajax({
+                url: '/Driver/LoadShipmentSchedule',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate },
+                success: function (data) {
+                    $('#shipmentSchedule').html(data);
+                },
+                error: function () {
+                    alert('Error loading shipment schedule.');
+                }
+            });
+        }
+
+        // initialize date
+        let today = new Date();
+        let weekDates = getStartAndEndOfWeek(today);
+
+        $('#startDateInput').val(weekDates.start);
+        $('#endDateInput').val(weekDates.end);
+        loadShipmentSchedule(weekDates.start, weekDates.end);
+
+        $('#btnAll').click(function () {
+            let weekDates = getStartAndEndOfWeek(new Date());
+            $('#startDateInput').val(weekDates.start);
+            $('#endDateInput').val(weekDates.end);
+            loadShipmentSchedule(weekDates.start, weekDates.end);
+        });
+
+        $('#btnToday').click(function () {
+            let today = new Date().toISOString().slice(0, 10);
+            $('#startDateInput').val(today);
+            $('#endDateInput').val(today);
+            loadShipmentSchedule(today, today);
+        });
+
+        $('#startDateInput').change(function () {
+            let today = new Date().toISOString().slice(0, 10);
+
+            let startDate = new Date($(this).val()).toISOString().slice(0, 10);
+            let endDate = new Date($('#endDateInput').val()).toISOString().slice(0, 10);
+
+            if (isNaN(new Date($('#endDateInput').val()))) {
+                $('#endDateInput').val(today);
+                endDate = today;
+            }
+
+            if (startDate > endDate) {
+                $('#endDateInput').val($(this).val());
+                endDate = startDate;
+            }
+
+            loadShipmentSchedule(startDate, endDate);
+        });
+
+        $('#endDateInput').change(function () {
+            let today = new Date().toISOString().slice(0, 10);
+
+            let endDate = new Date($(this).val()).toISOString().slice(0, 10);
+            let startDate = new Date($('#startDateInput').val()).toISOString().slice(0, 10);
+
+            if (isNaN(new Date($('#startDateInput').val()))) {
+                $('#startDateInput').val(today);
+                startDate = today;
+            }
+
+            if (endDate < startDate) {
+                $('#startDateInput').val($(this).val());
+                startDate = endDate;
+            }
+
+            loadShipmentSchedule(startDate, endDate);
+        });
+    });
+</script>
