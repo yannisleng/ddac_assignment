@@ -12,7 +12,7 @@
 
     string getTomorrowDate = DateTime.Now.AddDays(1).ToString("dd MMMM");
 }
-@model List<ShipmentModel>
+@model ManageParcelModel
 
 <h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">Workspace</h1>
 
@@ -34,18 +34,18 @@
                 </div>
                 <button type="submit" class="bg-ok-boss-4 text-white rounded-3xl py-3 px-6 font-medium text-sm hover:bg-ok-boss-6">Filter</button>
             </form>
-            @if (Model.Count == 0)
+            @if (Model.Shipments.Count == 0)
             {
                 <div>Currently no parcel need to be handle in this state.</div>
             }
             <div class="flex flex-col gap-y-2 overflow-y-auto max-h-[80vh] pe-2 pt-2 pb-8">
                 <div class="grid lg:grid-cols-2 grid-cols-1 gap-4">
                     @{
-                        foreach (var shipment in Model)
+                        foreach (var shipment in Model.Shipments)
                         {
                             <div class="checkbox-card border shadow p-4 rounded-lg bg-white cursor-pointer">
                                 <div class="flex flex-row w-full items-center gap-x-4">
-                                    <input type="checkbox" name="shipmentIds" value="@shipment.ShipmentId" />
+                                    <input type="checkbox" name="shipmentIds" value="@shipment.ShipmentId" disabled />
                                     <div class="flex flex-col gap-y-1 w-full">
                                         <div>#Parcel ID:</div>
                                         <div class="text-xs text-ok-boss-7">@shipment.ParcelId</div>
@@ -67,16 +67,20 @@
                     <span class="text-ok-boss-7 text-sm">Shipment slot for @getTomorrowDate</span>
                 </div>
             </div>
-            <div class="flex flex-col h-full gap-y-2 justify-between px-4">
+            <form asp-action="CreateNewShipmentSlot" asp-controller="Workspace" method="post" class="flex flex-col h-full gap-y-2 justify-between px-4">
                 <div>
                     <div class="flex flex-col gap-y-0.5 mb-1">
                         <label for="selectedDriver" class="text-sm text-[#86909c]">Select a driver</label>
                         <select name="selectedDriver"
                                 class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
-                            <option value="Lennon">Lennon</option>
+                            @foreach (var driver in Model.Drivers)
+                            {
+                                <option value="@driver!.DriverId">@driver?.User?.FullName</option>
+                            }
                         </select>
                     </div>
                     <div class="text-sm pb-1 border-b">Parcel list</div>
+                    <input type="hidden" name="selectedShipmentIds" value="" />
                     <div id="shipments-container" class="flex flex-col pe-2 overflow-y-auto min-h-[55vh] max-h-[67.5vh] gap-y-1">
                     </div>
                 </div>
@@ -85,7 +89,7 @@
                         Arrange shipment slot
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -117,6 +121,7 @@ checkboxCards.forEach(checkboxCard => {
         } else {
             removeParcelCard(parcelId);
         }
+        updateHiddenInput();
     });
 });
 
@@ -129,6 +134,14 @@ function removeParcelCard(parcelId) {
     parcelCard.remove();
 }
 
+function updateHiddenInput() {
+    const hiddenInput = document.querySelector('input[name="selectedShipmentIds"]');
+    hiddenInput.value = Array.from(document.querySelectorAll('input[name="shipmentIds"]'))
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value)
+        .join(',');
+}
+
 const arrangeButton = document.querySelector('#arrange-btn');
 shipmentsContainer.addEventListener('DOMSubtreeModified', () => {
     if (shipmentsContainer.children.length > 0) {
@@ -136,14 +149,6 @@ shipmentsContainer.addEventListener('DOMSubtreeModified', () => {
     } else {
         arrangeButton.disabled = true;
     }
-});
-arrangeButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    const selectedDriver = document.querySelector('select[name="selectedDriver"]').value;
-    const shipmentIds = Array.from(document.querySelectorAll('input[name="shipmentIds"]'))
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value);
-    console.log(selectedDriver, shipmentIds);
 });
 
 </script>
