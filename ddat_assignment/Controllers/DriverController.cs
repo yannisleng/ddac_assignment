@@ -34,30 +34,34 @@ namespace ddat_assignment.Controllers
 		[HttpGet]
 		public async Task<IActionResult> LoadShipmentSchedule(DateTime startDate, DateTime endDate)
 		{
-			var shipmentSlotModels = await GetShipmentSlotModels(startDate, endDate);
+			List<ShipmentSlotModel> shipmentSlotModels = await GetShipmentSlotModels(startDate, endDate);
+
 			return PartialView("_ShipmentSchedulePartial", shipmentSlotModels);
 		}
 
 		private async Task<List<ShipmentSlotModel>> GetShipmentSlotModels(DateTime startDate, DateTime endDate)
 		{
 			var user = await _userManager.GetUserAsync(User);
-			if (user == null)
-			{
-				return new List<ShipmentSlotModel>();
-			}
 
 			var driver = await _context.DriverModel.FirstOrDefaultAsync(d => d.User.Id == user.Id);
-			if (driver == null)
-			{
-				return new List<ShipmentSlotModel>();
-			}
 
-			var shipmentSlotModels = await _context.ShipmentSlotModel
-				.Where(ss => ss.DriverId == driver.DriverId && ss.ShipmentDate >= startDate && ss.ShipmentDate <= endDate.AddDays(1).AddTicks(-1))
+            List<ShipmentSlotModel> shipmentSlotModels = new List<ShipmentSlotModel>();
+
+            shipmentSlotModels = await _context.ShipmentSlotModel
+				.Where(ss => ss.DriverId == driver!.DriverId && ss.ShipmentDate >= startDate && ss.ShipmentDate <= endDate.AddDays(1).AddTicks(-1))
 				.OrderBy(ss => ss.ShipmentDate)
 				.ToListAsync();
 
-			return shipmentSlotModels;
+            if (!shipmentSlotModels.Any())
+            {
+                shipmentSlotModels.Add(new ShipmentSlotModel
+                {
+                    DriverId = driver?.DriverId,
+                    Driver = driver,
+                });
+            }
+
+            return shipmentSlotModels;
 		}
 
 		private DateTime GetWeekOfFirstDate()
