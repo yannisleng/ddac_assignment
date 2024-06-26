@@ -69,331 +69,124 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Table -->
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                    <thead class="bg-gray-50 dark:bg-neutral-900">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Shipment ID
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Warehouse
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Delivery Date
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Receiver Name
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Receiver Contact No.
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Delivery Address
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                <div class="flex items-center gap-x-2">
-                                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
-                                        Status
-                                    </span>
-                                </div>
-                            </th>
-
-                            <th scope="col" class="px-6 py-3 text-start">
-                                
-                            </th>
-
-                        </tr>
-                    </thead>
-
-                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700 align-top">
-                        <tr class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="font-mono text-sm text-ok-boss-6">#ADUQ2189H1-0038</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Warehouse Selangor</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">10 Jan 2023</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Tyu Kai Kiat</span>
-                                </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <a href="tel:0123456789">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">0123456789</span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px">
-                                <a href="http://maps.google.com/?q=20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32, Taman Jinjang Baru, 52000 Kuala Lumpur." target="_blank" >
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">
-                                            20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
-                                            Taman Jinjang Baru, 52000 Kuala Lumpur.
+                
+                <div class="max-h-[52.5vh] overflow-y-auto">
+                    <table id="shipment-table" class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                        <thead class="bg-gray-50 dark:bg-neutral-900">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Tracking No.
                                         </span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                                    <span class="block px-6 py-2">
-                                        <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </svg>
-                                            Pending
-                                        </span>
-                                    </span>
-                                </button>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-1.5">
-                                    <a class="inline-flex items-center gap-x-1 text-sm text-ok-boss-6 decoration-2 hover:underline font-medium" href="#">
-                                        Update
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                                    </div>
+                                </th>
 
-                        <tr class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="font-mono text-sm text-ok-boss-6">#ADUQ2189H1-0038</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Warehouse Selangor</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">10 Jan 2023</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Tyu Kai Kiat</span>
-                                </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <a href="tel:0123456789">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">0123456789</span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px">
-                                <a href="http://maps.google.com/?q=20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32, Taman Jinjang Baru, 52000 Kuala Lumpur." target="_blank">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">
-                                            20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
-                                            Taman Jinjang Baru, 52000 Kuala Lumpur.
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Shipment Slot
                                         </span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                                    <span class="block px-6 py-2">
-                                        <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </svg>
-                                            Pending
-                                        </span>
-                                    </span>
-                                </button>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-1.5">
-                                    <a class="inline-flex items-center gap-x-1 text-sm text-ok-boss-6 decoration-2 hover:underline font-medium" href="#">
-                                        Update
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                                    </div>
+                                </th>
 
-                        <tr class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="font-mono text-sm text-ok-boss-6">#ADUQ2189H1-0038</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Warehouse Selangor</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">10 Jan 2023</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Tyu Kai Kiat</span>
-                                </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <a href="tel:0123456789">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">0123456789</span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px">
-                                <a href="http://maps.google.com/?q=20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32, Taman Jinjang Baru, 52000 Kuala Lumpur." target="_blank">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">
-                                            20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
-                                            Taman Jinjang Baru, 52000 Kuala Lumpur.
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Receiver 
                                         </span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
-                                    <span class="block px-6 py-2">
-                                        <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </svg>
-                                            Pending
-                                        </span>
-                                    </span>
-                                </button>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-1.5">
-                                    <a class="inline-flex items-center gap-x-1 text-sm text-ok-boss-6 decoration-2 hover:underline font-medium" href="#">
-                                        Update
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                                    </div>
+                                </th>
 
-                        <tr class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="font-mono text-sm text-ok-boss-6">#ADUQ2189H1-0038</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Warehouse Selangor</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">10 Jan 2023</span>
-                                </span>
-                            </td>
-                            <td class="size-px">
-                                <span class="block px-6 py-2">
-                                    <span class="text-sm text-gray-600 dark:text-neutral-400">Tyu Kai Kiat</span>
-                                </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <a href="tel:0123456789">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">0123456789</span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px">
-                                <a href="http://maps.google.com/?q=20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32, Taman Jinjang Baru, 52000 Kuala Lumpur." target="_blank">
-                                    <span class="block px-6 py-2">
-                                        <span class="text-sm text-gray-600 dark:text-neutral-400">
-                                            20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
-                                            Taman Jinjang Baru, 52000 Kuala Lumpur.
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Status
                                         </span>
-                                    </span>
-                                </a>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-neutral-700 align-top">
+                            <tr class="bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                                <td class="size-px">
                                     <span class="block px-6 py-2">
-                                        <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </svg>
-                                            Pending
-                                        </span>
+                                        <span class="font-mono text-sm text-ok-boss-6">#ADUQ2189H1-0038</span>
                                     </span>
-                                </button>
-                            </td>
-                            <td class="size-px whitespace-nowrap">
-                                <div class="px-6 py-1.5">
-                                    <a class="inline-flex items-center gap-x-1 text-sm text-ok-boss-6 decoration-2 hover:underline font-medium" href="#">
-                                        Update
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td class="size-px">
+                                    <span class="block px-6 py-2 flex flex-col">
+                                        <span class="font-mono text-sm text-ok-boss-6 mb-3">#ADUQ2189H1-0038</span>
+                                        <span class="text-sm text-gray-600 dark:text-neutral-400 font-semibold">Warehouse Selangor</span>
+                                        <a href="http://maps.google.com/?q=20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32, Taman Jinjang Baru, 52000 Kuala Lumpur." target="_blank" class="my-1.5 leading-none">
+                                            <span class="text-sm text-[#86909c]">
+                                                20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
+                                                Taman Jinjang Baru, 52000 Kuala Lumpur.
+                                            </span>
+                                        </a>
+                                        <span class="text-xs text-[#86909c] font-light">Delivery Date: 26 Jun 2024</span>
+                                    </span>
+                                </td>
+                                <td class="size-px">
+                                    <span class="block px-6 py-2 flex flex-col">
+                                        <div class="font-mono text-sm text-ok-boss-6 mb-3 text-transparent">#ADUQ2189H1-0038</div>
+                                        <span class="text-sm text-gray-600 dark:text-neutral-400 font-semibold">Tyu Kai Kiat</span>
+                                        <a href="http://maps.google.com/?q=20-5-11Pangsapuri Sri Jinjang, Jalan 19/32, Taman Jinjang Baru, 52000 Kuala Lumpur." target="_blank" class="my-1.5 leading-none">
+                                            <span class="text-sm text-[#86909c]">
+                                                20-5-11 Pangsapuri Sri Jinjang, Jalan 19/32,
+                                                Taman Jinjang Baru, 52000 Kuala Lumpur.
+                                            </span>
+                                        </a>
+                                        <a href="tel:0123456789">
+                                            <span class="text-xs text-[#86909c] font-light flex items-center">
+                                                <svg t="1719392098389" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1601" width="14" height="14" data-spm-anchor-id="a313x.search_index.0.i3.51113a81EjPI1R"><path d="M284.484267 128.546133c-136.669867 101.973333-153.6 325.717333-32.034134 551.253334 118.801067 220.3648 307.063467 337.442133 501.725867 277.333333 50.602667-15.616 99.157333-58.862933 99.157333-107.5712 0.017067-84.667733-96.8704-253.269333-169.437866-266.359467-20.360533-3.652267-44.970667 3.6864-81.578667 19.490134-3.7888 1.6384-7.68 3.362133-11.6736 5.1712l-9.1136 4.1984c-8.9088 4.1472-16.401067 7.7824-29.1328 14.08l-5.4784 2.696533-0.256-0.238933a122.043733 122.043733 0 0 1-6.638933-6.9632c-10.496-11.844267-22.869333-29.2864-35.345067-49.800534l-3.618133-6.0416c-16.759467-28.330667-31.6416-58.811733-41.3184-84.206933l-0.904534-2.440533 23.125334-9.898667c4.778667-2.048 9.335467-4.078933 14.114133-6.212267l13.482667-6.0928 10.376533-4.829866c26.282667-12.4416 41.8816-21.4528 50.653867-30.993067C620.714667 366.557867 521.352533 103.082667 439.825067 87.893333c-48.503467-9.045333-107.1104 6.7072-150.5792 37.205334l-4.778667 3.447466z m142.830933 26.453334c10.410667 1.9456 40.7552 48.810667 63.5392 109.226666 11.383467 30.1568 20.002133 60.586667 24.029867 84.599467l0.682666 4.164267a139.946667 139.946667 0 0 1 1.774934 20.48l-0.1024 3.140266-4.3008 2.474667-2.3552 1.314133c-7.543467 4.096-17.527467 8.994133-29.559467 14.523734l-19.797333 8.891733c-6.997333 3.072-14.062933 6.144-22.715734 9.813333l-31.402666 13.3632-4.676267 2.184534-1.570133 0.836266-0.887467-0.887466c-1.877333-1.28-3.498667 3.293867-15.991467 38.775466 20.736 88.814933 108.3392 232.942933 162.133334 233.028267l6.638933-0.733867c1.416533-0.170667 2.218667-0.324267 2.952533-0.529066l4.539734-1.621334 3.908266-1.6896 14.08-6.826666 23.944534-11.7248c3.6864-1.757867 7.168-3.413333 11.0592-5.205334l10.922666-4.949333 5.2224-2.286933a303.8208 303.8208 0 0 1 31.9488-12.100267l3.805867-1.058133c4.608-1.2288 7.338667-1.6896 6.656-1.809067 34.133333 6.144 113.288533 143.872 113.271467 199.168 0 11.605333-25.736533 34.542933-51.029334 42.359467-158.037333 48.7936-316.484267-49.732267-421.495466-244.5312-107.076267-198.6048-92.928-385.262933 12.765866-464.128 29.422933-21.9648 71.697067-33.911467 102.007467-28.2624z" fill="#86909c" p-id="1602"></path><path d="M670.1056 75.946667c92.9792 75.776 120.149333 191.3344 79.906133 305.373866l-2.218666 6.109867-63.931734-23.927467c32.836267-87.773867 14.848-173.192533-52.5312-230.997333l-4.369066-3.652267 43.144533-52.906666z" fill="#1afa29" p-id="1603" data-spm-anchor-id="a313x.search_index.0.i4.51113a81EjPI1R" class="selected"></path></svg>
+                                                <span class="ml-1">0123456789</span>
+                                            </span>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <button type="button" class="block" data-hs-overlay="#hs-ai-invoice-modal">
+                                        <span class="block px-6 py-2">
+                                            <span class="py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
+                                                Returned
+                                            </span>
+                                        </span>
+                                    </button>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <div class="px-6 py-1.5">
+                                        <a class="inline-flex items-center gap-x-1 text-sm text-ok-boss-6 decoration-2 hover:underline font-medium" href="#">
+                                            Update
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!-- End Table -->
+
                 <!-- Footer -->
                 <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
                     <div>
                         <p class="text-sm text-gray-600 dark:text-neutral-400">
-                            <span class="font-semibold text-gray-800 dark:text-neutral-200">9</span> results
+                            <span class="font-semibold text-gray-800 dark:text-neutral-200 results-count"></span> results found
                         </p>
                     </div>
 
                     <div>
                         <div class="inline-flex gap-x-2">
-                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 prev">
                                 <svg class="size-3" width="16" height="16" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10.506 1.64001L4.85953 7.28646C4.66427 7.48172 4.66427 7.79831 4.85953 7.99357L10.506 13.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                 </svg>
                                 Prev
                             </button>
 
-                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 next">
                                 Next
                                 <svg class="size-3" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M4.50598 2L10.1524 7.64645C10.3477 7.84171 10.3477 8.15829 10.1524 8.35355L4.50598 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -407,3 +200,59 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var rowsPerPage = 10;
+        var currentPage = 1;
+        var $tableRows = $('#shipment-table tbody tr');
+        var totalRows = $tableRows.length;
+        var totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        // Show initial rows based on currentPage
+        showPage(currentPage);
+
+        // Update results count
+        $('span.results-count').text(totalRows);
+
+        // Disable prev/next buttons initially
+        updatePaginationButtons();
+
+        // Next button click event
+        $('button.next').on('click', function () {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Prev button click event
+        $('button.prev').on('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        // Function to show rows for the given page
+        function showPage(page) {
+            var start = (page - 1) * rowsPerPage;
+            var end = start + rowsPerPage - 1;
+
+            $tableRows.hide().slice(start, end + 1).show();
+
+            // Update pagination info
+            var resultsCount = Math.min(totalRows, end + 1);
+
+            // Disable/enable pagination buttons based on current page
+            updatePaginationButtons();
+        }
+
+        // Function to disable/enable prev/next buttons
+        function updatePaginationButtons() {
+            $('button.prev').prop('disabled', currentPage === 1);
+            $('button.next').prop('disabled', currentPage === totalPages || totalRows === 0);
+        }
+    });
+</script>
