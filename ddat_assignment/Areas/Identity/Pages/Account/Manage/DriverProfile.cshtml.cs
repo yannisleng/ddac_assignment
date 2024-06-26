@@ -2,6 +2,7 @@
 using ddat_assignment.Areas.Identity.Data;
 using ddat_assignment.Data;
 using ddat_assignment.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize(Roles = "Driver")]
     public class DriverProfileModel : PageModel
     {
         private readonly UserManager<ddat_assignmentUser> _userManager;

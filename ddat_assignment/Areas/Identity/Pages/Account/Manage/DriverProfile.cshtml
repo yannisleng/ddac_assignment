@@ -25,23 +25,23 @@
                 <nav class="hs-accordion-group sm:px-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
                     <ul class="space-y-1.5">
                         <li>
-                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-700 dark:text-white" href="#personal-information" onclick="showSection('personal-information')">
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-700 dark:text-white" href="#personal-information" onclick="showSection('personal-information')">
                                 Personal Information
                             </a>
                         </li>
                         <li>
-                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#license" onclick="showSection('license')">
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#license" onclick="showSection('license')">
                                 License
                             </a>
                         </li>
 
                         <li>
-                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#working-preferences" onclick="showSection('working-preferences')">
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#working-preferences" onclick="showSection('working-preferences')">
                                 Working Preferences
                             </a>
                         </li>
                         <li>
-                            <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#emergency-contact" onclick="showSection('emergency-contact')">
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#emergency-contact" onclick="showSection('emergency-contact')">
                                 Emergency Contact
                             </a>
                         </li>
@@ -266,7 +266,7 @@
                 </div>
             </form>
 
-            <form id="working-preferences" class="p-6 section" method="post" asp-page-handler="WorkingPreferences">
+            <form id="working-preferences" class="p-6 section hidden" method="post" asp-page-handler="WorkingPreferences">
                 <div>
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -329,7 +329,7 @@
                 </div>
             </form>
 
-            <form id="emergency-contact" class="p-6 section" method="post" asp-page-handler="EmergencyContact">
+            <form id="emergency-contact" class="p-6 section hidden" method="post" asp-page-handler="EmergencyContact">
                 <div>
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
 
@@ -385,11 +385,11 @@
         $(document).ready(function () {
             showSection('personal-information');
 
-            $('nav a').click(function (event) {
+            $('nav a.driver-profile').click(function (event) {
                 event.preventDefault();
 
-                $('nav a').removeClass('bg-gray-100 dark:text-white');
-                $('nav a').addClass('dark:text-neutral-400 dark:hover:text-neutral-300');
+                $('nav a.driver-profile').removeClass('bg-gray-100 dark:text-white');
+                $('nav a.driver-profile').addClass('dark:text-neutral-400 dark:hover:text-neutral-300');
 
                 $(this).removeClass('dark:text-neutral-400 dark:hover:text-neutral-300');
                 $(this).addClass('bg-gray-100 dark:text-white');
