@@ -70,8 +70,14 @@
             <form asp-action="CreateNewShipmentSlot" asp-controller="Workspace" method="post" class="flex flex-col h-full gap-y-2 justify-between px-4">
                 <div>
                     <div class="flex flex-col gap-y-0.5 mb-1">
-                        <label for="selectedDriver" class="text-sm text-[#86909c]">Select a driver</label>
-                        <select name="selectedDriver"
+                        <label for="selectedDriverId" class="text-sm text-[#86909c]">Select a driver</label>
+                        @if (Model.Drivers.Count == 0) {
+                            <select name="selectedDriverId"
+                                    class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5" disabled>
+                                <option value="">No driver available</option>
+                            </select>
+                        }
+                        <select name="selectedDriverId"
                                 class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
                             @foreach (var driver in Model.Drivers)
                             {

@@ -1,9 +1,6 @@
 ﻿using ddat_assignment.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ddat_assignment.Models;
 using ddat_assignment.Data;
-using System.Diagnostics;
 
 namespace ddat_assignment.Controllers.Admin
 {
@@ -27,7 +24,7 @@ namespace ddat_assignment.Controllers.Admin
             ShipmentSlotModel shipmentSlot = new()
             {
                 ShipmentSlotId = Guid.NewGuid(),
-                ShipmentDate = DateTime.Now.AddDays(1),
+                ShipmentDate = DateTime.Now.AddDays(1).Date,
                 SlotTime = "8:00 AM - 5:00 PM",
                 DriverId = Convert.ToInt16(fc["selectedDriverId"]),
                 ShipmentIds = fc["selectedShipmentIds"].ToString().Split(',').Select(Guid.Parse).ToList()

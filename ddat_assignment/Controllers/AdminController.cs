@@ -19,7 +19,7 @@ namespace ddat_assignment.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.ToListAsync();
+            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.Include(s => s.Parcel).ToListAsync();
             if (selectedStatus == "All")
             { }
             else
@@ -32,7 +32,6 @@ namespace ddat_assignment.Controllers
             {
                 shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
                 shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
-                shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
             }
             shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
             ViewData["status"] = selectedStatus;
@@ -113,12 +112,11 @@ namespace ddat_assignment.Controllers
 
         public async Task<ShipmentModel> SearchShipment(Guid shipmentId)
         {
-            ShipmentModel shipment = await _context.ShipmentModel.FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
+            ShipmentModel shipment = await _context.ShipmentModel.Include(s => s.Parcel).FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
             if (shipment != null)
             {
                 shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
                 shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
-                shipment.Parcel = await _context.ParcelModel.FirstOrDefaultAsync(p => p.ParcelId == shipment.ParcelId);
                 return shipment;
             }
             return null;
@@ -143,7 +141,7 @@ namespace ddat_assignment.Controllers
 
         public async Task<List<ShipmentModel>> GetInTransitShipment(string filteredState)
         {
-            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.ToListAsync();
+            List<ShipmentModel> shipmentModels = await _context.ShipmentModel.Include(s => s.Parcel).ToListAsync();
             shipmentModels = shipmentModels.Where(s => s.ShipmentStatus == "Pending").ToList();
             shipmentModels = shipmentModels.Where(s => s.PickupAddress.Contains(filteredState)).ToList();
             shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
@@ -177,7 +175,7 @@ namespace ddat_assignment.Controllers
             }
             
             List<ShipmentSlotModel> shipmentSlotModels = await _context.ShipmentSlotModel.ToListAsync();
-            DateTime tmrDate = DateTime.Now.AddDays(1);
+            DateTime tmrDate = DateTime.Now.AddDays(1).Date;
             shipmentSlotModels = shipmentSlotModels.Where(s => s.ShipmentDate == tmrDate).ToList();
             foreach (var shipmentSlot in shipmentSlotModels)
             {
@@ -193,21 +191,17 @@ namespace ddat_assignment.Controllers
 
         public async Task<List<DriverModel>> GetAvailableDrivers(string filteredState)
         {
-            List<DriverModel> driverModels = await _context.DriverModel.ToListAsync();
+            List<DriverModel> driverModels = await _context.DriverModel.Include(d => d.User).ToListAsync();
             driverModels = driverModels.Where(d => d.PreferredWorkingLocation!.Contains(filteredState)).ToList();
             string tmr = DateTime.Now.AddDays(1).DayOfWeek.ToString();
             if (tmr == "Saturday" || tmr == "Sunday")
                 driverModels = driverModels.Where(d => d.PreferredWorkingDay == "Weekend").ToList();
             else
                 driverModels = driverModels.Where(d => d.PreferredWorkingDay == "Weekday").ToList();
-            /*foreach (var driverModel in driverModels)
-            {
-                driverModel.User = await _context.Users.FirstOrDefaultAsync(user => user.Id == driverModel.User.Id);
-            }*/
-            DateTime tmrDate = DateTime.Now.AddDays(1);
+            DateTime tmrDate = DateTime.Now.AddDays(1).Date;
             
             //check the shipmentslot by ShipmentDate to check the driver is available or not
-            List<ShipmentSlotModel> shipmentSlotModels = await _context.ShipmentSlotModel.ToListAsync();
+            List<ShipmentSlotModel> shipmentSlotModels = await _context.ShipmentSlotModel.Include(s => s.Driver).ToListAsync();
             shipmentSlotModels = shipmentSlotModels.Where(s => s.ShipmentDate == tmrDate).ToList();
             foreach (var shipmentSlot in shipmentSlotModels)
             {
