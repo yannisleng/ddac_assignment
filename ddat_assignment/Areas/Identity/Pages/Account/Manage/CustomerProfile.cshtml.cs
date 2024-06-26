@@ -1,15 +1,14 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using ddat_assignment.Areas.Identity.Data;
 using ddat_assignment.Data;
+using ddat_assignment.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
 {
@@ -17,13 +16,19 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ddat_assignmentUser> _userManager;
         private readonly SignInManager<ddat_assignmentUser> _signInManager;
+        private readonly ddat_assignmentContext _context;
+        private readonly ILogger<CustomerProfileModel> _logger;
 
         public CustomerProfileModel(
             UserManager<ddat_assignmentUser> userManager,
-            SignInManager<ddat_assignmentUser> signInManager)
+            SignInManager<ddat_assignmentUser> signInManager,
+            ddat_assignmentContext context,
+            ILogger<CustomerProfileModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
+            _logger = logger;
         }
 
         public string Username { get; set; }
@@ -32,9 +37,9 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public CustomerPersonalInfoInputModel CustomerPersonalInfo { get; set; }
 
-        public class InputModel
+        public class CustomerPersonalInfoInputModel
         {
             [Required]
             [EmailAddress]
@@ -65,12 +70,12 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             [StringLength(255, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
-            public string Password { get; set; }
+            public string? Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Confirm Password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
+            public string? ConfirmPassword { get; set; }
 
             [DataType(DataType.Date)]
             [Display(Name = "Date of Birth")]
@@ -82,20 +87,15 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(ddat_assignmentUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
-
-            Input = new InputModel
+            CustomerPersonalInfo = new CustomerPersonalInfoInputModel
             {
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 IdentityCardNumber = user.IdentityCardNumber,
-                PhoneNumber = phoneNumber,
+                PhoneNumber = user.PhoneNumber,
                 DateOfBirth = (DateTime)user.DateOfBirth,
-                Gender = user.Gender
+                Gender = user.Gender,
             };
         }
 
@@ -125,66 +125,45 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var email = await _userManager.GetEmailAsync(user);
-            if (Input.Email != email)
+            user.FirstName = CustomerPersonalInfo.FirstName;
+            user.LastName = CustomerPersonalInfo.LastName;
+            user.IdentityCardNumber = CustomerPersonalInfo.IdentityCardNumber;
+            user.DateOfBirth = CustomerPersonalInfo.DateOfBirth;
+            user.Gender = CustomerPersonalInfo.Gender;
+            user.PhoneNumber = CustomerPersonalInfo.PhoneNumber;
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
             {
-                var setEmailResult = await _userManager.SetEmailAsync(user, Input.Email);
-                if (!setEmailResult.Succeeded)
+                foreach (var error in updateResult.Errors)
                 {
-                    foreach (var error in setEmailResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                    return Page();
+                    _logger.LogError("Error updating user: {Error}", error.Description);
                 }
+                StatusMessage = "Unexpected error when trying to update profile.";
+                return RedirectToPage();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            if (!string.IsNullOrEmpty(CustomerPersonalInfo.Password))
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passwordResult = await _userManager.ResetPasswordAsync(user, token, CustomerPersonalInfo.Password);
+
+                if (!passwordResult.Succeeded)
                 {
-                    foreach (var error in setPhoneResult.Errors)
+                    foreach (var error in passwordResult.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        _logger.LogError("Error updating password: {Error}", error.Description);
                     }
-                    return Page();
+                    StatusMessage = "Error updating password.";
+                    return RedirectToPage();
                 }
-            }
-
-            if (!string.IsNullOrEmpty(Input.Password))
-            {
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.Password, Input.ConfirmPassword);
-                if (!changePasswordResult.Succeeded)
-                {
-                    foreach (var error in changePasswordResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                    return Page();
-                }
-            }
-
-            user.FirstName = Input.FirstName;
-            user.LastName = Input.LastName;
-            user.IdentityCardNumber = Input.IdentityCardNumber;
-            user.DateOfBirth = Input.DateOfBirth;
-            user.Gender = Input.Gender;
-
-            var updateUserResult = await _userManager.UpdateAsync(user);
-            if (!updateUserResult.Succeeded)
-            {
-                foreach (var error in updateUserResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
+
+
     }
 }
