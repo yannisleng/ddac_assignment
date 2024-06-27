@@ -26,10 +26,37 @@ namespace ddat_assignment.Controllers
 			return View(shipmentSlotModels);
 		}
 
-		public IActionResult Shipment()
+		public async Task<IActionResult> Shipment()
 		{
-			return View();
-		}
+            var user = await _userManager.GetUserAsync(User);
+
+            var shipmentSlots = await _context.ShipmentSlotModel
+			 .Where(ss => ss.Driver!.User.Id == user!.Id)
+			 .ToListAsync();
+
+            var shipmentIds = shipmentSlots.SelectMany(ss => ss.ShipmentIds!).ToList();
+
+            var shipments = await _context.ShipmentModel
+                .Include(s => s.Sender)
+                .Include(s => s.Receiver)
+                .Where(s => shipmentIds.Contains(s.ShipmentId))
+				.OrderByDescending(s => s.ShipmentDate)
+                .ToListAsync();
+
+            var transitions = await _context.TransitionModel
+				.Where(t => shipmentIds.Contains(t.ShipmentId))
+				.GroupBy(t => t.ShipmentId)
+				.Select(g => g.OrderByDescending(t => t.Timestamp).First())
+				.ToListAsync();
+
+            ManageShipmentModel manageShipmentModels = new ManageShipmentModel();
+
+            manageShipmentModels.Shipments = shipments ?? new List<ShipmentModel>();
+            manageShipmentModels.ShipmentSlots = shipmentSlots ?? new List<ShipmentSlotModel>();
+            manageShipmentModels.Transitions = transitions ?? new List<TransitionModel>();
+
+            return View(manageShipmentModels);
+        }
 
 		[HttpGet]
 		public async Task<IActionResult> LoadShipmentSchedule(DateTime startDate, DateTime endDate)
@@ -64,7 +91,89 @@ namespace ddat_assignment.Controllers
             return shipmentSlotModels;
 		}
 
-		private DateTime GetWeekOfFirstDate()
+        [HttpGet]
+        public async Task<IActionResult> LoadShipmentData(string searchTerm = "")
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var shipmentSlotsQuery = _context.ShipmentSlotModel
+                .Where(ss => ss.Driver!.User.Id == user!.Id);
+
+            var shipmentSlotsQueryResult = new List<ShipmentSlotModel>();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                shipmentSlotsQueryResult = await shipmentSlotsQuery.Where(ss =>
+                    EF.Functions.Like(ss.ShipmentSlotId.ToString(), $"%{searchTerm}%") ||
+                    EF.Functions.Like(ss.ShipmentDate.ToString(), $"%{searchTerm}%")
+                ).ToListAsync();
+
+                if (shipmentSlotsQueryResult.Count > 0)
+                {
+                    shipmentSlotsQuery = shipmentSlotsQuery.Where(ss =>
+                        EF.Functions.Like(ss.ShipmentSlotId.ToString(), $"%{searchTerm}%") ||
+                        EF.Functions.Like(ss.ShipmentDate.ToString(), $"%{searchTerm}%")
+                    );
+                }
+            }
+
+            var shipmentIdsQuery = shipmentSlotsQuery
+                .SelectMany(ss => ss.ShipmentIds!);
+
+            var transitionsQuery = _context.TransitionModel
+                .Where(t => shipmentIdsQuery.Contains(t.ShipmentId));
+
+            var shipmentsQuery = _context.ShipmentModel
+                .Include(s => s.Sender)
+                .Include(s => s.Receiver)
+                .Where(s => shipmentIdsQuery.Contains(s.ShipmentId));
+
+            var shipmentQueryResult = new List<ShipmentModel>();
+            var transitionQueryResult = new List<TransitionModel>();
+
+            if (!string.IsNullOrEmpty(searchTerm) && shipmentSlotsQueryResult.Count == 0)
+            {
+                shipmentQueryResult = await shipmentsQuery.Where(s =>
+                    EF.Functions.Like(s.ShipmentId.ToString(), $"%{searchTerm}%") ||
+                    EF.Functions.Like(s.ReceiverName, $"%{searchTerm}%") ||
+                    EF.Functions.Like(s.DeliveryAddress, $"%{searchTerm}%") ||
+                    EF.Functions.Like(s.ReceiverPhoneNumber, $"%{searchTerm}%") ||
+                    EF.Functions.Like(s.ShipmentStatus, $"%{searchTerm}%")
+                ).ToListAsync();
+
+                transitionQueryResult = await transitionsQuery
+                    .Where(t => EF.Functions.Like(t.Address, $"%{searchTerm}%")
+                        && t.Timestamp == transitionsQuery
+                        .Where(t2 => t2.ShipmentId == t.ShipmentId)
+                        .Max(t2 => t2.Timestamp)
+                ).ToListAsync();
+
+                var matchingShipmentIds = shipmentQueryResult.Select(s => s.ShipmentId)
+                        .Union(transitionQueryResult.Select(t => t.ShipmentId))
+                        .Distinct();
+
+                shipmentsQuery = shipmentsQuery.Where(s => matchingShipmentIds.Contains(s.ShipmentId));
+                transitionsQuery = transitionsQuery.Where(t => matchingShipmentIds.Contains(t.ShipmentId));
+            }
+
+            var shipmentSlots = await shipmentSlotsQuery.ToListAsync();
+            var shipments = await shipmentsQuery.OrderByDescending(s => s.ShipmentDate).ToListAsync();
+            var transitions = await transitionsQuery
+                .GroupBy(t => t.ShipmentId)
+                .Select(g => g.OrderByDescending(t => t.Timestamp).First())
+                .ToListAsync();
+
+            ManageShipmentModel manageShipmentModels = new ManageShipmentModel
+            {
+                Shipments = shipments ?? new List<ShipmentModel>(),
+                ShipmentSlots = shipmentSlots ?? new List<ShipmentSlotModel>(),
+                Transitions = transitions ?? new List<TransitionModel>()
+            };
+
+            return PartialView("_ShipmentTablePartial", manageShipmentModels);
+        }
+
+        private DateTime GetWeekOfFirstDate()
 		{
 			DateTime today = DateTime.Today;
 

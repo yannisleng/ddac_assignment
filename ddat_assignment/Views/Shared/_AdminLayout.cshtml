@@ -4,18 +4,16 @@
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="~/images/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-        @{
-            if (User.IsInRole("Warehouse"))
-            {
-                ViewData["Title"] = " - Warehouse Admin";
-            }
-            else if (User.IsInRole("Driver"))
-            {
-                ViewData["Title"] = " - Driver";
-            }
+    @{
+        if (User.IsInRole("Warehouse"))
+        {
+            <title>@ViewData["Title"] - Admin</title>
         }
-        </title>
+        else if (User.IsInRole("Driver"))
+        {
+            <title>@ViewData["Title"] - Driver</title>
+        }
+    }
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ddat_assignment.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />

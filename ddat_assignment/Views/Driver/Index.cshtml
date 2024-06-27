@@ -1,7 +1,7 @@
 ﻿@model List<ShipmentSlotModel>
 
 @{
-    ViewData["Title"] = "Driver Dashboard";
+    ViewData["Title"] = "Dashboard";
 }
 
 <div class="flex justify-between items-center h-1/5">
@@ -60,12 +60,13 @@
 			</button>
 		</div>
 	</div>
-	<div class="overflow-y-auto h-4/5" id="shipmentSchedule">
-		@Html.Partial("_ShipmentSchedulePartial", Model)
-	</div>
+    <div class="overflow-y-auto h-4/5" id="shipmentSchedule">
+        <partial name="_ShipmentSchedulePartial" model="Model" />
+    </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         // get the start date and end date of the week
