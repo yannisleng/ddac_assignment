@@ -10,7 +10,7 @@
     @if (User.IsInRole("Customer"))
     {
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/CustomerProfile" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/CustomerProfile" title="Manage">Profile</a>
     </li>
     }
     <li class="nav-item">

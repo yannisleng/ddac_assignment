@@ -1,7 +1,9 @@
 ﻿@{
     ViewData["Title"] = "CreateShipment";
-    var states = ViewBag.States as List<string>;
-    var paymentMethods = ViewBag.PaymentMethods as List<string>;
+    //var states = ViewBag.States as List<string>;
+    //var paymentMethods = ViewBag.PaymentMethods as List<string>;
+    List<string> states = new List<string> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kuala Lumpur", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+    List<string> paymentMethods = new List<string> { "Cash", "Credit Card", "Debit Card", "E-wallet", "Online Transfer" };
     var senderName = ViewBag.SenderName;
     var senderPhoneNumber = ViewBag.SenderPhoneNumber;
     var SenderAddress = ViewBag.SenderAddress;

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using ddat_assignment.Areas.Identity.Data;
 
 namespace ddat_assignment.Controllers
 {
@@ -13,10 +15,12 @@ namespace ddat_assignment.Controllers
     public class CustomerController : Controller
     {
         private readonly ddat_assignmentContext _context;
+        private readonly UserManager<ddat_assignmentUser> _userManager;
 
-        public CustomerController(ddat_assignmentContext context)
+        public CustomerController(ddat_assignmentContext context, UserManager<ddat_assignmentUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -32,13 +36,11 @@ namespace ddat_assignment.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var user = await _context.Users
-                .Where(u => u.Id == userId)
-                .FirstOrDefaultAsync();
-
             var userDetail = await _context.UserDetailsModel
                 .Where(u => u.UserId == userId)
                 .FirstOrDefaultAsync();
+
+            var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
             {
@@ -46,17 +48,9 @@ namespace ddat_assignment.Controllers
             }
 
             // Passing user details to the view
-            ViewBag.SenderName = user.FirstName + " " + user.LastName;
+            ViewBag.SenderName = user.FullName;
             ViewBag.SenderPhoneNumber = user.PhoneNumber;
             ViewBag.SenderAddress = userDetail.Address;
-
-            // Creating lists for states and payment methods
-            List<string> states = new List<string> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kuala Lumpur", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
-            List<string> paymentMethods = new List<string> { "Cash", "Credit Card", "Debit Card", "E-wallet", "Online Transfer" };
-
-            ViewBag.States = states;
-            ViewBag.PaymentMethods = paymentMethods;
-
             return View();
         }
     }

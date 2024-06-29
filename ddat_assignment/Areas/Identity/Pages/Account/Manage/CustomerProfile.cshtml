@@ -14,13 +14,16 @@
         <div class="w-1/4 border-r border-gray-300 bg-gray-100 p-4">
             <ul>
                 <li class="mb-4">
-                    <button class="w-full rounded bg-gray-200 px-4 py-2 text-gray-800">Personal Information</button>
+                    <button id="personal-info-button" class="w-full rounded bg-gray-200 px-4 py-2 text-gray-800">Personal Information</button>
+                </li>
+                <li class="mb-4">
+                    <button id="address-button" class="w-full rounded bg-gray-200 px-4 py-2 text-gray-800">Address</button>
                 </li>
             </ul>
         </div>
 
         <!-- Form -->
-        <div class="w-3/4 rounded bg-white p-6 shadow-md">
+        <div class="w-3/4 rounded bg-white p-6 shadow-md" id="personal-info-form">
             <form id="profile-form" method="post" class="space-y-6">
                 <div asp-validation-summary="ModelOnly" class="mb-4 text-red-500" role="alert"></div>
 
@@ -105,6 +108,42 @@
                 </div>
             </form>
         </div>
+
+        <!-- Address Form -->
+        <div class="hidden w-3/4 rounded bg-white p-6 shadow-md" id="address-form">
+            <form id="address-form" method="post" class="space-y-6" asp-page-handler="UpdateAddress">
+                <div>
+                    <label asp-for="Address.HouseNumber" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="Address.HouseNumber" class="w-full rounded border px-3 py-2" />
+                    <span asp-validation-for="Address.HouseNumber" class="text-sm text-red-500"></span>
+                </div>
+                <div>
+                    <label asp-for="Address.Street" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="Address.Street" class="w-full rounded border px-3 py-2" />
+                    <span asp-validation-for="Address.Street" class="text-sm text-red-500"></span>
+                </div>
+                <div>
+                    <label asp-for="Address.Postcode" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="Address.Postcode" class="w-full rounded border px-3 py-2" />
+                    <span asp-validation-for="Address.Postcode" class="text-sm text-red-500"></span>
+                </div>
+                <div>
+                    <label asp-for="Address.Park" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="Address.Park" class="w-full rounded border px-3 py-2" />
+                    <span asp-validation-for="Address.Park" class="text-sm text-red-500"></span>
+                </div>
+                <div>
+                    <label asp-for="Address.City" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="Address.City" class="w-full rounded border px-3 py-2" />
+                    <span asp-validation-for="Address.City" class="text-sm text-red-500"></span>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="rounded bg-red-500 px-4 py-2 text-white">Save Address</button>
+                </div>
+            </form>
+        </div>
+
+
     </div>
 </div>
 
@@ -119,6 +158,13 @@
             } else {
                 passwordSection.classList.add("hidden");
             }
+        });
+    </script>
+
+    <script>
+        document.getElementById("address-button").addEventListener("click", function () {
+            document.getElementById("personal-info-form").classList.toggle("hidden");
+            document.getElementById("address-form").classList.toggle("hidden");
         });
     </script>
 }

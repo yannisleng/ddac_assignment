@@ -39,6 +39,9 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public CustomerPersonalInfoInputModel CustomerPersonalInfo { get; set; }
 
+        [BindProperty]
+        public AddressInputModel Address { get; set; }
+
         public class CustomerPersonalInfoInputModel
         {
             [Required]
@@ -84,6 +87,33 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             [StringLength(10)]
             public string? Gender { get; set; }
         }
+        public class AddressInputModel
+        {
+            [Required]
+            [StringLength(100)]
+            [Display(Name = "House Number")]
+            public string HouseNumber { get; set; }
+
+            [Required]
+            [StringLength(100)]
+            [Display(Name = "Street")]
+            public string Street { get; set; }
+
+            [Required]
+            [StringLength(20)]
+            [Display(Name = "Postcode")]
+            public string Postcode { get; set; }
+
+            [Required]
+            [StringLength(100)]
+            [Display(Name = "Park")]
+            public string Park { get; set; }
+
+            [Required]
+            [StringLength(100)]
+            [Display(Name = "City")]
+            public string City { get; set; }
+        }
 
         private async Task LoadAsync(ddat_assignmentUser user)
         {
@@ -99,6 +129,22 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             };
         }
 
+        private async Task LoadAddressAsync(UserDetailsModel userDetails)
+        {
+            var addressParts = userDetails.Address?.Split(", ");
+            if (addressParts != null && addressParts.Length == 5)
+            {
+                Address = new AddressInputModel
+                {
+                    HouseNumber = addressParts[0],
+                    Street = addressParts[1],
+                    Postcode = addressParts[2],
+                    Park = addressParts[3],
+                    City = addressParts[4],
+                };
+            }
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -107,7 +153,10 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            var userDetails = await _context.UserDetailsModel.FirstOrDefaultAsync(u => u.UserId == user.Id);
+
             await LoadAsync(user);
+            await LoadAddressAsync(userDetails);
             return Page();
         }
 
@@ -118,6 +167,9 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
+            ModelState.Clear();
+            TryValidateModel(CustomerPersonalInfo, nameof(CustomerPersonalInfo));
 
             if (!ModelState.IsValid)
             {
@@ -164,6 +216,39 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
+        public async Task<IActionResult> OnPostUpdateAddressAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
 
+            var userDetails = await _context.UserDetailsModel.FirstOrDefaultAsync(u => u.UserId == user.Id);
+            ModelState.Clear();
+            TryValidateModel(Address, nameof(Address));
+
+            if (!ModelState.IsValid)
+            {
+                await LoadAddressAsync(userDetails);
+                return Page();
+            }
+
+            userDetails.Address = $"{Address.HouseNumber}, {Address.Street}, {Address.Postcode}, {Address.Park}, {Address.City}";
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+            {
+                foreach (var error in updateResult.Errors)
+                {
+                    _logger.LogError("Error updating address: {Error}", error.Description);
+                }
+                StatusMessage = "Unexpected error when trying to update address.";
+                return RedirectToPage();
+            }
+
+            StatusMessage = "Your address has been updated";
+            return RedirectToPage();
+        }
     }
 }
