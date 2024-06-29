@@ -46,11 +46,26 @@ namespace ddat_assignment.Controllers
             {
                 return NotFound();
             }
+            
+            // Parse the address from the database
+            var addressParts = userDetail.Address.Split(",");
+            string addressLine1 = addressParts.Length > 0 ? addressParts[0] : "";
+            string addressLine2 = addressParts.Length > 1 ? addressParts[1] : "";
+            string postcode = addressParts.Length > 2 ? addressParts[2] : "";
+            string city = addressParts.Length > 3 ? addressParts[3] : "";
+            string state = addressParts.Length > 4 ? addressParts[4] : "";
 
             // Passing user details to the view
             ViewBag.SenderName = user.FullName;
             ViewBag.SenderPhoneNumber = user.PhoneNumber;
-            ViewBag.SenderAddress = userDetail.Address;
+            ViewBag.SenderAddressLine1 = addressLine1;
+            ViewBag.SenderAddressLine2 = addressLine2;
+            ViewBag.SenderPostcode = postcode;
+            ViewBag.SenderCity = city;
+            ViewBag.SenderState = state;
+
+            TempData["UserId"] = userId;
+
             return View();
         }
     }

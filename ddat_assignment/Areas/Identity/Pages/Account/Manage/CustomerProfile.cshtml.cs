@@ -91,13 +91,13 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
         {
             [Required]
             [StringLength(100)]
-            [Display(Name = "House Number")]
-            public string HouseNumber { get; set; }
+            [Display(Name = "Address1")]
+            public string Address1 { get; set; }
 
             [Required]
             [StringLength(100)]
-            [Display(Name = "Street")]
-            public string Street { get; set; }
+            [Display(Name = "Address2")]
+            public string Address2 { get; set; }
 
             [Required]
             [StringLength(20)]
@@ -106,13 +106,13 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
 
             [Required]
             [StringLength(100)]
-            [Display(Name = "Park")]
-            public string Park { get; set; }
+            [Display(Name = "City")]
+            public string City { get; set; }
 
             [Required]
             [StringLength(100)]
-            [Display(Name = "City")]
-            public string City { get; set; }
+            [Display(Name = "State")]
+            public string State { get; set; }
         }
 
         private async Task LoadAsync(ddat_assignmentUser user)
@@ -131,19 +131,32 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAddressAsync(UserDetailsModel userDetails)
         {
-            var addressParts = userDetails.Address?.Split(", ");
-            if (addressParts != null && addressParts.Length == 5)
+            if (!string.IsNullOrEmpty(userDetails.Address))
             {
-                Address = new AddressInputModel
+                var addressParts = userDetails.Address.Split(", ");
+                if (addressParts.Length == 5) // Adjust this number based on actual parts
                 {
-                    HouseNumber = addressParts[0],
-                    Street = addressParts[1],
-                    Postcode = addressParts[2],
-                    Park = addressParts[3],
-                    City = addressParts[4],
-                };
+                    Address = new AddressInputModel
+                    {
+                        Address1 = addressParts[0],
+                        Address2 = addressParts[1],
+                        Postcode = addressParts[2],
+                        City = addressParts[3],
+                        State = addressParts[4]
+                    };
+                }
+                else
+                {
+                    // Handle unexpected format or missing parts
+                    Address = new AddressInputModel(); // or set default values
+                }
+            }
+            else
+            {
+                Address = new AddressInputModel(); // Initialize with default or empty values
             }
         }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -216,7 +229,7 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostUpdateAddressAsync()
+        /*public async Task<IActionResult> OnPostUpdateAddressAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -246,6 +259,33 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
                 StatusMessage = "Unexpected error when trying to update address.";
                 return RedirectToPage();
             }
+
+            StatusMessage = "Your address has been updated";
+            return RedirectToPage();
+        }*/
+
+        public async Task<IActionResult> OnPostUpdateAddressAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var userDetails = await _context.UserDetailsModel.FirstOrDefaultAsync(u => u.UserId == user.Id);
+            ModelState.Clear();
+            TryValidateModel(Address, nameof(Address));
+
+            if (!ModelState.IsValid)
+            {
+                await LoadAddressAsync(userDetails);
+                return Page();
+            }
+
+            userDetails.Address = $"{Address.Address1}, {Address.Address2}, {Address.Postcode}, {Address.City}, {Address.State}";
+
+            _context.Update(userDetails);
+            await _context.SaveChangesAsync();
 
             StatusMessage = "Your address has been updated";
             return RedirectToPage();
