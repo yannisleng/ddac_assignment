@@ -19,11 +19,12 @@ namespace ddat_assignment.Models
         public virtual DriverModel? Driver { get; set; }
 
         [ForeignKey("ParcelModel")]
-        public Guid ? ParcelId { get; set; }
+        public Guid? ParcelId { get; set; }
         public virtual ParcelModel? Parcel { get; set; }
 
-        [ForeignKey("ddat_assignmentUser")]
-        public int? SenderId { get; set; }
+        [ForeignKey("Sender")]
+        public string? SenderId { get; set; }
+        public virtual ddat_assignmentUser? Sender { get; set; }
 
         [StringLength(100)]
         public string? SenderName { get; set; }
@@ -31,18 +32,15 @@ namespace ddat_assignment.Models
         [StringLength(15)]
         public string? SenderPhoneNumber { get; set; }
 
-        public virtual ddat_assignmentUser? Sender { get; set; }
-
-        [ForeignKey("ddat_assignmentUser")]
-        public int? ReceiverId { get; set; }
+        [ForeignKey("Receiver")]
+        public string? ReceiverId { get; set; }
+        public virtual ddat_assignmentUser? Receiver { get; set; }
 
         [StringLength(100)]
         public string? ReceiverName { get; set; }
 
         [StringLength(15)]
         public string? ReceiverPhoneNumber { get; set; }
-
-        public virtual ddat_assignmentUser? Receiver { get; set; }
 
         [StringLength(255)]
         public string PickupAddress { get; set; }

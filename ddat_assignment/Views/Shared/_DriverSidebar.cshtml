@@ -13,37 +13,16 @@
     <nav class="p-4 w-full flex flex-col flex-wrap mt-4">
         <ul class="space-y-1.5">
             <li>
-                <a asp-action="Index" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg text-gray-700 hover:bg-ok-boss-2 bg-ok-boss-2 text-ok-boss-9 hover:bg-ok-boss-3 hover:text-ok-boss-7">
+                <a asp-action="Index" asp-controller="Driver" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg text-gray-700">
                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
                     Dashboard
                 </a>
             </li>
 
             <li>
-                <a asp-action="Index" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg text-gray-700 hover:bg-ok-boss-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0" /><circle cx="10" cy="8" r="5" /><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" /></svg>
-                    Manage Drivers
-                </a>
-            </li>
-
-            <li>
-                <a asp-action="Workspace" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase-business"><path d="M12 12h.01" /><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /><path d="M22 13a18.15 18.15 0 0 1-20 0" /><rect width="20" height="14" x="2" y="6" rx="2" /></svg>
-                    Manage Parcels
-                </a>
-            </li>
-
-            @* <li>
-                <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
-                    Self Collection
-                </a>
-            </li> *@
-
-            <li>
-                <a asp-action="StandardShipping" asp-controller="Admin" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
+                <a asp-action="Shipment" asp-controller="Driver" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
-                    Standard Shipping    
+                    Shipment
                 </a>
             </li>
             
@@ -67,3 +46,20 @@
     </nav>
 </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let currentPath = window.location.pathname;
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        if (currentPath === "/Driver") {
+            sidebarItems[0].classList.add("bg-ok-boss-2", "text-ok-boss-9", "hover:bg-ok-boss-3", "hover:text-ok-boss-7");
+            return;
+        }
+        sidebarItems.forEach(link => {
+            const href = link.getAttribute('href');
+            if (currentPath === href) {
+                link.classList.add("bg-ok-boss-2", "text-ok-boss-9", "hover:bg-ok-boss-3", "hover:text-ok-boss-7");
+            }
+        })
+    })
+</script>
