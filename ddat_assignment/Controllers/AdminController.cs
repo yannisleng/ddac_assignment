@@ -105,6 +105,40 @@ namespace ddat_assignment.Controllers
         }
 
         [HttpGet]
+        public IActionResult ShipmentSchedule()
+        {
+            string searchQuery = Request.Query["searchQuery"]!;
+            Guid searchQueryUuid;
+            try
+            {
+                searchQueryUuid = Guid.Parse(searchQuery);
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Invalid Shipment Slot ID!";
+                return View();
+            }
+            ShipmentSlotModel shipmentSlot = _context.ShipmentSlotModel.Include(s => s.Driver).ThenInclude(d => d.User).FirstOrDefault(s => s.ShipmentSlotId == searchQueryUuid);
+            if (shipmentSlot != null) {
+                List<ShipmentModel> shipmentModels = new();
+                foreach (var shipmentId in shipmentSlot.ShipmentIds!)
+                {
+                    ShipmentModel shipment = _context.ShipmentModel.Include(s => s.Parcel).FirstOrDefault(s => s.ShipmentId == shipmentId);
+                    shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
+                    shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
+                    shipmentModels.Add(shipment);
+                }
+                shipmentSlot.Shipments = shipmentModels;
+            }
+            if (shipmentSlot == null)
+            {
+                TempData["error"] = "Shipment Slot with Shipment Slot Id: " + searchQuery + " not found!";
+                return View();
+            }
+            return View(shipmentSlot);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Shipment()
         {
             string searchQuery = Request.Query["searchQuery"]!;

@@ -68,6 +68,10 @@
             sidebarItems[0].classList.add("bg-ok-boss-2", "text-ok-boss-9", "hover:bg-ok-boss-3", "hover:text-ok-boss-7");
             return;
         }
+        if (currentPath === "/Admin/ShipmentSchedule") {
+            sidebarItems[2].classList.add("bg-ok-boss-2", "text-ok-boss-9", "hover:bg-ok-boss-3", "hover:text-ok-boss-7");
+            return;
+        }
         sidebarItems.forEach(link => {
             const href = link.getAttribute('href');
             if (currentPath === href) {
