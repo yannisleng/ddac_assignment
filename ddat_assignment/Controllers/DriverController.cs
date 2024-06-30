@@ -70,7 +70,7 @@ namespace ddat_assignment.Controllers
 		{
 			var user = await _userManager.GetUserAsync(User);
 
-			var driver = await _context.DriverModel.FirstOrDefaultAsync(d => d.User.Id == user.Id);
+			var driver = await _context.DriverModel.FirstOrDefaultAsync(d => d.User.Id == user!.Id);
 
             List<ShipmentSlotModel> shipmentSlotModels = new List<ShipmentSlotModel>();
 
@@ -91,6 +91,35 @@ namespace ddat_assignment.Controllers
             return shipmentSlotModels;
 		}
 
+        private DateTime GetWeekOfFirstDate()
+        {
+            DateTime today = DateTime.Today;
+
+            int daysUntilStartOfWeek = ((int)today.DayOfWeek - (int)DayOfWeek.Monday);
+
+            if (daysUntilStartOfWeek < 0)
+            {
+                daysUntilStartOfWeek += 7;
+            }
+
+            return today.AddDays(-daysUntilStartOfWeek);
+        }
+
+        private DateTime GetWeekOfLastDate()
+        {
+            DateTime today = DateTime.Today;
+
+            int daysUntilEndOfWeek = 6 - (int)today.DayOfWeek;
+
+            if (daysUntilEndOfWeek == 0)
+            {
+                daysUntilEndOfWeek += 7;
+            }
+
+            return today.AddDays(daysUntilEndOfWeek);
+        }
+
+        //Shipment View
         [HttpGet]
         public async Task<IActionResult> LoadShipmentData(string searchTerm = "")
         {
@@ -173,32 +202,103 @@ namespace ddat_assignment.Controllers
             return PartialView("_ShipmentTablePartial", manageShipmentModels);
         }
 
-        private DateTime GetWeekOfFirstDate()
-		{
-			DateTime today = DateTime.Today;
+        [HttpPost]
+        public async Task<IActionResult> UpdateShipmentStatus(Guid shipmentId, string newStatus, string transitLocation)
+        {
+            var shipment = await _context.ShipmentModel.FindAsync(shipmentId);
 
-			int daysUntilStartOfWeek = ((int)today.DayOfWeek - (int)DayOfWeek.Monday);
+            // Update shipment status
+            shipment!.ShipmentStatus = newStatus;
 
-			if (daysUntilStartOfWeek < 0)
-			{
-				daysUntilStartOfWeek += 7;
-			}
+            if (newStatus == "Delivered")
+            {
+                shipment.DeliveryDate = DateTime.Now;
+            }
 
-			return today.AddDays(-daysUntilStartOfWeek);
-		}
+            // Create a new transition
+            if (shipment!.ShipmentStatus == "Pending")
+            {
+                var defaultTransistion = new TransitionModel
+                {
+                    ShipmentId = shipmentId,
+                    Address = shipment!.PickupAddress,
+                    Status = "Picked Up",
+                    Timestamp = DateTime.Now
+                };
 
-		private DateTime GetWeekOfLastDate()
-		{
-			DateTime today = DateTime.Today;
+                _context.TransitionModel.Add(defaultTransistion);
+            }
 
-			int daysUntilEndOfWeek = 6 - (int)today.DayOfWeek;
+            if (newStatus == "Delivered")
+            {
+                transitLocation = shipment!.DeliveryAddress;
+            }
 
-			if (daysUntilEndOfWeek == 0)
-			{
-				daysUntilEndOfWeek += 7; 
-			}
+            // Create a new transition
+            var transition = new TransitionModel
+            {
+                ShipmentId = shipmentId,
+                Address = transitLocation,
+                Status = newStatus,
+                Timestamp = DateTime.Now
+            };
 
-			return today.AddDays(daysUntilEndOfWeek);
-		}
-	}
+            _context.TransitionModel.Add(transition);
+
+            // If the status is "Delivered", handle proof of delivery
+            if (newStatus == "Delivered")
+            {
+                var file = Request.Form.Files.GetFile("proofOfDelivery");
+                if (file != null && file.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(memoryStream);
+                        shipment.ProofOfDelivery = memoryStream.ToArray();
+                        shipment.ProofOfDeliveryFileName = file.FileName;
+                        shipment.ProofOfDeliveryContentType = file.ContentType;
+                    }
+                }
+                else
+                {
+                    return BadRequest("Proof of delivery is required for 'Delivered' status.");
+                }
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok("Shipment status updated and transition added successfully.");
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "An error occurred while updating the database.");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProofOfDelivery(string shipmentId)
+        {
+            if (!Guid.TryParse(shipmentId, out Guid parsedShipmentId))
+            {
+                return BadRequest("Invalid shipment ID.");
+            }
+
+            var shipment = await _context.ShipmentModel.FindAsync(parsedShipmentId);
+            if (shipment?.ProofOfDelivery == null)
+            {
+                return NotFound();
+            }
+
+            var response = new
+            {
+                Image = Convert.ToBase64String(shipment.ProofOfDelivery),
+                ContentType = shipment.ProofOfDeliveryContentType,
+                FileName = shipment.ProofOfDeliveryFileName,
+                DeliveryDate = shipment.DeliveryDate 
+            };
+
+            return Json(response);
+        }
+    }
 }

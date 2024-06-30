@@ -1,6 +1,7 @@
 ﻿@model ManageShipmentModel
 @{
     ViewData["Title"] = "Shipment Portal";
+    List<String> shipmentStatus = new List<string> { "All", "Pending", "Picked Up", "In Transit", "Delivered", "Returned" };
 }
 
 <div class="h-[10%]">
@@ -36,30 +37,15 @@
                                 </button>
                                 <div class="absolute top-10 right-0 hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden divide-y divide-gray-200 min-w-48 z-10 bg-white shadow-md rounded-lg mt-2 dark:divide-neutral-700 dark:bg-neutral-800 dark:border dark:border-neutral-700" aria-labelledby="hs-as-table-table-filter-dropdown">
                                     <div class="divide-y divide-gray-200 dark:divide-neutral-700">
-                                        <label for="hs-as-filters-dropdown-all" class="flex py-2.5 px-3">
-                                            <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-all" checked>
-                                            <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">All</span>
-                                        </label>
-                                        <label for="hs-as-filters-dropdown-published" class="flex py-2.5 px-3">
-                                            <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-published">
-                                            <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Pending</span>
-                                        </label>
-                                        <label for="hs-as-filters-dropdown-pending" class="flex py-2.5 px-3">
-                                            <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-pending">
-                                            <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Picked Up</span>
-                                        </label>
-                                        <label for="hs-as-filters-dropdown-pending" class="flex py-2.5 px-3">
-                                            <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-pending">
-                                            <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">In Transit</span>
-                                        </label>
-                                        <label for="hs-as-filters-dropdown-pending" class="flex py-2.5 px-3">
-                                            <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-pending">
-                                            <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Delivered</span>
-                                        </label>
-                                        <label for="hs-as-filters-dropdown-pending" class="flex py-2.5 px-3">
-                                            <input type="checkbox" class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-pending">
-                                            <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">Returned</span>
-                                        </label>
+                                        @{
+                                            foreach (var status in shipmentStatus)
+                                            {
+                                                <label for="hs-as-filters-dropdown-all" class="flex py-2.5 px-3">
+                                                    <input type="checkbox" checked=@(status == "All") class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-all">
+                                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">@status</span>
+                                                </label>
+                                            }
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -144,35 +130,9 @@
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/shipment-functions.js"></script>
 <script>
     $(document).ready(function () {
-        function loadShipmentData(searchTerm) {
-            $.ajax({
-                url: '/Driver/LoadShipmentData',
-                type: 'GET',
-                data: { searchTerm: searchTerm },
-                success: function (data) {
-                    $('#shipmentTable').html(data);
-                    updateTableData();
-                },
-                error: function () {
-                    alert('Error loading shipment data.');
-                }
-            });
-        }
-
-        function updateTableData() {
-            $tableRows = $('#shipment-table tbody tr');
-            totalRows = $tableRows.length;
-            totalPages = Math.ceil(totalRows / rowsPerPage);
-
-            $('span.results-count').text(totalRows);
-
-            showPage(currentPage);
-
-            updatePaginationButtons();
-        }
-
         $('#searchTerm').on('keyup', function () {
             var searchTerm = $(this).val().trim();
             loadShipmentData(searchTerm);
@@ -192,16 +152,8 @@
             loadShipmentData(filter === "All" ? "" : filter);
         });
 
-        var rowsPerPage = 10;
-        var currentPage = 1;
-        var $tableRows = $('#shipment-table tbody tr');
-        var totalRows = $tableRows.length;
-        var totalPages = Math.ceil(totalRows / rowsPerPage);
-
         showPage(currentPage);
-
         $('span.results-count').text(totalRows);
-
         updatePaginationButtons();
 
         $('button.next').on('click', function () {
@@ -217,21 +169,5 @@
                 showPage(currentPage);
             }
         });
-
-        function showPage(page) {
-            var start = (page - 1) * rowsPerPage;
-            var end = start + rowsPerPage - 1;
-
-            $tableRows.hide().slice(start, end + 1).show();
-
-            var resultsCount = Math.min(totalRows, end + 1);
-
-            updatePaginationButtons();
-        }
-
-        function updatePaginationButtons() {
-            $('button.prev').prop('disabled', currentPage === 1);
-            $('button.next').prop('disabled', currentPage === totalPages || totalRows === 0);
-        }
     });
 </script>

@@ -408,6 +408,14 @@ namespace ddat_assignment.Migrations
                     b.Property<byte[]>("ProofOfDelivery")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("ProofOfDeliveryContentType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProofOfDeliveryFileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("ReceiverId")
                         .HasColumnType("nvarchar(450)");
 
