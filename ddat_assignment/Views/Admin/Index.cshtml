@@ -1,11 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
     var statusSelected = Convert.ToString(ViewData["status"]);
-    string formatDate(DateTime date)
-    {
-        return date.ToString("dd MMMM yyyy HH:mm:ss");
-    };
-
     List<string> shipmentStatus = new List<string> { "All", "Pending", "Picked Up", "In Transit", "Delivered", "Returned" };
 }
 @model List<ShipmentModel>
@@ -50,40 +45,7 @@
     <div class="flex flex-col gap-y-2 overflow-y-auto max-h-[80vh] pe-2 pb-8">
         @foreach (var shipment in Model)
         {
-            <div class="border shadow rounded-md w-full p-4 bg-white cursor-pointer" onclick="shipmentCardOnClick('@(shipment.ShipmentId)')">
-                <div class="flex flex-row items-center justify-between mb-2">
-                    <div class="text-lg text-ok-boss-8 font-semibold"># @shipment.ShipmentId</div>
-                    <div class="text-[#86909c] text-xs">
-                        @formatDate(shipment.ShipmentDate)
-                    </div>
-                </div>
-                <div class="flex flex-row items-center gap-x-2 mb-4">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
-                    <div class="">#Parcel ID: @shipment?.Parcel?.ParcelId</div>
-                </div>
-                <div class="flex flex-row justify-between items-center">
-                    <div class="flex flex-1 flex-row gap-x-6">
-                        <div class="flex flex-col flex-1 gap-y-0.5">
-                            <div class="text-xs text-[#86909c]">Pickup address</div>
-                            <div class="text-ok-boss-4 text-sm font-medium">@shipment.PickupAddress</div>
-                        </div>
-                        <div class="flex flex-col flex-1 gap-y-0.5">
-                            <div class="text-xs text-[#86909c]">Delivery address</div>
-                            <div class="text-ok-boss-4 text-sm font-medium">@shipment.DeliveryAddress</div>
-                        </div>
-                    </div>
-                    <div class="flex-1 flex flex-row justify-end">
-                        <div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-sm">
-                            @shipment.ShipmentStatus
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <partial name="_ShipmentCardPartial" model="shipment" />
         }
     </div>
 </div>
-<script>
-    function shipmentCardOnClick(shipmentId) {
-        window.location.href = "@Url.Action("Shipment","Admin")?searchQuery=" + shipmentId;
-    }
-</script>

@@ -58,6 +58,11 @@ namespace ddat_assignment.Controllers.Admin
                     fc["receiver-postcode"] + "||" + fc["receiver-city"] + "||" + fc["receiver-state"];
                 shipment.PickupAddress = pickupAddress;
                 shipment.DeliveryAddress = deliveryAddress;
+                //search the ddat_assignmentUser in Identity where the sender phone number is the same as the input
+                var user = await _context.Users.Where(u => u.PhoneNumber == fc["sender-phone-number"]).FirstOrDefaultAsync();
+                if (user != null) {
+                    shipment.SenderId = user.Id;
+                }
                 var parcelCost = Convert.ToDecimal(Convert.ToDouble(fc["goods-weight"]) * 4.5);
                 shipment.Cost = parcelCost;
                 _context.ShipmentModel.Add(shipment);

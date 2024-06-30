@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Shipment Slots";
+
+    string[] GetScheduleDates() 
+    {
+        return new string[] { DateTime.Now.ToString("dddd, dd MMMM yyyy"), DateTime.Now.AddDays(1).ToString("dddd, dd MMMM yyyy") };
+    }
+}
+@model DriverScheduleModel
+
+<h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">All Shipment Slots</h1>
+
+<div class="my-4 py-2">
+    <div class="flex flex-col gap-y-4 overflow-y-auto max-h-[80vh] pe-2 pb-8">
+        <div class="flex flex-col gap-y-2">
+            <div class="flex flex-row p-4 rounded-t-lg bg-ok-boss-3 text-white text-sm">
+                @GetScheduleDates()[0]
+            </div>
+            @if (Model.TodaySlots.Count == 0)
+            {
+                <div class="flex flex-col bg-white rounded-lg p-4">
+                    <div class="text-center text-[#4e5969]">No shipment has been scheduled</div>
+                </div>
+            }
+            @foreach (var shipmentSlot in Model.TodaySlots) {
+                <partial name="_ShipmentSchedulePartial" model="shipmentSlot" />
+            }
+        </div>
+        <div class="flex flex-col gap-y-2">
+            <div class="flex flex-row p-4 rounded-t-lg bg-ok-boss-3 text-white text-sm">
+                @GetScheduleDates()[1]
+            </div>
+            @if (Model.TmrSlots.Count == 0)
+            {
+                <div class="flex flex-col bg-white rounded-lg p-4">
+                    <div class="text-center text-[#4e5969]">No shipment has been scheduled</div>
+                </div>
+            }
+            @foreach (var shipmentSlot in Model.TmrSlots)
+            {
+                <partial name="_ShipmentSchedulePartial" model="shipmentSlot" />
+            }
+        </div>
+    </div>
+</div>
