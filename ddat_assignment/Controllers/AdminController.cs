@@ -91,6 +91,19 @@ namespace ddat_assignment.Controllers
             return View(shipment);
         }
 
+        public IActionResult ShipmentSlots()
+        {
+            DateTime today = DateTime.Now.Date;
+            DateTime tmr = DateTime.Now.AddDays(1).Date;
+            DriverScheduleModel model = new()
+            {
+                //include the User in the Driver
+                TodaySlots = _context.ShipmentSlotModel.Include(s => s.Driver).ThenInclude(d => d.User).Where(s => s.ShipmentDate == today).ToList(),
+                TmrSlots = _context.ShipmentSlotModel.Include(s => s.Driver).ThenInclude(d => d.User).Where(s => s.ShipmentDate == tmr).ToList()
+            };
+            return View(model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Shipment()
         {
