@@ -12,8 +12,8 @@ using ddat_assignment.Data;
 namespace ddat_assignment.Migrations
 {
     [DbContext(typeof(ddat_assignmentContext))]
-    [Migration("20240626164004_addManageShipmentModel")]
-    partial class addManageShipmentModel
+    [Migration("20240629154854_AddProofOfDeliveryToShipmentModel")]
+    partial class AddProofOfDeliveryToShipmentModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -410,6 +410,14 @@ namespace ddat_assignment.Migrations
 
                     b.Property<byte[]>("ProofOfDelivery")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ProofOfDeliveryContentType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ProofOfDeliveryFileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ReceiverId")
                         .HasColumnType("nvarchar(450)");

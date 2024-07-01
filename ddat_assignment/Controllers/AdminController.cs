@@ -91,6 +91,53 @@ namespace ddat_assignment.Controllers
             return View(shipment);
         }
 
+        public IActionResult ShipmentSlots()
+        {
+            DateTime today = DateTime.Now.Date;
+            DateTime tmr = DateTime.Now.AddDays(1).Date;
+            DriverScheduleModel model = new()
+            {
+                //include the User in the Driver
+                TodaySlots = _context.ShipmentSlotModel.Include(s => s.Driver).ThenInclude(d => d.User).Where(s => s.ShipmentDate == today).ToList(),
+                TmrSlots = _context.ShipmentSlotModel.Include(s => s.Driver).ThenInclude(d => d.User).Where(s => s.ShipmentDate == tmr).ToList()
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ShipmentSchedule()
+        {
+            string searchQuery = Request.Query["searchQuery"]!;
+            Guid searchQueryUuid;
+            try
+            {
+                searchQueryUuid = Guid.Parse(searchQuery);
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Invalid Shipment Slot ID!";
+                return View();
+            }
+            ShipmentSlotModel shipmentSlot = _context.ShipmentSlotModel.Include(s => s.Driver).ThenInclude(d => d.User).FirstOrDefault(s => s.ShipmentSlotId == searchQueryUuid);
+            if (shipmentSlot != null) {
+                List<ShipmentModel> shipmentModels = new();
+                foreach (var shipmentId in shipmentSlot.ShipmentIds!)
+                {
+                    ShipmentModel shipment = _context.ShipmentModel.Include(s => s.Parcel).FirstOrDefault(s => s.ShipmentId == shipmentId);
+                    shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
+                    shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
+                    shipmentModels.Add(shipment);
+                }
+                shipmentSlot.Shipments = shipmentModels;
+            }
+            if (shipmentSlot == null)
+            {
+                TempData["error"] = "Shipment Slot with Shipment Slot Id: " + searchQuery + " not found!";
+                return View();
+            }
+            return View(shipmentSlot);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Shipment()
         {
@@ -105,9 +152,17 @@ namespace ddat_assignment.Controllers
                 TempData["error"] = "Invalid Shipment ID!";
                 return View();
             }
-            ShipmentModel shipment = SearchShipment(searchQueryUuid).Result;
-            if (shipment == null) TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
-            return View(shipment);
+            ShipmentResultModel shipmentResultModel = new ShipmentResultModel
+            {
+                Shipment = SearchShipment(searchQueryUuid).Result,
+                Transitions = GetShipmentTransitions(searchQueryUuid).Result
+            };
+            if (shipmentResultModel.Shipment == null)
+            {
+                TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " not found!";
+                return View();
+            }
+            return View(shipmentResultModel);
         }
 
         public async Task<ShipmentModel> SearchShipment(Guid shipmentId)
@@ -120,6 +175,14 @@ namespace ddat_assignment.Controllers
                 return shipment;
             }
             return null;
+        }
+
+        public async Task<List<TransitionModel>> GetShipmentTransitions(Guid shipmentId)
+        {
+            List<TransitionModel> transitions = await _context.TransitionModel.Where(t => t.ShipmentId == shipmentId).ToListAsync();
+            //order the transitions by timestamp in desc order
+            transitions = transitions.OrderByDescending(t => t.Timestamp).ToList();
+            return transitions;
         }
 
         public IActionResult FilterShipmentStatus(string parameter)
