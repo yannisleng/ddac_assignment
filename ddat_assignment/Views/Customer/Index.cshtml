@@ -2,6 +2,9 @@
     ViewData["Title"] = "Index";
 }
 
+@model ShipmentModel
+
+<div class="mt-8 flex min-h-screen flex-col items-center bg-gray-100">
 <div class="mt-16 flex flex-col items-center">
     <form asp-action="Shipment" asp-controller="Customer" method="get" class="flex flex-row items-center space-x-4">
         <div class="relative">
@@ -18,3 +21,33 @@
     </form>
 </div>
 
+    @if (Model != null)
+    {
+        <a asp-controller="Customer" asp-action="CheckShippingStatus" asp-route-id="@Model.ShipmentId">
+            <div class="mt-4 w-full max-w-4xl rounded-md bg-white p-8 shadow-md">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-[#A82F38] text-xl font-bold">#@Model.ShipmentId</h2>
+                    <span class="text-sm text-gray-500">@Model.ShipmentDate.ToString("dd MMMM yyyy")</span>
+                </div>
+                <p class="text-[#A82F38] mt-2 text-sm">#Parcel ID: @Model.ParcelId</p>
+                <div class="mt-4 flex flex-col items-start justify-between md:flex-row md:items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-[#F69F73] font-semibold">Pickup address</h3>
+                        <p class="text-[#F69F73]">@Model.PickupAddress.Replace("||", ",")</p>
+                    </div>
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-[#F69F73] font-semibold">Delivery address</h3>
+                        <p class="text-[#F69F73]">@Model.DeliveryAddress.Replace("||", ",")</p>
+                    </div>
+                    <div class="ml-0 mt-4 md:ml-4 md:mt-0">
+                        <span class="bg-[#FFECE8] text-[#C74F88] flex h-12 w-24 items-center justify-center rounded-md px-4 py-2 text-xs font-semibold">
+                            @Model.ShipmentStatus
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    }
+
+
+</div>

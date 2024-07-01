@@ -10,25 +10,25 @@
     <h3 class="mb-4 text-2xl font-bold">@ViewData["Title"]</h3>
     <partial name="_StatusMessage" for="StatusMessage" />
 
-    <div class="flex">
+    <div class="flex flex-col md:flex-row">
         <!-- Sidebar -->
-        <div class="w-1/4 border-r border-gray-300 bg-gray-100 p-4">
-            <ul>
-                <li class="mb-4">
+        <div class="w-full border-b border-gray-300 bg-gray-100 p-4 md:w-1/4 md:border-b-0 md:border-r">
+            <ul class="flex flex-col space-y-2 md:flex-col">
+                <li>
                     <button id="personal-info-button" class="w-full rounded bg-gray-200 px-4 py-2 text-gray-800">Personal Information</button>
                 </li>
-                <li class="mb-4">
+                <li>
                     <button id="address-button" class="w-full rounded bg-gray-200 px-4 py-2 text-gray-800">Address</button>
                 </li>
             </ul>
         </div>
 
         <!-- Form -->
-        <div class="w-3/4 rounded bg-white p-6 shadow-md" id="personal-info-form">
+        <div class="w-full rounded bg-white p-6 shadow-md md:w-3/4" id="personal-info-form">
             <form id="profile-form" method="post" class="space-y-6">
                 <div asp-validation-summary="ModelOnly" class="mb-4 text-red-500" role="alert"></div>
 
-                <div class="grid-cols-2 grid gap-4">
+                <div class="grid-cols-1 grid gap-4 md:grid-cols-2">
                     <div>
                         <label asp-for="CustomerPersonalInfo.FirstName" class="mb-2 block text-sm font-bold text-gray-700"></label>
                         <input asp-for="CustomerPersonalInfo.FirstName" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
@@ -111,7 +111,7 @@
         </div>
 
         <!-- Address Form -->
-        <div class="hidden w-3/4 rounded bg-white p-6 shadow-md" id="address-form">
+        <div class="hidden w-full rounded bg-white p-6 shadow-md md:w-3/4" id="address-form">
             <form id="address-form" method="post" class="space-y-6" asp-page-handler="UpdateAddress">
                 <div class="grid-cols-1 grid gap-y-4">
                     <div>
@@ -124,7 +124,7 @@
                         <input asp-for="Address.Address2" class="w-full rounded-lg border border-gray-200 px-4 py-3" />
                         <span asp-validation-for="Address.Address2" class="text-sm text-red-500"></span>
                     </div>
-                    <div class="grid-cols-3 grid gap-2.5">
+                    <div class="grid-cols-1 grid gap-y-4 md:grid-cols-3 md:gap-2.5">
                         <div>
                             <label asp-for="Address.Postcode" class="text-[#86909c] mb-2 text-xs">Postcode</label>
                             <input asp-for="Address.Postcode" class="w-full rounded-lg border border-gray-200 px-4 py-3" />

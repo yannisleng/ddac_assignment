@@ -5,24 +5,36 @@ using ddat_assignment.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using ddat_assignment.Areas.Identity.Data;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace ddat_assignment.Controllers.Admin
 {
-    [Authorize(Roles = "Customer")]
     public class CreateShipmentController : Controller
     {
         private readonly ddat_assignmentContext _context;
+        //private readonly UserManager<ddat_assignmentUser> _userManager;
 
         public CreateShipmentController(ddat_assignmentContext context)
         {
             _context = context;
+            //_userManager = userManager;
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> AddShipment(IFormCollection form)
         {
             if (ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (userId == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
                 var parcelId = Guid.NewGuid();
                 var parcel = new ParcelModel
                 {
@@ -35,12 +47,13 @@ namespace ddat_assignment.Controllers.Admin
                 _context.ParcelModel.Add(parcel);
 
                 var shipmentId = Guid.NewGuid();
-                var price = Convert.ToDecimal(form["goods-price"]); // Directly get the calculated price from the form
+                var price = Convert.ToDecimal(form["goods-price"]);
                 var shipment = new ShipmentModel
                 {
                     ShipmentId = shipmentId,
                     ParcelId = parcelId,
                     Parcel = parcel,
+                    SenderId = userId,
                     SenderName = form["sender-name"],
                     SenderPhoneNumber = form["sender-phone-number"],
                     ReceiverName = form["receiver-name"],
@@ -65,10 +78,13 @@ namespace ddat_assignment.Controllers.Admin
                 _context.PaymentModel.Add(payment);
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("CreateShipment", "Customer");
+
+                // Redirect to AirBill page with shipment ID
+                return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
             }
 
             return RedirectToAction("CreateShipment", "Customer");
         }
+
     }
 }

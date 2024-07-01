@@ -16,18 +16,18 @@
 }
 @model ShipmentModel
 
-<div class="flex flex-row justify-between mb-2">
-    <h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">Shipment Tracking</h1>
+<div class="mb-2 flex flex-row justify-between">
+    <h1 class="text-[#1d2129] scroll-m-20 pb-2 text-2xl font-semibold tracking-tight">Shipment Tracking</h1>
     <form asp-action="Shipment" asp-controller="Admin" method="get" class="flex flex-row items-center gap-x-3">
         <div class="relative">
             <input name="searchQuery"
                 type="text"
-                class="text-sm py-2.5 pe-4 ps-8 rounded-xl focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                class="rounded-xl py-2.5 pe-4 ps-8 text-sm focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
                 placeholder="Shipment number"
                 required />
-            <svg class="top-[12px] left-[8px] w-4 h-4 text-gray-700 absolute" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /><circle cx="18.5" cy="15.5" r="2.5" /><path d="M20.27 17.27 22 19" /></svg>
+            <svg class="top-[12px] left-[8px] absolute h-4 w-4 text-gray-700" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /><circle cx="18.5" cy="15.5" r="2.5" /><path d="M20.27 17.27 22 19" /></svg>
         </div>
-        <button class="text-sm px-4 py-2 bg-ok-boss-3 rounded-md hover:bg-ok-boss-5 hover:text-white cursor-pointer" type="submit">
+        <button class="bg-ok-boss-3 cursor-pointer rounded-md px-4 py-2 text-sm hover:bg-ok-boss-5 hover:text-white" type="submit">
             Track
         </button>
     </form>
@@ -35,105 +35,105 @@
 
 @if (error != null)
 {
-    <div class="flex justify-center items-center my-8">
+    <div class="my-8 flex items-center justify-center">
         <h4 class="text-ok-boss-6 text-lg">@error Please try again</h4>
     </div>
 }
 else
 {
-    <div class="my-4 py-2 overflow-y-auto max-h-[82.5vh] pe-2 pb-6">
-        <div class="border shadow rounded-md bg-white">
-            <div class="p-4 flex flex-col gap-y-2">
+    <div class="max-h-[82.5vh] my-4 overflow-y-auto py-2 pb-6 pe-2">
+        <div class="rounded-md border bg-white shadow">
+            <div class="flex flex-col gap-y-2 p-4">
                 <div class="flex flex-row items-center justify-between">
-                    <div class="text-lg text-ok-boss-8 font-semibold"># @Model.ShipmentId</div>
+                    <div class="text-ok-boss-8 text-lg font-semibold"># @Model.ShipmentId</div>
                     <div class="text-[#86909c] text-xs">@formatDate(Model.ShipmentDate)</div>
                 </div>
-                <div class="flex flex-row items-center gap-x-2 mb-4">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
+                <div class="mb-4 flex flex-row items-center gap-x-2">
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
                     <div class="">#Parcel ID: @Model.ParcelId</div>
                 </div>
-                <div class="flex flex-row justify-between items-center">
-                    <div class="flex flex-1 flex-row gap-4">
-                        <div class="flex flex-col flex-1 gap-y-0.5">
-                            <div class="text-xs text-[#86909c]">Pickup address</div>
+                <div class="flex flex-row items-center justify-between">
+                    <div class="flex-1 flex flex-row gap-4">
+                        <div class="flex-1 flex flex-col gap-y-0.5">
+                            <div class="text-[#86909c] text-xs">Pickup address</div>
                             <div class="text-ok-boss-4 text-sm font-medium">@Model.PickupAddress</div>
                         </div>
-                        <div class="flex flex-col flex-1 gap-y-0.5">
-                            <div class="text-xs text-[#86909c]">Delivery address</div>
+                        <div class="flex-1 flex flex-col gap-y-0.5">
+                            <div class="text-[#86909c] text-xs">Delivery address</div>
                             <div class="text-ok-boss-4 text-sm font-medium">@Model.DeliveryAddress</div>
                         </div>
                     </div>
                     <div class="flex-1 flex flex-row justify-end">
-                        <div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-sm">
+                        <div class="bg-ok-boss-1 text-ok-boss-7 rounded-lg p-2 px-3 text-sm">
                             @Model.ShipmentStatus
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="px-4 py-2.5 bg-ok-boss-1 text-[#4e5969] text-sm font-medium">Shipment progress</div>
-            <div class="px-4 py-6 flex flex-col gap-y-6">
+            <div class="bg-ok-boss-1 text-[#4e5969] px-4 py-2.5 text-sm font-medium">Shipment progress</div>
+            <div class="flex flex-col gap-y-6 px-4 py-6">
                 <div class="flex flex-row gap-x-6">
-                    <div class="basis-1/5 flex items-center justify-end gap-x-4 pe-2">
+                    <div class="flex basis-1/5 items-center justify-end gap-x-4 pe-2">
                         <div class="inline-flex flex-col gap-y-0.5">
                             <div class="text-[#1d2129] text-sm">23 June</div>
                             <div class="text-[#4e5969] text-xs">10:33 AM</div>
                         </div>
-                        <div class="flex items-center justify-between rounded-full p-2.5 text-white bg-[#4cd263]">
+                        <div class="bg-[#4cd263] flex items-center justify-between rounded-full p-2.5 text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5" /></svg>
                         </div>
                     </div>
-                    <div class="basis-4/5 flex flex-col gap-y-1 py-2 px-3 rounded-md bg-[#f2f3f5]">
+                    <div class="bg-[#f2f3f5] flex basis-4/5 flex-col gap-y-1 rounded-md px-3 py-2">
                         <div class="text-[#1d2129] text-sm">Your parcel has been delivered</div>
-                        <div class="text-xs text-[#4e5969]">Warehouse</div>
+                        <div class="text-[#4e5969] text-xs">Warehouse</div>
                     </div>
                 </div>
                 <div class="flex flex-row gap-x-6">
-                    <div class="basis-1/5 flex items-center justify-end gap-x-4 pe-2">
+                    <div class="flex basis-1/5 items-center justify-end gap-x-4 pe-2">
                         <div class="inline-flex flex-col gap-y-0.5">
                             <div class="text-[#1d2129] text-sm">23 June</div>
                             <div class="text-[#4e5969] text-xs">10:03 AM</div>
                         </div>
-                        <div class="flex items-center justify-between rounded-full p-2.5 text-white bg-[#FF9A2E]">
+                        <div class="bg-[#FF9A2E] flex items-center justify-between rounded-full p-2.5 text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
                         </div>
                     </div>
-                    <div class="basis-4/5 flex flex-col gap-y-1 py-2 px-3 rounded-md bg-[#f2f3f5]">
+                    <div class="bg-[#f2f3f5] flex basis-4/5 flex-col gap-y-1 rounded-md px-3 py-2">
                         <div class="text-[#1d2129] text-sm">Your parcel is in transit</div>
-                        <div class="text-xs text-[#4e5969]">Warehouse</div>
+                        <div class="text-[#4e5969] text-xs">Warehouse</div>
                     </div>
                 </div>
                 <div class="flex flex-row gap-x-6">
-                    <div class="basis-1/5 flex items-center justify-end gap-x-4 pe-2">
+                    <div class="flex basis-1/5 items-center justify-end gap-x-4 pe-2">
                         <div class="inline-flex flex-col gap-y-0.5">
                             <div class="text-[#1d2129] text-sm">22 June</div>
                             <div class="text-[#4e5969] text-xs">13:03 PM</div>
                         </div>
-                        <div class="flex items-center justify-between rounded-full p-2.5 text-ok-boss-5 ">
+                        <div class="text-ok-boss-5 flex items-center justify-between rounded-full p-2.5">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
                         </div>
                     </div>
-                    <div class="basis-4/5 flex flex-col gap-y-1 py-2 px-3 rounded-md bg-[#f2f3f5]">
+                    <div class="bg-[#f2f3f5] flex basis-4/5 flex-col gap-y-1 rounded-md px-3 py-2">
                         <div class="text-[#1d2129] text-sm">Your parcel is in tansit</div>
-                        <div class="text-xs text-[#4e5969]">Driver name</div>
+                        <div class="text-[#4e5969] text-xs">Driver name</div>
                     </div>
                 </div>
                 <div class="flex flex-row gap-x-6">
-                    <div class="basis-1/5 flex items-center justify-end gap-x-4 pe-2">
+                    <div class="flex basis-1/5 items-center justify-end gap-x-4 pe-2">
                         <div class="inline-flex flex-col gap-y-0.5">
                             <div class="text-[#1d2129] text-sm">22 June</div>
                             <div class="text-[#4e5969] text-xs">08:03 AM</div>
                         </div>
-                        <div class="flex items-center justify-between rounded-full p-2.5 text-white bg-[#F9CC45]">
+                        <div class="bg-[#F9CC45] flex items-center justify-between rounded-full p-2.5 text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-check"><path d="m16 16 2 2 4-4" /><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /></svg>
                         </div>
                     </div>
-                    <div class="basis-4/5 flex flex-col gap-y-1 py-2 px-3 rounded-md bg-[#f2f3f5]">
+                    <div class="bg-[#f2f3f5] flex basis-4/5 flex-col gap-y-1 rounded-md px-3 py-2">
                         <div class="text-[#1d2129] text-sm">Your parcel has been picked up</div>
-                        <div class="text-xs text-[#4e5969]">Driver name</div>
+                        <div class="text-[#4e5969] text-xs">Driver name</div>
                     </div>
                 </div>
                 <div class="flex flex-row gap-x-6">
-                    <div class="basis-1/5 flex items-center justify-end gap-x-4 pe-2">
+                    <div class="flex basis-1/5 items-center justify-end gap-x-4 pe-2">
                         <div class="inline-flex flex-col gap-y-0.5">
                             @{
                                 var orderCreated = getDatetimeArray(Model.ShipmentDate);
@@ -141,11 +141,11 @@ else
                             <div class="text-[#1d2129] text-sm">@orderCreated[0]</div>
                             <div class="text-[#4e5969] text-xs">@orderCreated[1]</div>
                         </div>
-                        <div class="flex items-center justify-between rounded-full p-2.5 text-white bg-[#063078]">
+                        <div class="bg-[#063078] flex items-center justify-between rounded-full p-2.5 text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
                         </div>
                     </div>
-                    <div class="basis-4/5 flex flex-col gap-y-1 py-2 px-3 rounded-md bg-[#f2f3f5]">
+                    <div class="bg-[#f2f3f5] flex basis-4/5 flex-col gap-y-1 rounded-md px-3 py-2">
                         <div class="text-[#1d2129] text-sm">Order has been created</div>
                     </div>
                 </div>

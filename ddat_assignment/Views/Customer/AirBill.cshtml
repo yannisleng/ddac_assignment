@@ -1,0 +1,58 @@
+﻿@model AirBillViewModel
+
+@{
+    ViewData["Title"] = "Air Bill";
+}
+
+<style>
+    media print {
+        body * {
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+        }
+        #airbill, #airbill * {
+            visibility: visible;
+            height: auto;
+            overflow: visible;
+        }
+        #airbill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .no-print {
+            display: none;
+        }
+    }
+</style>
+
+<div id="airbill" class="mx-auto max-w-xl border border-black bg-white p-5">
+    <h2 class="mb-5 text-center">Order Details</h2>
+    <p><strong>Ship By Date:</strong> @Model.Shipment.ShipmentDate.ToString("dd-MM-yyyy")</p>
+    <p><strong>Weight (kg):</strong> @Model.Shipment.Parcel?.Weight</p>
+    <p><strong>Shipment ID:</strong> @Model.Shipment.ShipmentId</p>
+    
+    <h3 class="mt-5">Sender Details</h3>
+    <p><strong>Name:</strong> @Model.SenderName</p>
+    <p><strong>Phone:</strong> @Model.SenderPhoneNumber</p>
+    <p><strong>Address:</strong> @Model.SenderAddress.Replace("||", ", ")</p>
+    
+    <h3 class="mt-5">Recipient Details</h3>
+    <p><strong>Name:</strong> @Model.Shipment.ReceiverName</p>
+    <p><strong>Phone:</strong> @Model.Shipment.ReceiverPhoneNumber</p>
+    <p><strong>Address:</strong> @Model.Shipment.DeliveryAddress.Replace("||", ", ")</p>
+    
+    <h3 class="mt-5">POD</h3>
+    <p><strong>Name:</strong></p>
+    <p><strong>I.C.:</strong></p>
+    <p><strong>Signature:</strong></p>
+
+    <div class="no-print mt-8 flex justify-between">
+        <button onclick="window.history.back()" class="rounded bg-red-700 px-4 py-2 text-white">Back</button>
+        <button onclick="window.print()" class="rounded bg-pink-500 px-4 py-2 text-white">Print</button>
+    </div>
+</div>
