@@ -58,6 +58,12 @@ namespace ddat_assignment.Models
 
         public byte[]? ProofOfDelivery { get; set; }
 
+        [StringLength(100)]
+        public string? ProofOfDeliveryFileName { get; set; }
+
+        [StringLength(50)]
+        public string? ProofOfDeliveryContentType { get; set; }
+
         [Precision(5, 2)]
         public decimal? Cost { get; set; }
     }
