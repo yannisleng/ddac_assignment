@@ -1,0 +1,414 @@
+﻿@page
+@model DriverProfileModel
+@{
+    ViewData["Title"] = "Driver Profile";
+    List<String> genders = new List<String> { "Male", "Female", "Other" };
+    List<String> licenseTypes = new List<String> { "B2", "D", "E", "GDL" };
+    List<String> workingDays = new List<String> { "Weekday", "Weekend" };
+    List<String> vehicleTypes = new List<String> { "Motorcycle", "Car (5 Seats)", "Car (7 Seats)", "Van", "Lorry" };
+    List<String> states = new List<String> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+}
+
+<div class="xl:w-4/5 py-10 px-6 lg:px-8 mx-auto">
+    <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-neutral-800">
+        <div class="mb-8">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
+                Driver Profile
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-neutral-400">
+                Manage your OK Boss's driver information.
+            </p>
+        </div>
+
+        <div class="flex">
+            <div id="docs-sidebar" class="max-w-64 bg-white border-e border-gray-200 pt-6 pb-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-800 dark:border-neutral-700">
+                <nav class="hs-accordion-group sm:px-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
+                    <ul class="space-y-1.5">
+                        <li>
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-700 dark:text-white" href="#personal-information" onclick="showSection('personal-information')">
+                                Personal Information
+                            </a>
+                        </li>
+                        <li>
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#license" onclick="showSection('license')">
+                                License
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#working-preferences" onclick="showSection('working-preferences')">
+                                Working Preferences
+                            </a>
+                        </li>
+                        <li>
+                            <a class="driver-profile flex items-center gap-x-3.5 py-2 px-2.5 text-xs sm:text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300" href="#emergency-contact" onclick="showSection('emergency-contact')">
+                                Emergency Contact
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <form id="personal-information" class="p-6 section" method="post" asp-page-handler="PersonalInfo">
+                <div>
+                    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.FirstName" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Full name
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <div class="sm:flex">
+                                <input asp-for="PersonalInfo.FirstName" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="First Name">
+                                <input asp-for="PersonalInfo.LastName" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Last Name">
+                            </div>
+                            <span asp-validation-for="PersonalInfo.FirstName" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                            <span asp-validation-for="PersonalInfo.LastName" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.IdentityCardNumber" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Identity Card
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="PersonalInfo.IdentityCardNumber" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="xxxxxx-xx-xxxx">
+                            <span asp-validation-for="PersonalInfo.IdentityCardNumber" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.DateOfBirth" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Date of Birth
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="PersonalInfo.DateOfBirth" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true">
+                            <span asp-validation-for="PersonalInfo.DateOfBirth" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.Email" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Email
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="PersonalInfo.Email" disabled type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="example@okbossexpress.com">
+                            <span asp-validation-for="PersonalInfo.Email" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.NewPassword" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Password
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <div class="space-y-2">
+                                <div id="passwordContainer" style="display: none;">
+                                    <input asp-for="PersonalInfo.NewPassword" type="password" class="mb-2 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-xs sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="New password">
+                                    <input asp-for="PersonalInfo.ConfirmPassword" type="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-xs sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Comfirm new password">
+                                    <span asp-validation-for="PersonalInfo.NewPassword" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                                    <span asp-validation-for="PersonalInfo.ConfirmPassword" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                                </div>
+                                <button id="editPwdButton" type="button" class="px-3 text-xs sm:text-sm text-ok-boss-6 hover:underline focus:outline-none">
+                                    Edit
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <div class="inline-block font-semibold sm:font-normal">
+                                <label asp-for="PersonalInfo.PhoneNumber" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                    Phone
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <div class="sm:flex">
+                                <input asp-for="PersonalInfo.PhoneNumber" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px rounded-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="0123456789">
+                                <span asp-validation-for="PersonalInfo.PhoneNumber" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.Gender" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Gender
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <div class="sm:flex">
+                                <label asp-for="PersonalInfo.Gender" class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                    <input asp-for="PersonalInfo.Gender" type="radio" value="Male" class="shrink-0 mt-0.5 border-gray-300 rounded-full text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="af-account-gender-checkbox" checked>
+                                    <span class="text-xs sm:text-sm text-gray-500 ms-3 dark:text-neutral-400">Male</span>
+                                </label>
+
+                                <label asp-for="PersonalInfo.Gender" class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                    <input asp-for="PersonalInfo.Gender" type="radio" value="Female" class="shrink-0 mt-0.5 border-gray-300 rounded-full text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="af-account-gender-checkbox-female">
+                                    <span class="text-xs sm:text-sm text-gray-500 ms-3 dark:text-neutral-400">Female</span>
+                                </label>
+
+                                <label asp-for="PersonalInfo.Gender" class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                    <input asp-for="PersonalInfo.Gender" type="radio" value="Other" class="shrink-0 mt-0.5 border-gray-300 rounded-full text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="af-account-gender-checkbox-other">
+                                    <span class="text-xs sm:text-sm text-gray-500 ms-3 dark:text-neutral-400">Other</span>
+                                </label>
+                                <span asp-validation-for="PersonalInfo.Gender" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="PersonalInfo.Address" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Address
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <textarea asp-for="PersonalInfo.Address" id="address" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="6" placeholder="Address"></textarea>
+                            <span asp-validation-for="PersonalInfo.Address" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+                    </div>
+                    <div class="mt-5 flex justify-end gap-x-2">
+                        <button type="submit" id="saveButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs sm:text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <form id="license" class="p-6 section hidden" method="post" asp-page-handler="License">
+                <div>
+                    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="LicenseInfo.LicenseId" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                License ID
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="LicenseInfo.LicenseId" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="License ID">
+                            <span asp-validation-for="LicenseInfo.LicenseId" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="LicenseInfo.DrivingLicenseType" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                License Type
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <div class="sm:flex">
+                                @{
+                                    foreach (var type in licenseTypes)
+                                    {
+                                        <label asp-for="LicenseInfo.DrivingLicenseType" class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                            <input asp-for="LicenseInfo.DrivingLicenseType" type="radio" value="@type" class="shrink-0 mt-0.5 border-gray-300 rounded-full text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="af-account-gender-checkbox">
+                                            <span class="text-xs sm:text-sm text-gray-500 ms-3 dark:text-neutral-400">@type</span>
+                                        </label>
+                                    }
+                                }
+                                <span asp-validation-for="LicenseInfo.DrivingLicenseType" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="LicenseInfo.DrivingLicenseExpiryDate" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                License Expiry Date
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="LicenseInfo.DrivingLicenseExpiryDate" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true">
+                            <span asp-validation-for="LicenseInfo.DrivingLicenseExpiryDate" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="LicenseInfo.VehicleType" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Vehicle Type
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <select asp-for="LicenseInfo.VehicleType" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true">
+                                @{
+                                    foreach (var type in vehicleTypes)
+                                    {
+                                        <option value="@type">@type</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="LicenseInfo.VehicleType" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="LicenseInfo.VehiclePlateNumber" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Vehicle Plate Number
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="LicenseInfo.VehiclePlateNumber" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="ABC123">
+                            <span asp-validation-for="LicenseInfo.VehiclePlateNumber" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                    </div>
+                    <div class="mt-5 flex justify-end gap-x-2">
+                        <button type="submit" id="saveButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs sm:text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <form id="working-preferences" class="p-6 section hidden" method="post" asp-page-handler="WorkingPreferences">
+                <div>
+                    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="WorkPreferences.StartDate" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Start Date
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="WorkPreferences.StartDate" type="text" disabled class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="xxxxxx-xx-xxxx">
+                            <span asp-validation-for="WorkPreferences.StartDate" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="WorkPreferences.PreferredWorkingDay" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Preferred Working Day
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <div class="sm:flex">
+                                <label asp-for="WorkPreferences.PreferredWorkingDay" class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                    <input asp-for="WorkPreferences.PreferredWorkingDay" type="radio" value="Weekday" class="shrink-0 mt-0.5 border-gray-300 rounded-full text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="af-account-gender-checkbox" checked>
+                                    <span class="text-xs sm:text-sm text-gray-500 ms-3 dark:text-neutral-400">Weekday</span>
+                                </label>
+
+                                <label asp-for="WorkPreferences.PreferredWorkingDay" class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-xs sm:text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                                    <input asp-for="WorkPreferences.PreferredWorkingDay" type="radio" value="Weekend" class="shrink-0 mt-0.5 border-gray-300 rounded-full text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="af-account-gender-checkbox-female">
+                                    <span class="text-xs sm:text-sm text-gray-500 ms-3 dark:text-neutral-400">Weekend</span>
+                                </label>
+                                <span asp-validation-for="WorkPreferences.PreferredWorkingDay" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="WorkPreferences.PreferredWorkingLocation" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Preferred Working Location
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <select asp-for="WorkPreferences.PreferredWorkingLocation" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true">
+                                    @{
+                                        foreach (var state in states)
+                                        {
+                                            <option value="@state">@state</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="WorkPreferences.PreferredWorkingLocation" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                    </div>
+                    <div class="mt-5 flex justify-end gap-x-2">
+                        <button type="submit" id="saveButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs sm:text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <form id="emergency-contact" class="p-6 section hidden" method="post" asp-page-handler="EmergencyContact">
+                <div>
+                    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="EmergencyContact.EmergencyContactName" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Contact Name
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="EmergencyContact.EmergencyContactName" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Contact Full Name">
+                            <span asp-validation-for="EmergencyContact.EmergencyContactName" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="EmergencyContact.EmergencyContactPhone" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Contact Number
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="EmergencyContact.EmergencyContactPhone" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="0123456789">
+                            <span asp-validation-for="EmergencyContact.EmergencyContactPhone" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label asp-for="EmergencyContact.EmergencyContactRelationship" class="inline-block font-semibold sm:font-normal text-xs sm:text-sm text-gray-800 mt-2.5 dark:text-neutral-200">
+                                Contact Relationship
+                            </label>
+                        </div>
+
+                        <div class="sm:col-span-9">
+                            <input asp-for="EmergencyContact.EmergencyContactRelationship" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Contact Relationship">
+                            <span asp-validation-for="EmergencyContact.EmergencyContactRelationship" class="text-xs sm:text-sm text-red-600 mt-2"></span>
+                        </div>
+
+                     </div>
+                    <div class="mt-5 flex justify-end gap-x-2">
+                        <button type="submit" id="saveButton" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs sm:text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            showSection('personal-information');
+
+            $('nav a.driver-profile').click(function (event) {
+                event.preventDefault();
+
+                $('nav a.driver-profile').removeClass('bg-gray-100 dark:text-white');
+                $('nav a.driver-profile').addClass('dark:text-neutral-400 dark:hover:text-neutral-300');
+
+                $(this).removeClass('dark:text-neutral-400 dark:hover:text-neutral-300');
+                $(this).addClass('bg-gray-100 dark:text-white');
+
+                var sectionId = $(this).attr('href').substring(1);
+                $('.section').addClass('hidden');
+                $('#' + sectionId).removeClass('hidden');
+            });
+
+            $('#editPwdButton').click(function () {
+                $('#passwordContainer').toggle();
+                var buttonText = ($('#passwordContainer').is(':visible')) ? 'Hide' : 'Edit';
+                $(this).text(buttonText);
+            });
+        });
+
+        function showSection(sectionId) {
+            $('.section').addClass('hidden');
+            $('#' + sectionId).removeClass('hidden');
+        }
+    </script>
+}

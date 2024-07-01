@@ -1,7 +1,51 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var statusSelected = Convert.ToString(ViewData["status"]);
+    List<string> shipmentStatus = new List<string> { "All", "Pending", "Picked Up", "In Transit", "Delivered", "Returned" };
 }
+@model List<ShipmentModel>
 
-<h1>Index</h1>
-<div>Bro this MVC fucking sucks!</div>
+<h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">Shipments</h1>
+
+<div class="my-4 py-2">
+    <div class="flex lg:flex-row flex-col lg:items-center align-items-start gap-4 justify-between mb-4">
+        <div class="flex flex-row flex-wrap items-center gap-x-4 gap-y-2">
+            @foreach (var status in shipmentStatus)
+            {
+                <a href="@Url.Action("FilterShipmentStatus","Admin", new { parameter = @status})"
+                   type="button"
+                   data="@status"
+                   class="cursor-pointer inline-flex items-center text-sm px-4 py-2 rounded-3xl hover:bg-ok-boss-5 hover:text-white @(statusSelected == status ? "bg-ok-boss-5 text-white hover:bg-ok-boss-6": "bg-ok-boss-2 text-ok-boss-10")">
+                    @status
+                </a>
+            }
+        </div>
+        <form asp-action="Shipment" asp-controller="Admin" method="get" class="flex flex-row items-center gap-x-3">
+            <div class="relative">
+                <input 
+                    name="searchQuery"
+                    type="text"
+                    class="text-sm py-2 pe-4 ps-8 rounded-xl focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                    placeholder="Shipment number" 
+                    required
+                />
+                <svg class="top-[10px] left-[8px] w-4 h-4 text-gray-700 absolute" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /><circle cx="18.5" cy="15.5" r="2.5" /><path d="M20.27 17.27 22 19" /></svg>
+            </div>
+            <button class="text-sm px-4 py-2 bg-ok-boss-3 rounded-md hover:bg-ok-boss-5 hover:text-white cursor-pointer" type="submit">
+                Track
+            </button>
+        </form>
+    </div>
+    @if (Model.Count == 0)
+    {
+        <div class="flex my-auto gap-y-2 mt-6">
+            <div class="text-[#86909c] font-medium">No shipments available</div>
+        </div>
+    }
+    <div class="flex flex-col gap-y-2 overflow-y-auto max-h-[80vh] pe-2 pb-8">
+        @foreach (var shipment in Model)
+        {
+            <partial name="_ShipmentCardPartial" model="shipment" />
+        }
+    </div>
+</div>

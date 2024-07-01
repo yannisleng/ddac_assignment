@@ -1,0 +1,173 @@
+﻿@model ManageShipmentModel
+@{
+    ViewData["Title"] = "Shipment Portal";
+    List<String> shipmentStatus = new List<string> { "All", "Pending", "Picked Up", "In Transit", "Delivered", "Returned" };
+}
+
+<div class="h-[10%]">
+    <h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">Shipments</h1>
+    <p class="text-sm text-gray-600 dark:text-neutral-400">Update, track, and manage shipment statuses.</p>
+</div>
+
+<div class="flex flex-col my-4 py-2 h-[90%]">
+    <div class="-m-1.5 overflow-x-auto">
+        <div class="p-1.5 min-w-full inline-block align-middle">
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+                <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+                    <div class="sm:col-span-1">
+                        <label for="hs-as-table-product-review-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <input type="text" id="searchTerm" name="hs-as-table-product-review-search" class="py-2 px-3 ps-11 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Search">
+                            <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4">
+                                <svg class="flex-shrink-0 size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2 md:grow">
+                        <div class="flex justify-end gap-x-2">
+                            <button id="bthAll" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" href="#">
+                                View all
+                            </button>
+                            <!-- End Input -->
+                            <div class="hs-dropdown [--placement:bottom-right] relative inline-block" data-hs-dropdown-auto-close="inside">
+                                <button id="hs-as-table-table-filter-dropdown" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                    <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M7 12h10" /><path d="M10 18h4" /></svg>
+                                    Filter
+                                </button>
+                                <div class="absolute top-10 right-0 hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden divide-y divide-gray-200 min-w-48 z-10 bg-white shadow-md rounded-lg mt-2 dark:divide-neutral-700 dark:bg-neutral-800 dark:border dark:border-neutral-700" aria-labelledby="hs-as-table-table-filter-dropdown">
+                                    <div class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                        @{
+                                            foreach (var status in shipmentStatus)
+                                            {
+                                                <label for="hs-as-filters-dropdown-all" class="flex py-2.5 px-3">
+                                                    <input type="checkbox" checked=@(status == "All") class="shrink-0 mt-0.5 border-gray-300 rounded text-ok-boss-6 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-as-filters-dropdown-all">
+                                                    <span class="ms-3 text-sm text-gray-800 dark:text-neutral-200">@status</span>
+                                                </label>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="max-h-[52.5vh] overflow-y-auto">
+                    <table id="shipment-table" class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                        <thead class="bg-gray-50 dark:bg-neutral-900">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Tracking No.
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Shipment Slot
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Receiver 
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-neutral-200">
+                                            Status
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="shipmentTable" class="divide-y divide-gray-200 dark:divide-neutral-700 align-top">
+                            <partial name="_ShipmentTablePartial" model="Model" />
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+                    <div>
+                        <p class="text-sm text-gray-600 dark:text-neutral-400">
+                            <span class="font-semibold text-gray-800 dark:text-neutral-200 results-count"></span> results found
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="inline-flex gap-x-2">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 prev">
+                                <svg class="size-3" width="16" height="16" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.506 1.64001L4.85953 7.28646C4.66427 7.48172 4.66427 7.79831 4.85953 7.99357L10.506 13.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                                Prev
+                            </button>
+
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 next">
+                                Next
+                                <svg class="size-3" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.50598 2L10.1524 7.64645C10.3477 7.84171 10.3477 8.15829 10.1524 8.35355L4.50598 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/shipment-functions.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#searchTerm').on('keyup', function () {
+            var searchTerm = $(this).val().trim();
+            loadShipmentData(searchTerm);
+        });
+
+        $('#bthAll').on('click', function () {
+            loadShipmentData("");
+        });
+
+        $('#hs-as-table-table-filter-dropdown').click(function () {
+            $('.hs-dropdown-menu').toggleClass('hidden opacity-0');
+        });
+
+        $('input[type="checkbox"]').change(function () {
+            $('input[type="checkbox"]').not(this).prop('checked', false);
+            var filter = $(this).next('span').text().trim();
+            loadShipmentData(filter === "All" ? "" : filter);
+        });
+
+        showPage(currentPage);
+        $('span.results-count').text(totalRows);
+        updatePaginationButtons();
+
+        $('button.next').on('click', function () {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        $('button.prev').on('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+    });
+</script>

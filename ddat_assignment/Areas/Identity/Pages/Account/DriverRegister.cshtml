@@ -1,0 +1,352 @@
+﻿@page
+@model ddat_assignment.Areas.Identity.Pages.Account.DriverRegisterModel
+@{
+    ViewData["Title"] = "Driver Registration";
+    List<String> genders = new List<String> { "Male", "Female", "Other" };
+    List<String> licenseTypes = new List<String> { "B2", "D", "E", "GDL" };
+    List<String> workingDays = new List<String> { "Weekday", "Weekend" };
+    List<String> vehicleTypes = new List<String> { "Motorcycle", "Car (5 Seats)", "Car (7 Seats)", "Van", "Lorry" };
+    List<String> states = new List<String> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+}
+
+<div data-hs-stepper="" class="w-2/3 mx-auto px-20 py-10 min-h-screen">
+    <h1 class="text-4xl font-semibold mb-7">Driver Registration</h1>
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded flex justify-between" role="alert">
+            <div>
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">@Model.SuccessMessage</span>
+            </div>
+            <a href="~/Identity/Account/Login" class="underline">Go to Login</a>
+        </div>
+    }
+    else
+    {
+        <form id="registration-form" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="w-full">
+            <ul class="relative flex flex-row gap-x-2">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <li class="flex items-center gap-x-2 shrink basis-0 flex-1 group" data-hs-stepper-nav-item='{"index": @i}'>
+                        <span class="min-w-5 min-h-7 group inline-flex items-center text-xs align-middle">
+                            <span class="size-7 flex justify-center items-center flex-shrink-0 bg-gray-100 font-medium text-gray-800 rounded-full group-focus:bg-gray-200 hs-stepper-active:bg-primary hs-stepper-active:text-white hs-stepper-success:bg-primary hs-stepper-success:text-white hs-stepper-completed:bg-primary hs-stepper-completed:text-white dark:bg-neutral-700 dark:text-white dark:group-focus:bg-gray-600 dark:hs-stepper-active:bg-blue-500 dark:hs-stepper-success:bg-blue-500 dark:hs-stepper-completed:bg-blue-500">
+                                <span class="hs-stepper-success:hidden hs-stepper-completed:hidden">@i</span>
+                                <svg class="hidden flex-shrink-0 size-3 hs-stepper-success:block" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span class="ms-2 text-sm font-medium text-gray-800 dark:text-neutral-200 hidden sm:block">Step</span>
+                        </span>
+                        @if (i != 5)
+                        {
+                            <div class="w-full h-px flex-1 bg-gray-200 group-last:hidden hs-stepper-success:bg-primary hs-stepper-completed:bg-primary dark:bg-neutral-700 dark:hs-stepper-success:bg-primary dark:hs-stepper-completed:bg-primary"></div>
+                        }
+                    </li>
+                }
+            </ul>
+
+            <div class="mt-5 sm:mt-8">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <div data-hs-stepper-content-item='{"index": @i}' style="display: @(i == 1 ? "" : "none");">
+                        <div class="p-4 bg-gray-50 flex justify-center items-center border border-dashed border-gray-200 rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
+                            @if (i == 1)
+                            {
+                                <div class="w-full">
+                                    <h1 class="text-2xl mb-5">Personal Information</h1>
+                                    <hr class="mb-5" />
+                                    <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.FirstName" class="block text-sm font-medium mb-2 dark:text-white">First Name</label>
+                                        <input asp-for="Input.FirstName" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="First Name" />
+                                        <span asp-validation-for="Input.FirstName" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.LastName" class="block text-sm font-medium mb-2 dark:text-white">Last Name</label>
+                                        <input asp-for="Input.LastName" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Last Name" />
+                                        <span asp-validation-for="Input.LastName" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.PhoneNumber" class="block text-sm font-medium mb-2 dark:text-white">Phone Number</label>
+                                        <input asp-for="Input.PhoneNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Phone Number" />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.Email" class="block text-sm font-medium mb-2 dark:text-white">Email</label>
+                                        <input asp-for="Input.Email" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Email Address" />
+                                        <span asp-validation-for="Input.Email" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.Address" class="block text-sm font-medium mb-2 dark:text-white">Address</label>
+                                        <textarea asp-for="Input.Address" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" rows="3" aria-required="true" placeholder="Address"></textarea>
+                                        <span asp-validation-for="Input.Address" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                </div>
+                            }
+                            else if (i == 2)
+                            {
+                                <div class="w-full">
+                                    <h1 class="text-2xl mb-5">Identity Card</h1>
+                                    <hr class="mb-5" />
+                                    <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.IdentityCardNumber" class="block text-sm font-medium mb-2 dark:text-white">Identity Card Number</label>
+                                        <input asp-for="Input.IdentityCardNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="XXXXXX-XX-XXXX" />
+                                        <span asp-validation-for="Input.IdentityCardNumber" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.Gender" class="block text-sm font-medium mb-2 dark:text-white">Gender</label>
+                                        <select asp-for="Input.Gender" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true">
+                                            @{
+                                                foreach (var gender in genders)
+                                                {
+                                                    <option value="@gender">@gender</option>    
+                                                }
+                                            }
+                                        </select>
+                                        <span asp-validation-for="Input.Gender" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.DateOfBirth" class="block text-sm font-medium mb-2 dark:text-white">Date of Birth</label>
+                                        <input asp-for="Input.DateOfBirth" type="date" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
+                                        <span asp-validation-for="Input.DateOfBirth" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                </div>
+                            }
+                            else if (i == 3)
+                            {
+                                <div class="w-full">
+                                    <h1 class="text-2xl mb-5">License</h1>
+                                    <hr class="mb-5" />
+                                    <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
+                                    <div class="mb-4">
+                                        <label asp-for="Input.LicenseId" class="block text-sm font-medium mb-2 dark:text-white">License ID</label>
+                                        <input asp-for="Input.LicenseId" accept="image/png, image/gif, image/jpeg" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="License ID Number" />
+                                        <span asp-validation-for="Input.LicenseId" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    @* <div class="mb-4">
+                        <label asp-for="Input.LicenseImage" class="block text-sm font-medium mb-2 dark:text-white">Upload License Image</label>
+                        <input asp-for="Input.LicenseImage" type="file" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 dark:file:bg-neutral-700 dark:file:text-neutral-400">
+                        <span asp-validation-for="Input.LicenseImage" class="text-sm text-red-600 mt-2"></span>
+                        </div> *@
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.DrivingLicenseType" class="block text-sm font-medium mb-2 dark:text-white">License Type</label>
+                                        <div class="flex gap-x-6">
+                                            @{
+                                                foreach (var type in licenseTypes)
+                                                {
+                                                    <div class="flex">
+                                                        <input asp-for="Input.DrivingLicenseType" type="radio" value="@type" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="license-type-truck">
+                                                        <label for="license-type-truck" class="text-sm text-gray-500 ms-2 dark:text-neutral-400">@type</label>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        <span asp-validation-for="Input.DrivingLicenseType" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.DrivingLicenseExpiryDate" class="block text-sm font-medium mb-2 dark:text-white">License Expiry Date</label>
+                                        <input asp-for="Input.DrivingLicenseExpiryDate" type="date" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
+                                        <span asp-validation-for="Input.DrivingLicenseExpiryDate" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.VehicleType" class="block text-sm font-medium mb-2 dark:text-white">Vehicle Type</label>
+                                        <div class="grid sm:grid-cols-2 gap-2">
+                                            @{
+                                                foreach (var type in vehicleTypes)
+                                                {
+                                                    <label class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                                                        <input asp-for="Input.VehicleType" type="radio" value="@type" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-truck">
+                                                        <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">@type</span>
+                                                    </label>
+                                                }
+                                            }
+                                        </div>
+                                        <span asp-validation-for="Input.VehicleType" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.VehiclePlateNumber" class="block text-sm font-medium mb-2 dark:text-white">Vehicle Plate Number</label>
+                                        <input asp-for="Input.VehiclePlateNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Vehicle Plate Number" />
+                                        <span asp-validation-for="Input.VehiclePlateNumber" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                </div>
+                            }
+                            else if (i == 4)
+                            {
+                                <div class="w-full">
+                                    <h1 class="text-2xl mb-5">Work Preferences</h1>
+                                    <hr class="mb-5" />
+                                    <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.StartDate" class="block text-sm font-medium mb-2 dark:text-white">Start Date</label>
+                                        <input asp-for="Input.StartDate" type="date" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
+                                        <span asp-validation-for="Input.StartDate" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.PreferredWorkingDay" class="block text-sm font-medium mb-2 dark:text-white">Preferred Working Day</label>
+                                        <div class="grid sm:grid-cols-2 gap-2">
+                                            @{
+                                                foreach (var day in workingDays)
+                                                {
+                                                    <label class="flex p-3 w-full bg-white border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                                                        <input asp-for="Input.PreferredWorkingDay" type="radio" value="@day" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="vehicle-car">
+                                                        <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">@day</span>
+                                                    </label>
+                                                }
+                                            }
+                                        </div>
+                                        <span asp-validation-for="Input.PreferredWorkingDay" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.PreferredWorkingLocation" class="block text-sm font-medium mb-2 dark:text-white">Preferred Working Location</label>
+                                        <select asp-for="Input.PreferredWorkingLocation" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true">
+                                            @{
+                                                foreach (var state in states)
+                                                {
+                                                    <option value="@state">@state</option>    
+                                                }
+                                            }
+                                        </select>
+                                        <span asp-validation-for="Input.PreferredWorkingLocation" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                </div>
+                            }
+                            else if (i == 5)
+                            {
+                                <div class="w-full">
+                                    <h1 class="text-2xl mb-5">Emergency Contact</h1>
+                                    <hr class="mb-5" />
+                                    <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.EmergencyContactName" class="block text-sm font-medium mb-2 dark:text-white">Name</label>
+                                        <input asp-for="Input.EmergencyContactName" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Emergency Contact Name" />
+                                        <span asp-validation-for="Input.EmergencyContactName" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.EmergencyContactPhone" class="block text-sm font-medium mb-2 dark:text-white">Phone</label>
+                                        <input asp-for="Input.EmergencyContactPhone" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Emergency Contact Number" />
+                                        <span asp-validation-for="Input.EmergencyContactPhone" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label asp-for="Input.EmergencyContactRelationship" class="block text-sm font-medium mb-2 dark:text-white">Relationship</label>
+                                        <input asp-for="Input.EmergencyContactRelationship" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Relationship" />
+                                        <span asp-validation-for="Input.EmergencyContactRelationship" class="text-sm text-red-600 mt-2"></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="mt-5 flex justify-between items-center gap-x-2">
+                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-1 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none" data-hs-stepper-back-btn="" disabled>
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                    Back
+                </button>
+                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-stepper-next-btn="">
+                    Next
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                </button>
+                <button id="registration-form" type="submit" class="py-2 px-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-primary text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-stepper-finish-btn="" style="display: none;">
+                    Submit
+                </button>
+            </div>
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            let $stepper = $('[data-hs-stepper]');
+            let $stepperNavItems = $stepper.find('[data-hs-stepper-nav-item]');
+            let $stepperContentItems = $stepper.find('[data-hs-stepper-content-item]');
+            let $backBtn = $stepper.find('[data-hs-stepper-back-btn]');
+            let $nextBtn = $stepper.find('[data-hs-stepper-next-btn]');
+            let $finishBtn = $stepper.find('[data-hs-stepper-finish-btn]');
+            let currentIndex = 0;
+            let maxIndex = 4;
+
+            function updateStepper() {
+                $stepperNavItems.each(function (index) {
+                    let stepIndex = JSON.parse($(this).attr('data-hs-stepper-nav-item')).index;
+                    let $navItem = $(this);
+
+                    if (stepIndex <= currentIndex + 1) {
+                        $navItem.addClass('hs-stepper-active');
+                        $navItem.find('.size-7').addClass('bg-primary text-white');
+                        $navItem.find('.size-7').removeClass('bg-gray-100 text-gray-800');
+                    } else {
+                        $navItem.removeClass('hs-stepper-active');
+                        $navItem.find('.size-7').removeClass('bg-primary text-white');
+                        $navItem.find('.size-7').addClass('bg-gray-100 text-gray-800');
+                    }
+
+                    $stepperContentItems.eq(index).css('display', stepIndex === currentIndex + 1 ? '' : 'none');
+                });
+                $backBtn.prop('disabled', currentIndex === 0);
+                $nextBtn.css('display', currentIndex < maxIndex ? '' : 'none');
+                $finishBtn.css('display', currentIndex === maxIndex ? '' : 'none');
+            }
+
+            function validateStep(stepIndex) {
+                let $currentStep = $stepperContentItems.eq(stepIndex);
+                let isValid = true;
+
+                // Perform client-side validation using jQuery Validate plugin
+                $currentStep.find('input, select, textarea').each(function () {
+                    if (!$(this).valid()) {
+                        isValid = false;
+                        return false;
+                    }
+                });
+
+                return isValid;
+            }
+
+            function scrollToTop() {
+                window.scrollTo(0, 0);
+            }
+
+            $backBtn.on('click', function () {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateStepper();
+                    scrollToTop();
+                }
+            });
+
+            $nextBtn.on('click', function () {
+                if (validateStep(currentIndex)) {
+                    if (currentIndex < maxIndex) {
+                        currentIndex++;
+                        updateStepper();
+                        scrollToTop();
+                    }
+                } else {
+                    // Focus the first invalid input
+                    $stepperContentItems.eq(currentIndex).find(':invalid').first().focus();
+                }
+            });
+
+            updateStepper();
+        });
+    </script>
+}

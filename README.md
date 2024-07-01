@@ -9,3 +9,24 @@
 5. dhl: [https://www.dhl.com/my-en/home.html](https://www.dhl.com/my-en/home.html)
 6. shopee express: [https://spx.com.my/](https://spx.com.my/)
 7. pos laju: [https://www.pos.com.my/](https://www.pos.com.my/)
+
+
+
+
+
+## NuGet Package Manager
+
+![image-20240618220454301](image-20240618220454301.png)
+
+### After Creating Data Model
+
+```bash
+add-migration [your action, etc addObjectNameModel]
+```
+
+### Update database
+
+```bash
+update-database
+```
+
