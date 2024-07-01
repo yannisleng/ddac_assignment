@@ -23,7 +23,7 @@
             </ul>
         </div>
 
-        <!-- Form -->
+        <!-- Personal Info Form -->
         <div class="w-full rounded bg-white p-6 shadow-md md:w-3/4" id="personal-info-form">
             <form id="profile-form" method="post" class="space-y-6">
                 <div asp-validation-summary="ModelOnly" class="mb-4 text-red-500" role="alert"></div>
@@ -153,9 +153,6 @@
                 </div>
             </form>
         </div>
-
-
-
     </div>
 </div>
 
@@ -171,12 +168,15 @@
                 passwordSection.classList.add("hidden");
             }
         });
-    </script>
 
-    <script>
         document.getElementById("address-button").addEventListener("click", function () {
-            document.getElementById("personal-info-form").classList.toggle("hidden");
-            document.getElementById("address-form").classList.toggle("hidden");
+            document.getElementById("personal-info-form").classList.add("hidden");
+            document.getElementById("address-form").classList.remove("hidden");
+        });
+
+        document.getElementById("personal-info-button").addEventListener("click", function () {
+            document.getElementById("address-form").classList.add("hidden");
+            document.getElementById("personal-info-form").classList.remove("hidden");
         });
     </script>
 }

@@ -107,6 +107,9 @@ namespace ddat_assignment.Controllers
                 return RedirectToAction("Index");
             }
 
+            // Add this to log or debug the retrieved data
+            Console.WriteLine($"SenderName: {shipment.SenderName}, SenderPhoneNumber: {shipment.SenderPhoneNumber}, PickupAddress: {shipment.PickupAddress}");
+
             var viewModel = new AirBillViewModel
             {
                 Shipment = shipment,
@@ -138,38 +141,25 @@ namespace ddat_assignment.Controllers
             return View(shipments);
         }
 
+        [HttpGet]
         public async Task<IActionResult> CheckShippingStatus(Guid id)
         {
-            var shipment = await _context.ShipmentModel
-                .Where(s => s.ShipmentId == id)
-                .Select(s => new ShipmentModel
-                {
-                    ShipmentId = s.ShipmentId,
-                    ParcelId = s.ParcelId,
-                    PickupAddress = s.PickupAddress,
-                    DeliveryAddress = s.DeliveryAddress,
-                    ShipmentDate = s.ShipmentDate,
-                    ShipmentStatus = s.ShipmentStatus
-                })
-                .FirstOrDefaultAsync();
-
-            if (shipment == null)
+            if (id == Guid.Empty)
             {
-                ViewBag.ErrorMessage = "Shipment not found.";
+                TempData["error"] = "Invalid Shipment ID!";
                 return RedirectToAction("Index");
             }
 
-            var transitions = await _context.TransitionModel
-                .Where(t => t.ShipmentId == id)
-                .Select(t => new TransitionModel
-                {
-                    Timestamp = t.Timestamp,
-                    Status = t.Status,
-                    Address = t.Address
-                })
-                .ToListAsync();
+            ShipmentModel shipment = await SearchShipment(id);
+            List<TransitionModel> transitions = await GetShipmentTransitions(id);
 
-            var shipmentStatusModel = new ShipmentStatusModel
+            if (shipment == null)
+            {
+                TempData["error"] = "Shipment not found!";
+                return RedirectToAction("Index");
+            }
+
+            var shipmentStatusModel = new ShipmentResultModel
             {
                 Shipment = shipment,
                 Transitions = transitions
@@ -178,5 +168,33 @@ namespace ddat_assignment.Controllers
             return View(shipmentStatusModel);
         }
 
+        private async Task<ShipmentModel> SearchShipment(Guid shipmentId)
+        {
+            var shipment = await _context.ShipmentModel
+                .Include(s => s.Parcel)
+                .FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
+
+            if (shipment != null)
+            {
+                shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
+                shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
+                return shipment;
+            }
+            return null;
+        }
+
+        private async Task<List<TransitionModel>> GetShipmentTransitions(Guid shipmentId)
+        {
+            var transitionModels = await _context.TransitionModel
+                .Where(t => t.ShipmentId == shipmentId)
+                .ToListAsync();
+
+            var uniqueTransitions = transitionModels
+                .GroupBy(t => t.Status)
+                .Select(g => g.OrderByDescending(t => t.Timestamp).First())
+                .ToList();
+
+            return uniqueTransitions;
+        }
     }
 }

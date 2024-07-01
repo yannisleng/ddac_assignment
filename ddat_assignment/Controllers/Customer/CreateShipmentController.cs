@@ -41,7 +41,7 @@ namespace ddat_assignment.Controllers.Admin
                     ParcelId = parcelId,
                     GoodsName = form["goods-name"],
                     Weight = Convert.ToDecimal(form["goods-weight"]),
-                    Value = Convert.ToDecimal(form["goods-value"]),
+                    Value = Convert.ToDecimal(form["goods-price"]),
                     Type = form["goods-type"]
                 };
                 _context.ParcelModel.Add(parcel);
@@ -79,12 +79,12 @@ namespace ddat_assignment.Controllers.Admin
 
                 await _context.SaveChangesAsync();
 
-                // Redirect to AirBill page with shipment ID
                 return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
             }
 
             return RedirectToAction("CreateShipment", "Customer");
         }
+
 
     }
 }
