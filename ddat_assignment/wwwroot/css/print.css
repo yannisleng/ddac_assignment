@@ -1,0 +1,23 @@
+@media print {
+
+    body * {
+        visibility: hidden;
+        height: 0;
+        overflow: hidden;
+    }
+
+    #airbill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    #airbill, #airbill * {
+        visibility: visible;
+        height: auto;
+        overflow: visible;
+    }
+}

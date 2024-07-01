@@ -6,7 +6,7 @@
 
 @model CreateShipmentModel
 
-<h1 class="text-[#1d2129] scroll-m-20 pb-2 text-2xl font-semibold tracking-tight">Standard Shipping</h1>
+<h1 class="text-[#A82F38] mb-6 scroll-m-20 pb-2 text-3xl font-bold tracking-tight">Standard Shipping</h1>
 
 <div class="max-h-[82.5vh] mx-2 my-4 overflow-y-auto py-2"></div>
 <form asp-controller="CreateShipment" asp-action="AddShipment" method="post" class="mx-2 my-4 flex flex-col gap-y-4 py-2 pe-2">
@@ -179,7 +179,7 @@
                                required />
                     </div>
                     <div class="flex flex-col">
-                        <label for="goods-price" class="text-[#86909c] mb-2 text-xs">Price (RM)</label>
+                        <label for="goods-price" class="text-[#86909c] mb-2 text-xs">Parcel value</label>
                         <input id="goods-price" name="goods-price" type="text" placeholder="Price" readonly
                                class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5" />
                     </div>
@@ -195,11 +195,9 @@
                         <div class="flex flex-col">
                             <label for="payment-method" class="text-[#86909c] mb-2 text-xs">Payment Method</label>
                             <select name="payment-method" class="apperance-none w-full rounded-lg border border-gray-200 px-4 py-3 pe-9 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
-                                @{
-                                    foreach (var paymentMethod in paymentMethods)
-                                    {
-                                        <option value="@paymentMethod">@paymentMethod</option>
-                                    }
+                                @foreach (var paymentMethod in paymentMethods)
+                                {
+                                    <option value="@paymentMethod">@paymentMethod</option>
                                 }
                             </select>
                         </div>

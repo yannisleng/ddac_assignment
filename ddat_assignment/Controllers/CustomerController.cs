@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using ddat_assignment.Areas.Identity.Data;
+using System;
+using System.Collections.Generic;
 
 namespace ddat_assignment.Controllers
 {
@@ -23,11 +25,10 @@ namespace ddat_assignment.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
-
 
         public async Task<IActionResult> CreateShipment()
         {
@@ -71,18 +72,8 @@ namespace ddat_assignment.Controllers
                 return View("Index");
             }
 
-            var shipment = await _context.ShipmentModel
-                .Where(s => s.ShipmentId == shipmentId)
-                .Select(s => new ShipmentModel
-                {
-                    ShipmentId = s.ShipmentId,
-                    ParcelId = s.ParcelId,
-                    PickupAddress = s.PickupAddress,
-                    DeliveryAddress = s.DeliveryAddress,
-                    ShipmentDate = s.ShipmentDate,
-                    ShipmentStatus = s.ShipmentStatus
-                })
-                .FirstOrDefaultAsync();
+            ShipmentModel shipment = await SearchShipment(shipmentId);
+            List<TransitionModel> transitions = await GetShipmentTransitions(shipmentId);
 
             if (shipment == null)
             {
@@ -90,9 +81,14 @@ namespace ddat_assignment.Controllers
                 return View("Index");
             }
 
-            return View("Index", shipment);
-        }
+            var shipmentStatusModel = new ShipmentResultModel
+            {
+                Shipment = shipment,
+                Transitions = transitions
+            };
 
+            return View("Index", shipmentStatusModel);
+        }
 
         public async Task<IActionResult> AirBill(Guid id)
         {
@@ -106,9 +102,6 @@ namespace ddat_assignment.Controllers
                 ViewBag.ErrorMessage = "Shipment not found.";
                 return RedirectToAction("Index");
             }
-
-            // Add this to log or debug the retrieved data
-            Console.WriteLine($"SenderName: {shipment.SenderName}, SenderPhoneNumber: {shipment.SenderPhoneNumber}, PickupAddress: {shipment.PickupAddress}");
 
             var viewModel = new AirBillViewModel
             {
@@ -195,6 +188,11 @@ namespace ddat_assignment.Controllers
                 .ToList();
 
             return uniqueTransitions;
+        }
+
+        public IActionResult PaymentMethod()
+        {
+            return View();
         }
     }
 }

@@ -7,22 +7,18 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using ddat_assignment.Areas.Identity.Data;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using System;
 
 namespace ddat_assignment.Controllers.Admin
 {
     public class CreateShipmentController : Controller
     {
         private readonly ddat_assignmentContext _context;
-        //private readonly UserManager<ddat_assignmentUser> _userManager;
 
         public CreateShipmentController(ddat_assignmentContext context)
         {
             _context = context;
-            //_userManager = userManager;
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> AddShipment(IFormCollection form)
@@ -66,25 +62,38 @@ namespace ddat_assignment.Controllers.Admin
                 };
                 _context.ShipmentModel.Add(shipment);
 
-                var payment = new PaymentModel
+                await _context.SaveChangesAsync(); // Save the shipment and parcel before redirecting
+
+                string paymentMethod = form["payment-method"].ToString(); // Ensure this is a single string
+
+                if (paymentMethod == "Credit Card" || paymentMethod == "Debit Card")
                 {
-                    ShipmentId = shipmentId,
-                    Shipment = shipment,
-                    Amount = price,
-                    PaymentStatus = "Pending",
-                    PaymentDate = DateTime.Now,
-                    PaymentMethod = form["payment-method"]
-                };
-                _context.PaymentModel.Add(payment);
+                    TempData["shipmentId"] = shipmentId.ToString();
+                    TempData["parcelId"] = parcelId.ToString();
+                    TempData["price"] = price.ToString();
+                    TempData["paymentMethod"] = paymentMethod;
+                    return RedirectToAction("PaymentMethod", "Customer");
+                }
+                else
+                {
+                    var payment = new PaymentModel
+                    {
+                        ShipmentId = shipmentId,
+                        Shipment = shipment,
+                        Amount = price,
+                        PaymentStatus = "Pending",
+                        PaymentDate = DateTime.Now,
+                        PaymentMethod = paymentMethod
+                    };
+                    _context.PaymentModel.Add(payment);
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
+                    return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
+                }
             }
 
             return RedirectToAction("CreateShipment", "Customer");
         }
-
-
     }
 }

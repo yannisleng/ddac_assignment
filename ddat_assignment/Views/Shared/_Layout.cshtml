@@ -33,6 +33,11 @@
                     <img class="h-10 w-10" src="~/images/ok-boss.svg" alt="Brand">
                     <span class="block">OK Boss Express</span>
                 </a>
+                <button id="burger-menu" class="ml-2 text-white md:hidden">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
                 <ul class="hidden space-x-7 md:flex" id="nav-links">
                     @{
                         if (User.IsInRole("Driver"))
@@ -46,13 +51,10 @@
                         }
                         else
                         {
-                            <li>
-                                <a class="cursor-pointer text-sm hover:text-ok-boss-1">SHIPPING</a>
-                            </li>
                             @if (User.IsInRole("Customer"))
                             {
                                 <li class="relative ml-5">
-                                    <span class="mb-0 cursor-pointer text-sm hover:text-ok-boss-1" id="dropdownToggle">Service</span>
+                                    <span class="mb-0 cursor-pointer text-sm hover:text-ok-boss-1" id="dropdownToggle">Services</span>
                                     <ul class="absolute left-0 z-50 mt-2 max-h-0 w-40 overflow-hidden bg-gray-800 text-white transition-all duration-500 ease-in-out" id="dropdownMenu">
                                         <li class="flex flex-row items-center bg-gray-800 p-4 hover:bg-red-600">
                                             <svg class="mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
@@ -85,11 +87,6 @@
             </ul>
             </div>
             <div class="flex items-center space-x-4">
-                <button id="burger-menu" class="text-white md:hidden">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
                 <partial name="_LoginPartial" />
             </div>
         </nav>
@@ -97,10 +94,7 @@
         <div id="mobile-menu" class="bg-primary hidden p-4 text-white">
             <ul class="space-y-4">
                 <li>
-                    <a class="block text-sm hover:text-ok-boss-1">SHIPPING</a>
-                </li>
-                <li>
-                    <a class="block text-sm hover:text-ok-boss-1" id="mobile-titre">Titre</a>
+                    <a class="block text-sm hover:text-ok-boss-1" id="mobile-titre">Services</a>
                     <ul class="hidden space-y-2 bg-gray-800 text-white" id="mobile-dropdown">
                         <li class="p-4 hover:bg-red-600">
                             <a asp-action="CreateShipment" asp-controller="Customer" class="block">Create Shipment</a>
