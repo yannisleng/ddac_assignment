@@ -1,5 +1,7 @@
+using ddat_assignment.Data;
 using ddat_assignment.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace ddat_assignment.Controllers

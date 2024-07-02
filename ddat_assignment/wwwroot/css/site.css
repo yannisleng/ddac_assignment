@@ -20,6 +20,11 @@ body {
     src: url(./Inter-VariableFont_slnt,wght.ttf);
 }
 
+@font-face {
+    font-family: 'Montserrat';
+    src: url(./Montserrat-VariableFont_wght.ttf);
+}
+
 body {
   background-color: #F8F9FA !important;
 }
