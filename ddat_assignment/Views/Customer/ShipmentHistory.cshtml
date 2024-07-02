@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ddat_assignment.Models.ShipmentModel>
+
+@{
+    ViewData["Title"] = "Shipment History";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <p>@ViewBag.ErrorMessage</p>
+}
+else
+{
+    <div class="flex justify-center p-4">
+        <div class="w-full max-w-4xl">
+            <h1 class="text-[#A82F38] mb-6 text-3xl font-bold">Shipment History</h1>
+            @foreach (var shipment in Model)
+            {
+                <a asp-controller="Customer" asp-action="CheckShippingStatus" asp-route-id="@shipment.ShipmentId">
+                    <div class="mt-4 rounded-md bg-white p-8 shadow-md">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-[#A82F38] text-xl font-bold">#@shipment.ShipmentId</h2>
+                            <span class="text-sm text-gray-500">@shipment.ShipmentDate.ToString("dd MMMM yyyy")</span>
+                        </div>
+                        <p class="text-[#A82F38] mt-2 text-sm">#Parcel ID: @shipment.ParcelId</p>
+                        <div class="mt-4 flex flex-col items-start justify-between md:flex-row md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <h3 class="text-[#F69F73] font-semibold">Pickup address</h3>
+                                <p class="text-[#F69F73]">@shipment.PickupAddress.Replace("||", ",")</p>
+                            </div>
+                            <div class="mb-4 md:mb-0">
+                                <h3 class="text-[#F69F73] font-semibold">Delivery address</h3>
+                                <p class="text-[#F69F73]">@shipment.DeliveryAddress.Replace("||", ",")</p>
+                            </div>
+                            <div class="ml-0 mt-4 md:ml-4 md:mt-0">
+                                <span class="bg-[#FFECE8] text-[#C74F88] flex h-12 w-24 items-center justify-center rounded-md px-4 py-2 text-xs font-semibold">
+                                    @shipment.ShipmentStatus
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+            }
+        </div>
+    </div>
+}
