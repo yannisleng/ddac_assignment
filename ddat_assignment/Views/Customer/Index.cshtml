@@ -20,15 +20,15 @@
             </button>
         </form>
     </div>
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="mb-4 text-red-600">
+            @ViewBag.ErrorMessage
+        </div>
+    }
 
     @if (Model != null && Model.Shipment != null)
     {
         <partial name="_CheckShipmentStatusPartial" model="Model" />
-    }
-    else
-    {
-        <div class="mt-2 text-center text-xl font-bold text-red-500">
-            Invalid shipment ID
-        </div>
     }
 </div>
