@@ -77,13 +77,16 @@
                                 <option value="">No driver available</option>
                             </select>
                         }
-                        <select name="selectedDriverId"
-                                class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
-                            @foreach (var driver in Model.Drivers)
-                            {
-                                <option value="@driver!.DriverId">@driver?.User?.FullName</option>
-                            }
-                        </select>
+                        else
+                        {
+                            <select name="selectedDriverId"
+                                    class="apperance-none py-3 px-4 pe-9 text-sm w-full border border-gray-200 rounded-lg focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                                @foreach (var driver in Model.Drivers)
+                                {
+                                    <option value="@driver!.DriverId">@driver?.User?.FullName</option>
+                                }
+                            </select>
+                        }
                     </div>
                     <div class="text-sm pb-1 border-b">Parcel list</div>
                     <input type="hidden" name="selectedShipmentIds" value="" />
