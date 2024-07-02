@@ -38,7 +38,6 @@ namespace ddat_assignment.Controllers
 
             var shipments = await _context.ShipmentModel
                 .Include(s => s.Sender)
-                .Include(s => s.Receiver)
                 .Where(s => shipmentIds.Contains(s.ShipmentId))
 				.OrderByDescending(s => s.ShipmentDate)
                 .ToListAsync();
@@ -154,7 +153,6 @@ namespace ddat_assignment.Controllers
 
             var shipmentsQuery = _context.ShipmentModel
                 .Include(s => s.Sender)
-                .Include(s => s.Receiver)
                 .Where(s => shipmentIdsQuery.Contains(s.ShipmentId));
 
             var shipmentQueryResult = new List<ShipmentModel>();
