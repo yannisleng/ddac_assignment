@@ -59,7 +59,8 @@ namespace ddat_assignment.Controllers.Admin
                 shipment.PickupAddress = pickupAddress;
                 shipment.DeliveryAddress = deliveryAddress;
                 //search the ddat_assignmentUser in Identity where the sender phone number is the same as the input
-                var user = await _context.Users.Where(u => u.PhoneNumber == fc["sender-phone-number"]).FirstOrDefaultAsync();
+                string SenderPhoneNumber = fc["sender-phone-number"]!;
+                var user = await _context.Users.Where(u => u.PhoneNumber == SenderPhoneNumber).FirstOrDefaultAsync();
                 if (user != null) {
                     shipment.SenderId = user.Id;
                 }

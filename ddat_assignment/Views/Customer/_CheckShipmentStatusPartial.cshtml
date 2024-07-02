@@ -22,7 +22,26 @@
                 </div>
             </div>
             <div class="mt-6">
-                <h3 class="text-lg font-bold">Shipment progress</h3>
+                <h3 class="bg-ok-boss-1 text-[#4e5969] mt-6 text-lg font-bold">Shipment progress</h3>
+                <div class="mt-2 flex flex-row gap-x-6">
+                    <div class="flex basis-1/5 items-center justify-end gap-x-4 pe-2">
+                        <div class="inline-flex flex-col gap-y-0.5">
+                            @{
+                                var shipmentDate = Model.Shipment.ShipmentDate;
+                                var orderCreatedDate = shipmentDate.ToString("dd/MM/yyyy");
+                                var orderCreatedTime = shipmentDate.ToString("hh:mm tt");
+                            }
+                            <div class="text-[#1d2129] text-sm">@orderCreatedDate</div>
+                            <div class="text-[#4e5969] text-xs">@orderCreatedTime</div>
+                        </div>
+                        <div class="bg-[#063078] flex items-center justify-between rounded-full p-2.5 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+                        </div>
+                    </div>
+                    <div class="bg-[#f2f3f5] flex basis-4/5 flex-col gap-y-1 rounded-md px-3 py-2">
+                        <div class="text-[#1d2129] text-sm">Order has been created</div>
+                    </div>
+                </div>
                 <div class="mt-4">
                     @foreach (var transition in Model.Transitions)
                     {
@@ -30,28 +49,29 @@
                         string iconClass;
                         string bgColor;
 
-                        switch (transition.Status.ToLower())
+                        if (transition.Status.ToLower() == "picked up")
                         {
-                            case "picked up":
-                                statusMessage = "Your parcel has been picked up";
-                                iconClass = "bg-[#F9CC45]";
-                                bgColor = "bg-[#f2f3f5]";
-                                break;
-                            case "in transit":
-                                statusMessage = "Your parcel is in transit";
-                                iconClass = "bg-[#FF9A2E]";
-                                bgColor = "bg-[#f2f3f5]";
-                                break;
-                            case "delivered":
-                                statusMessage = "Your parcel has been delivered";
-                                iconClass = "bg-[#4cd263]";
-                                bgColor = "bg-[#f2f3f5]";
-                                break;
-                            default:
-                                statusMessage = "Status not available.";
-                                iconClass = "bg-gray-400";
-                                bgColor = "bg-gray-100";
-                                break;
+                            statusMessage = "Your parcel has been picked up";
+                            iconClass = "bg-[#F9CC45]";
+                            bgColor = "bg-[#f2f3f5]";
+                        }
+                        else if (transition.Status.ToLower() == "in transit")
+                        {
+                            statusMessage = "Your parcel is in transit";
+                            iconClass = "bg-[#FF9A2E]";
+                            bgColor = "bg-[#f2f3f5]";
+                        }
+                        else if (transition.Status.ToLower() == "delivered")
+                        {
+                            statusMessage = "Your parcel has been delivered";
+                            iconClass = "bg-[#4cd263]";
+                            bgColor = "bg-[#f2f3f5]";
+                        }
+                        else
+                        {
+                            statusMessage = "Status not available.";
+                            iconClass = "bg-gray-400";
+                            bgColor = "bg-gray-100";
                         }
 
                         <div class="mb-4 flex items-center">
@@ -83,5 +103,11 @@
                 </div>
             </div>
         </div>
+    </div>
+}
+else
+{
+    <div class="text-center text-xl font-bold text-red-500">
+        Invalid shipment ID
     </div>
 }

@@ -85,7 +85,8 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             public DateTime DateOfBirth { get; set; }
 
             [StringLength(10)]
-            public string? Gender { get; set; }
+            [Required(ErrorMessage = "Please select your gender.")]
+            public string Gender { get; set; }
         }
         public class AddressInputModel
         {
@@ -133,8 +134,10 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
         {
             if (!string.IsNullOrEmpty(userDetails.Address))
             {
-                var addressParts = userDetails.Address.Split(", ");
-                if (addressParts.Length == 5) // Adjust this number based on actual parts
+                _logger.LogInformation("Address retrieved from database: {Address}", userDetails.Address);
+
+                var addressParts = userDetails.Address.Split("||");
+                if (addressParts.Length == 5)
                 {
                     Address = new AddressInputModel
                     {
@@ -156,6 +159,7 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
                 Address = new AddressInputModel(); // Initialize with default or empty values
             }
         }
+
 
 
         public async Task<IActionResult> OnGetAsync()
@@ -229,41 +233,6 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
-        /*public async Task<IActionResult> OnPostUpdateAddressAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            var userDetails = await _context.UserDetailsModel.FirstOrDefaultAsync(u => u.UserId == user.Id);
-            ModelState.Clear();
-            TryValidateModel(Address, nameof(Address));
-
-            if (!ModelState.IsValid)
-            {
-                await LoadAddressAsync(userDetails);
-                return Page();
-            }
-
-            userDetails.Address = $"{Address.HouseNumber}, {Address.Street}, {Address.Postcode}, {Address.Park}, {Address.City}";
-
-            var updateResult = await _userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded)
-            {
-                foreach (var error in updateResult.Errors)
-                {
-                    _logger.LogError("Error updating address: {Error}", error.Description);
-                }
-                StatusMessage = "Unexpected error when trying to update address.";
-                return RedirectToPage();
-            }
-
-            StatusMessage = "Your address has been updated";
-            return RedirectToPage();
-        }*/
-
         public async Task<IActionResult> OnPostUpdateAddressAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -282,9 +251,9 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            userDetails.Address = $"{Address.Address1}, {Address.Address2}, {Address.Postcode}, {Address.City}, {Address.State}";
+            userDetails.Address = $"{Address.Address1}||{Address.Address2}||{Address.Postcode}||{Address.City}||{Address.State}";
 
-            _context.Update(userDetails);
+            _context.UserDetailsModel.Update(userDetails);
             await _context.SaveChangesAsync();
 
             StatusMessage = "Your address has been updated";

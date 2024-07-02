@@ -61,13 +61,13 @@
                 <div id="password-section" class="hidden space-y-6">
                     <div>
                         <label asp-for="CustomerPersonalInfo.Password" class="mb-2 block text-sm font-bold text-gray-700"></label>
-                        <input asp-for="CustomerPersonalInfo.Password" type="password" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                        <input asp-for="CustomerPersonalInfo.Password" type="password" autocomplete="new-password" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
                         <span asp-validation-for="CustomerPersonalInfo.Password" class="text-sm text-red-500"></span>
                     </div>
 
                     <div>
                         <label asp-for="CustomerPersonalInfo.ConfirmPassword" class="mb-2 block text-sm font-bold text-gray-700"></label>
-                        <input asp-for="CustomerPersonalInfo.ConfirmPassword" type="password" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                        <input asp-for="CustomerPersonalInfo.ConfirmPassword" type="password" autocomplete="new-password" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
                         <span asp-validation-for="CustomerPersonalInfo.ConfirmPassword" class="text-sm text-red-500"></span>
                     </div>
                 </div>

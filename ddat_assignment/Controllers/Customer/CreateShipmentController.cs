@@ -89,6 +89,8 @@ namespace ddat_assignment.Controllers.Admin
 
                     await _context.SaveChangesAsync();
 
+                    TempData.Clear();
+
                     return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
                 }
             }

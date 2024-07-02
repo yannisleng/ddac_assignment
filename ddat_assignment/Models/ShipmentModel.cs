@@ -32,10 +32,6 @@ namespace ddat_assignment.Models
         [StringLength(15)]
         public string? SenderPhoneNumber { get; set; }
 
-        [ForeignKey("Receiver")]
-        public string? ReceiverId { get; set; }
-        public virtual ddat_assignmentUser? Receiver { get; set; }
-
         [StringLength(100)]
         public string? ReceiverName { get; set; }
 

@@ -48,7 +48,12 @@ namespace ddat_assignment.Controllers
                 return NotFound();
             }
 
-            var addressParts = userDetail.Address.Split(",").Select(p => p.Trim()).ToList();
+            var addressParts = new List<string>();
+
+            if (!string.IsNullOrEmpty(userDetail.Address))
+            {
+                addressParts = userDetail.Address.Split("||").Select(p => p.Trim()).ToList();
+            }
 
             var viewModel = new CreateShipmentModel
             {
@@ -63,6 +68,7 @@ namespace ddat_assignment.Controllers
 
             return View(viewModel);
         }
+
 
         public async Task<IActionResult> Shipment(string searchQuery)
         {
