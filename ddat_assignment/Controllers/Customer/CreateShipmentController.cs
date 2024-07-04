@@ -5,8 +5,6 @@ using ddat_assignment.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using ddat_assignment.Areas.Identity.Data;
 using System;
 
 namespace ddat_assignment.Controllers.Admin
@@ -66,33 +64,17 @@ namespace ddat_assignment.Controllers.Admin
 
                 string paymentMethod = form["payment-method"].ToString(); // Ensure this is a single string
 
-                if (paymentMethod == "Credit Card" || paymentMethod == "Debit Card")
+                var viewModel = new PaymentMethodViewModel
                 {
-                    TempData["shipmentId"] = shipmentId.ToString();
-                    TempData["parcelId"] = parcelId.ToString();
-                    TempData["price"] = price.ToString();
-                    TempData["paymentMethod"] = paymentMethod;
-                    return RedirectToAction("PaymentMethod", "Customer");
-                }
-                else
-                {
-                    var payment = new PaymentModel
-                    {
-                        ShipmentId = shipmentId,
-                        Shipment = shipment,
-                        Amount = price,
-                        PaymentStatus = "Pending",
-                        PaymentDate = DateTime.Now,
-                        PaymentMethod = paymentMethod
-                    };
-                    _context.PaymentModel.Add(payment);
+                    ShipmentId = shipmentId,
+                    ShipmentFee = price,
+                    PaymentMethod = paymentMethod,
+                    ParcelName = form["goods-name"],
+                    ParcelWeight = Convert.ToDecimal(form["goods-weight"])
+                };
+                Console.WriteLine(viewModel);
 
-                    await _context.SaveChangesAsync();
-
-                    TempData.Clear();
-
-                    return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
-                }
+                return RedirectToAction("PaymentMethod", "Customer", viewModel);
             }
 
             return RedirectToAction("CreateShipment", "Customer");

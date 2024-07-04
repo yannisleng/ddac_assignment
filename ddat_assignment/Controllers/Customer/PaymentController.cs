@@ -16,36 +16,29 @@ namespace ddat_assignment.Controllers
         }
 
         [HttpGet]
-        public IActionResult PaymentMethod()
+        public IActionResult PaymentMethod(PaymentMethodViewModel viewModel)
         {
-            return View();
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessPayment(IFormCollection form)
+        public async Task<IActionResult> ProcessPayment(PaymentMethodViewModel viewModel)
         {
-            var shipmentId = Guid.Parse(TempData["shipmentId"].ToString());
-            var parcelId = Guid.Parse(TempData["parcelId"].ToString());
-            var price = decimal.Parse(TempData["price"].ToString());
-            string paymentMethod = TempData["paymentMethod"].ToString(); // Ensure this is a single string
-
+            var shipmentId = viewModel.ShipmentId.ToString();
             var shipment = await _context.ShipmentModel.FindAsync(shipmentId);
-            var parcel = await _context.ParcelModel.FindAsync(parcelId);
 
             var payment = new PaymentModel
             {
-                ShipmentId = shipmentId,
+                ShipmentId = shipment.ShipmentId,
                 Shipment = shipment,
-                Amount = price,
+                Amount = viewModel.ShipmentFee,
                 PaymentStatus = "Completed",
                 PaymentDate = DateTime.Now,
-                PaymentMethod = paymentMethod
+                PaymentMethod = viewModel.PaymentMethod
             };
             _context.PaymentModel.Add(payment);
 
             await _context.SaveChangesAsync();
-
-            TempData.Clear();
 
             return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
         }

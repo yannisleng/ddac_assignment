@@ -55,17 +55,28 @@
                             {
                                 <li class="relative ml-5">
                                     <span class="mb-0 cursor-pointer text-sm hover:text-ok-boss-1" id="dropdownToggle">Services</span>
-                                    <ul class="absolute left-0 z-50 mt-2 max-h-0 w-40 overflow-hidden bg-gray-800 text-white transition-all duration-500 ease-in-out" id="dropdownMenu">
-                                        <li class="flex flex-row items-center bg-gray-800 p-4 hover:bg-red-600">
-                                            <svg class="mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
-                                            <a asp-action="CreateShipment" asp-controller="Customer" class="block text-sm">Create Shipment</a>
+                                    <ul class="absolute left-0 z-50 mt-2 max-h-0 w-40 overflow-hidden bg-white transition-all duration-500 ease-in-out" id="dropdownMenu">
+                                        <li class="flex flex-row items-center p-4 hover:bg-ok-boss-5 hover:text-white">
+                                            <svg class="mr-2 h-4 w-4 text-black hover:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="m7.5 4.27 9 5.15" />
+                                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                                <path d="m3.3 7 8.7 5 8.7-5" />
+                                                <path d="M12 22V12" />
+                                            </svg>
+                                            <a asp-action="CreateShipment" asp-controller="Customer" class="block text-sm text-black hover:text-white">Create Shipment</a>
                                         </li>
-                                        <li class="flex flex-row items-center bg-gray-800 p-4 hover:bg-red-600">
-                                            <svg class="mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
-                                            <a asp-action="ShipmentHistory" asp-controller="Customer" class="block text-sm">Shipment History</a>
+                                        <li class="flex flex-row items-center p-4 hover:text-white hover:hover:bg-ok-boss-5">
+                                            <svg class="mr-2 h-4 w-4 text-black hover:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="m7.5 4.27 9 5.15" />
+                                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                                <path d="m3.3 7 8.7 5 8.7-5" />
+                                                <path d="M12 22V12" />
+                                            </svg>
+                                            <a asp-action="ShipmentHistory" asp-controller="Customer" class="block text-sm text-black hover:text-white">Shipment History</a>
                                         </li>
                                     </ul>
                                 </li>
+
                             }
                             else
                             {
