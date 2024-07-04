@@ -15,10 +15,9 @@ namespace ddat_assignment.Controllers
             _context = context;
         }
 
-        [HttpGet]
         public IActionResult PaymentMethod(PaymentMethodViewModel viewModel)
         {
-            return View(viewModel);
+            return View("~/Views/Customer/PaymentMethod.cshtml", viewModel);
         }
 
         [HttpPost]

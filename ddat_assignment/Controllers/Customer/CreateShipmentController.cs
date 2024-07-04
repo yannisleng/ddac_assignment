@@ -74,7 +74,7 @@ namespace ddat_assignment.Controllers.Admin
                 };
                 Console.WriteLine(viewModel);
 
-                return RedirectToAction("PaymentMethod", "Customer", viewModel);
+                return RedirectToAction("PaymentMethod", "Payment", viewModel);
             }
 
             return RedirectToAction("CreateShipment", "Customer");
