@@ -6,10 +6,9 @@
 
 @model CreateShipmentModel
 
-<h1 class="text-[#A82F38] mb-6 scroll-m-20 pb-2 text-3xl font-bold tracking-tight">Standard Shipping</h1>
+<h1 class="text-[#A82F38] mx-8 mb-2 scroll-m-20 pb-2 text-3xl font-bold tracking-tight">Standard Shipping</h1>
 
-<div class="max-h-[82.5vh] mx-2 my-4 overflow-y-auto py-2"></div>
-<form asp-controller="CreateShipment" asp-action="AddShipment" method="post" class="mx-2 my-4 flex flex-col gap-y-4 py-2 pe-2">
+<form asp-controller="CreateShipment" asp-action="AddShipment" method="post" class="mx-8 my-4 flex flex-col gap-y-4 py-2 pe-2">
     <div class="rounded-lg border bg-white shadow">
         <div class="bg-ok-boss-1 flex flex-col gap-y-2 rounded-t-lg px-4 py-2">
             <div class="text-ok-boss-7 flex flex-row items-center gap-x-3">
@@ -176,7 +175,7 @@
                     </div>
                     <div class="flex flex-col">
                         <label for="goods-price" class="text-[#86909c] mb-2 text-xs">Parcel values</label>
-                        <input id="goods-price" name="goods-price" type="text" placeholder="Parcel values" readonly
+                        <input id="goods-price" name="goods-price" type="text" placeholder="Parcel values"
                                class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5" />
                     </div>
                 </div>
@@ -208,18 +207,3 @@
         </button>
     </div>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        document.getElementById("goods-weight").addEventListener("input", function () {
-            const weight = parseFloat(this.value);
-            if (!isNaN(weight)) {
-                const price = weight * 4.5;
-                document.getElementById("goods-price").value = price.toFixed(2);
-            } else {
-                document.getElementById("goods-price").value = '';
-            }
-        });
-    </script>
-}
