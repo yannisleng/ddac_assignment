@@ -31,9 +31,6 @@
         @if (Model.PaymentMethod == "Credit Card" || Model.PaymentMethod == "Debit Card")
         {
             <div class="mb-4">
-                <img src="~/images/credit_cards.png" alt="Credit Cards" class="mx-auto" />
-            </div>
-            <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-gray-700" for="card-number">Card number</label>
                 <input name="card-number" type="text" placeholder="1234 5678 9012 3456" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
             </div>
@@ -56,11 +53,11 @@
         {
             <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-gray-700" for="bank-name">Recipient Bank Name</label>
-                <input name="bank-name" type="text" placeholder="Ex. ABC Bank" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" readonly value="Your Bank Name" />
+                <input name="bank-name" type="text" placeholder="Bank Name" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required/>
             </div>
             <div class="mb-4">
-                <label class="mb-2 block text-sm font-bold text-gray-700" for="account-number">Account Number</label>
-                <input name="account-number" type="text" placeholder="1234567890" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" readonly value="1234567890" />
+                <label class="mb-2 block text-sm font-bold text-gray-700" for="account-number">Username</label>
+                <input name="account-number" type="text" placeholder="John" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required/>
             </div>
         }
         else if (Model.PaymentMethod == "E-wallet")
