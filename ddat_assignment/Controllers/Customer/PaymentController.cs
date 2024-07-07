@@ -23,12 +23,12 @@ namespace ddat_assignment.Controllers
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(PaymentMethodViewModel viewModel)
         {
-            var shipmentId = viewModel.ShipmentId.ToString();
+            var shipmentId = viewModel.ShipmentId;
             var shipment = await _context.ShipmentModel.FindAsync(shipmentId);
 
-            var payment = new PaymentModel
+            var payment = new PaymentModel()
             {
-                ShipmentId = shipment.ShipmentId,
+                ShipmentId = shipment?.ShipmentId,
                 Shipment = shipment,
                 Amount = viewModel.ShipmentFee,
                 PaymentStatus = "Completed",
