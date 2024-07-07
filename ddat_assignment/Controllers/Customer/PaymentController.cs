@@ -35,11 +35,12 @@ namespace ddat_assignment.Controllers
                 PaymentDate = DateTime.Now,
                 PaymentMethod = viewModel.PaymentMethod
             };
-            _context.PaymentModel.Add(payment);
 
+            _context.PaymentModel.Add(payment);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("AirBill", "Customer", new { id = shipmentId });
+            return RedirectToAction("AirBill", "Customer", new { id = shipment.ShipmentId });
         }
+
     }
 }
