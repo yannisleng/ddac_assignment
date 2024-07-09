@@ -4,7 +4,6 @@
     ViewData["Title"] = "Payment Method";
 }
 
-<h1>Invoice</h1>
 <div class="mx-auto mt-8 max-w-md rounded-lg bg-white p-6 shadow-lg">
     <form asp-controller="Payment" asp-action="ProcessPayment" method="post">
         <div class="mb-4">
@@ -36,9 +35,6 @@
         @if (Model.PaymentMethod == "Credit Card" || Model.PaymentMethod == "Debit Card")
         {
             <div class="mb-4">
-                <img src="~/images/credit_cards.png" alt="Credit Cards" class="mx-auto" />
-            </div>
-            <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-gray-700" for="CardNumber">Card number</label>
                 <input id="CardNumber" name="CardNumber" type="text" placeholder="1234 5678 9012 3456" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
             </div>
@@ -61,22 +57,22 @@
         {
             <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-gray-700" for="BankName">Recipient Bank Name</label>
-                <input id="BankName" name="BankName" type="text" placeholder="Ex. ABC Bank" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" readonly value="Your Bank Name" />
+                <input id="BankName" name="BankName" type="text" placeholder="RHB Bank" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
             </div>
             <div class="mb-4">
                 <label class="mb-2 block text-sm font-bold text-gray-700" for="AccountNumber">Account Number</label>
-                <input id="AccountNumber" name="AccountNumber" type="text" placeholder="1234567890" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" readonly value="1234567890" />
+                <input id="AccountNumber" name="AccountNumber" type="text" placeholder="1234567890" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
             </div>
         }
         else if (Model.PaymentMethod == "E-wallet")
         {
             <div class="mb-4">
                 <img src="~/images/QR_Code.svg" alt="QR Code" class="mx-auto" />
-             </div>
+            </div>
         }
 
         <div class="flex items-center justify-between">
-            <button class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">
+            <button class="bg-ok-boss-3 w-24 cursor-pointer rounded-md px-4 py-2 text-sm hover:bg-ok-boss-5 hover:text-white" type="submit">
                 Next
             </button>
         </div>
