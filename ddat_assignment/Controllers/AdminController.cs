@@ -83,7 +83,7 @@ namespace ddat_assignment.Controllers
                 TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " has been returned!";
                 return View();
             }
-            if (shipment.ShipmentStatus != "Completed")
+            if (shipment.ShipmentStatus != "Delivered")
             {
                 TempData["error"] = "Shipment with Shipment Id: " + searchQuery + " haven't been completed!";
                 return View();
