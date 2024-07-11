@@ -4,8 +4,8 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="flex justify-between items-center h-1/5">
-    <div class="flex-shrink-0 group block">
+<div class="flex flex-col sm:flex-row justify-between sm:items-center sm:h-1/5">
+    <div class="flex-shrink-0 group block mb-3 mt-5">
         <div class="flex items-center">
             <span class="inline-flex items-center justify-center size-[62px] text-sm font-semibold leading-none rounded-full bg-ok-boss-2 text-ok-boss-9 dark:bg-red-800/30 dark:text-red-500">
 				@Model[0].Driver?.User?.FirstName?[0]@Model[0].Driver?.User?.LastName?[0]
@@ -39,23 +39,23 @@
 </div>
 
 <div class="bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700 h-4/5 my-3 p-7">
-	<div class="h-1/5 mb-3">
+	<div class="h-1/5 mb-5 lg:mb-3">
 		<div class="text-ok-boss-9 font-semibold">Shipment Schedule</div>
 		<hr class="my-3" />
 		<div class="flex justify-between items-center">
 			<button id="btnAll" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-ok-boss-2 text-ok-boss-9 hover:bg-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none">
 				All
 			</button>
-			<div class="w-px h-8 bg-[#e5e7eb] ml-3"></div>
-			<div class="w-full mx-3">
+            <div class="w-px h-8 bg-[#e5e7eb] ml-3 hidden sm:block"></div>
+			<div class="w-full mx-3 hidden sm:block">
 				<input id="startDateInput" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true" />
 				<span class="text-xs sm:text-sm text-red-600 mt-2"></span>
 			</div>
-			<div class="w-full mx-3">
+            <div class="w-full mx-3 hidden sm:block">
 				<input id="endDateInput" type="date" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-required="true" />
 				<span class="text-xs sm:text-sm text-red-600 mt-2"></span>
 			</div>
-			<button id="btnToday" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-[#73000b] text-ok-boss-9 hover:border-ok-boss-3 hover:text-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none dark:border-white dark:text-white dark:hover:text-neutral-300 dark:hover:border-neutral-300">
+			<button id="btnToday" type="button" class="block md:hidden lg:block py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-[#73000b] text-ok-boss-9 hover:border-ok-boss-3 hover:text-ok-boss-3 disabled:opacity-50 disabled:pointer-events-none dark:border-white dark:text-white dark:hover:text-neutral-300 dark:hover:border-neutral-300">
 				Today
 			</button>
 		</div>
