@@ -33,7 +33,7 @@ namespace ddat_assignment.Controllers
                 shipment.PickupAddress = shipment.PickupAddress.Replace("||", ", ");
                 shipment.DeliveryAddress = shipment.DeliveryAddress.Replace("||", ", ");
             }
-            shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
+            shipmentModels = shipmentModels.OrderByDescending(s => s.ShipmentDate).ToList();
             ViewData["status"] = selectedStatus;
             return View(shipmentModels);
         }
@@ -205,7 +205,7 @@ namespace ddat_assignment.Controllers
         public async Task<List<ShipmentModel>> GetInTransitShipment(string filteredState)
         {
             List<ShipmentModel> shipmentModels = await _context.ShipmentModel.Include(s => s.Parcel).ToListAsync();
-            shipmentModels = shipmentModels.Where(s => s.ShipmentStatus == "Pending").ToList();
+            shipmentModels = shipmentModels.Where(s => s.ShipmentStatus == "Pending" || s.ShipmentStatus == "Picked Up").ToList();
             shipmentModels = shipmentModels.Where(s => s.PickupAddress.Contains(filteredState)).ToList();
             shipmentModels = shipmentModels.OrderBy(s => s.ShipmentDate).ToList();
 
