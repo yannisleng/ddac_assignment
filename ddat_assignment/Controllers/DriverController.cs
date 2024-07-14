@@ -252,10 +252,10 @@ namespace ddat_assignment.Controllers
                         shipment.ProofOfDeliveryContentType = file.ContentType;
                     }
                 }
-                else
-                {
-                    return BadRequest("Proof of delivery is required for 'Delivered' status.");
-                }
+                //else
+                //{
+                //    return BadRequest("Proof of delivery is required for 'Delivered' status.");
+                //}
             }
 
             try

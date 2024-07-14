@@ -23,7 +23,7 @@ $(document).ready(function () {
                     $('#saveChangesButton').hide();
                 },
                 error: function () {
-                    $('#modalBody').html('<p>Error loading proof of delivery.</p>');
+                    $('#modalBody').html('<p>No proof of image provided.</p>');
                     $('#saveChangesButton').hide();
                 }
             });
@@ -47,7 +47,7 @@ $(document).ready(function () {
 
                         <div id="proofOfDeliveryContainer" class="hidden mt-5">
                             <label for="file-input" class="block text-sm font-medium mb-2 dark:text-white">Proof of Delivery</label>
-                            <input type="file" accept="image/*" name="proofOfDelivery" id="file-input" required class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 dark:file:bg-neutral-700 dark:file:text-neutral-400">
+                            <input type="file" accept="image/*" name="proofOfDelivery" id="file-input" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 dark:file:bg-neutral-700 dark:file:text-neutral-400">
                         </div>
 
                         <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700 mt-7">

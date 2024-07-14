@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ddat_assignment.Data;
 using ddat_assignment.Areas.Identity.Data;
+using Microsoft.AspNetCore.Http.Features;
 
 public class Program
 {
@@ -13,6 +14,11 @@ public class Program
         builder.Services.AddDbContext<ddat_assignmentContext>(options => options.UseSqlServer(connectionString));
 
         builder.Services.AddDefaultIdentity<ddat_assignmentUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<ddat_assignmentContext>();
+
+        builder.Services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 104857600; // Set the limit to 100 MB
+        });
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
