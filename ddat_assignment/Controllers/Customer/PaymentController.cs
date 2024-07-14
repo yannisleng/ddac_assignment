@@ -21,11 +21,14 @@ namespace ddat_assignment.Controllers
         }
 
         [HttpPost]
+        // Action method to process the payment
         public async Task<IActionResult> ProcessPayment(PaymentMethodViewModel viewModel)
         {
+            // Retrieve the shipment by its ID
             var shipmentId = viewModel.ShipmentId;
             var shipment = await _context.ShipmentModel.FindAsync(shipmentId);
 
+            // Create a new payment model with the view model data
             var payment = new PaymentModel()
             {
                 ShipmentId = shipment?.ShipmentId,
@@ -36,9 +39,12 @@ namespace ddat_assignment.Controllers
                 PaymentMethod = viewModel.PaymentMethod
             };
 
+            // Add the payment to the context
             _context.PaymentModel.Add(payment);
+            // Save the changes to the context
             await _context.SaveChangesAsync();
 
+            // Redirect to the AirBill action in the Customer controller, passing the shipment ID
             return RedirectToAction("AirBill", "Customer", new { id = shipment.ShipmentId });
         }
 
