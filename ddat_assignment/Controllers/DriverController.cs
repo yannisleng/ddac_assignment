@@ -48,11 +48,12 @@ namespace ddat_assignment.Controllers
 				.Select(g => g.OrderByDescending(t => t.Timestamp).First())
 				.ToListAsync();
 
-            ManageShipmentModel manageShipmentModels = new ManageShipmentModel();
-
-            manageShipmentModels.Shipments = shipments ?? new List<ShipmentModel>();
-            manageShipmentModels.ShipmentSlots = shipmentSlots ?? new List<ShipmentSlotModel>();
-            manageShipmentModels.Transitions = transitions ?? new List<TransitionModel>();
+            ManageShipmentModel manageShipmentModels = new()
+            {
+                Shipments = shipments ?? [],
+                ShipmentSlots = shipmentSlots ?? [],
+                Transitions = transitions ?? new List<TransitionModel>()
+            };
 
             return View(manageShipmentModels);
         }
@@ -205,21 +206,20 @@ namespace ddat_assignment.Controllers
         {
             var shipment = await _context.ShipmentModel.FindAsync(shipmentId);
 
-            // Update shipment status
-            shipment!.ShipmentStatus = newStatus;
-
             if (newStatus == "Delivered")
             {
-                shipment.DeliveryDate = DateTime.Now;
+                shipment!.ShipmentStatus = newStatus;
+                shipment!.DeliveryDate = DateTime.Now;
+                transitLocation = shipment!.DeliveryAddress.Replace("||", ", ");
             }
 
-            // Create a new transition
+            // Create a new transition for "Picked Up"
             if (shipment!.ShipmentStatus == "Pending")
             {
                 var defaultTransistion = new TransitionModel
                 {
                     ShipmentId = shipmentId,
-                    Address = shipment!.PickupAddress,
+                    Address = shipment!.PickupAddress.Replace("||", ", "),
                     Status = "Picked Up",
                     Timestamp = DateTime.Now
                 };
@@ -227,12 +227,7 @@ namespace ddat_assignment.Controllers
                 _context.TransitionModel.Add(defaultTransistion);
             }
 
-            if (newStatus == "Delivered")
-            {
-                transitLocation = shipment!.DeliveryAddress;
-            }
-
-            // Create a new transition
+            // Create a new transition for "In Transist" or "Delivered"
             var transition = new TransitionModel
             {
                 ShipmentId = shipmentId,
@@ -257,14 +252,16 @@ namespace ddat_assignment.Controllers
                         shipment.ProofOfDeliveryContentType = file.ContentType;
                     }
                 }
-                else
-                {
-                    return BadRequest("Proof of delivery is required for 'Delivered' status.");
-                }
+                //else
+                //{
+                //    return BadRequest("Proof of delivery is required for 'Delivered' status.");
+                //}
             }
 
             try
             {
+                shipment.ShipmentStatus = newStatus;
+                _context.ShipmentModel.Update(shipment);
                 await _context.SaveChangesAsync();
                 return Ok("Shipment status updated and transition added successfully.");
             }
