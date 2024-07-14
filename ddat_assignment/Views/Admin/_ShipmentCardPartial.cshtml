@@ -9,30 +9,39 @@
 
 @model ShipmentModel
 
-<div class="w-full cursor-pointer rounded-md border bg-white p-4 shadow" onclick="shipmentCardOnClick('@(Model.ShipmentId)')">
-    <div class="mb-2 flex flex-row items-center justify-between">
-        <div class="text-ok-boss-8 text-lg font-semibold"># @Model.ShipmentId</div>
+<div class="border shadow rounded-md w-full p-4 bg-white cursor-pointer" onclick="shipmentCardOnClick('@(Model.ShipmentId)')">
+    <div class="flex flex-row items-center justify-between mb-2">
+        <div class="text-lg text-ok-boss-8 font-semibold"># @Model.ShipmentId</div>
         <div class="text-[#86909c] text-xs">
             @formatDate(Model.ShipmentDate)
         </div>
     </div>
-    <div class="mb-4 flex flex-row items-center gap-x-2">
-        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
+    <div class="flex flex-row items-center gap-x-2 mb-4">
+        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
         <div class="">#Parcel ID: @Model?.Parcel?.ParcelId</div>
     </div>
-    <div class="flex flex-row items-center justify-between">
-        <div class="flex-1 flex flex-row gap-x-6">
-            <div class="flex-1 flex flex-col gap-y-0.5">
-                <div class="text-[#86909c] text-xs">Pickup address</div>
+    <div class="flex flex-row justify-between items-center">
+        <div class="flex flex-1 flex-row gap-x-6">
+            <div class="flex flex-col flex-1 gap-y-0.5">
+                <div class="text-xs text-[#86909c]">Pickup address</div>
                 <div class="text-ok-boss-4 text-sm font-medium">@Model.PickupAddress</div>
             </div>
-            <div class="flex-1 flex flex-col gap-y-0.5">
-                <div class="text-[#86909c] text-xs">Delivery address</div>
+            <div class="flex flex-col flex-1 gap-y-0.5">
+                <div class="text-xs text-[#86909c]">Delivery address</div>
                 <div class="text-ok-boss-4 text-sm font-medium">@Model.DeliveryAddress</div>
             </div>
         </div>
         <div class="flex-1 flex flex-row justify-end">
-            <div class="bg-ok-boss-1 text-ok-boss-7 rounded-lg p-2 px-3 text-sm">
+            @{
+                string ShipmentStatus = Model.ShipmentStatus;
+                string className = "";
+                if (ShipmentStatus == "Delivered") className = "bg-[#AFF0B5] text-[#00B42A]";
+                else if (ShipmentStatus == "Pending") className = "bg-[#FFE4BA] text-[#D25F00]";
+                else if (ShipmentStatus == "Picked Up") className = "bg-[#E8F3FF] text-[#0E42D2]";
+                else if (ShipmentStatus == "Returned") className = "bg-ok-boss-3 text-ok-boss-8";
+                else className = "bg-ok-boss-1 text-ok-boss-7";
+            }
+            <div class="p-2 px-3 rounded-lg text-sm @className">
                 @Model.ShipmentStatus
             </div>
         </div>
