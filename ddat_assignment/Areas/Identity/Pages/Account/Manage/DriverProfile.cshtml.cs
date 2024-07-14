@@ -46,40 +46,39 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
         public class PersonalInfoInputModel
         {
             [Required]
-            [StringLength(50, MinimumLength = 2)]
+            [StringLength(100, MinimumLength = 2)]
+            [RegularExpression(@"^[a-zA-Z\s']+$", ErrorMessage = "First name must contain only letters.")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(50, MinimumLength = 2)]
+            [StringLength(100, MinimumLength = 2)]
+            [RegularExpression(@"^[a-zA-Z\s']+$", ErrorMessage = "Last name must contain only letters.")]
             public string LastName { get; set; }
 
             [Required]
-            [Phone]
-            [Display(Name = "Phone number")]
+            [RegularExpression(@"^0\d{8,10}$", ErrorMessage = "Phone number must start with 0 and be 9-11 digits long.")]
             public string PhoneNumber { get; set; }
 
             [EmailAddress]
             public string? Email { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "New Password")]
             public string? NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm New Password")]
             [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
             public string? ConfirmPassword { get; set; }
 
             [Required]
-            [StringLength(255)]
+            [StringLength(200, MinimumLength = 2)]
             public string Address { get; set; }
 
             [Required]
-            [StringLength(50)]
+            [RegularExpression(@"^\d{6}-\d{2}-\d{4}$", ErrorMessage = "Identity Card Number must be in the format xxxxxx-xx-xxxx and contain only digits.")]
             public string IdentityCardNumber { get; set; }
 
             [Required]
-            [StringLength(10)]
+            [Display(Name = "Gender")]
             public string Gender { get; set; }
 
             [Required]
@@ -90,52 +89,47 @@ namespace ddat_assignment.Areas.Identity.Pages.Account.Manage
         public class LicenseInputModel
         {
             [Required]
-            [StringLength(50)]
+            [RegularExpression(@"^\d{6}-\d{2}-\d{4}$", ErrorMessage = "License ID must be in the format xxxxxx-xx-xxxx and contain only digits.")]
             public string LicenseId { get; set; }
 
             [Required]
-            [StringLength(50)]
             public string DrivingLicenseType { get; set; }
 
             [Required]
             public DateTime DrivingLicenseExpiryDate { get; set; }
 
             [Required]
-            [StringLength(50)]
             public string VehicleType { get; set; }
 
             [Required]
-            [StringLength(50)]
+            [StringLength(7, MinimumLength = 3)]
             public string VehiclePlateNumber { get; set; }
         }
 
         public class WorkPreferencesInputModel
         {
-            [DataType(DataType.Date)]
             public DateTime? StartDate { get; set; }
 
             [Required]
-            [StringLength(50)]
             public string PreferredWorkingDay { get; set; }
 
             [Required]
-            [StringLength(100)]
             public string PreferredWorkingLocation { get; set; }
         }
 
         public class EmergencyContactInputModel
         {
             [Required]
-            [StringLength(100)]
+            [StringLength(100, MinimumLength = 2)]
+            [RegularExpression(@"^[a-zA-Z\s']+$", ErrorMessage = "Emergency contact name must contain only letters, spaces, and apostrophes.")]
             public string EmergencyContactName { get; set; }
 
             [Required]
-            [StringLength(20)]
-            [Phone(ErrorMessage = "Invalid phone number format.")]
+            [RegularExpression(@"^0\d{8,10}$", ErrorMessage = "Emergency contact number must start with 0 and be 9-11 digits long.")]
             public string EmergencyContactPhone { get; set; }
 
             [Required]
-            [StringLength(50)]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Emergency contact relationship must contain only letters.")]
             public string EmergencyContactRelationship { get; set; }
         }
 

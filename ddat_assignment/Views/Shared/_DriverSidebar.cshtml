@@ -2,49 +2,58 @@
 
 }
 <!-- Sidebar -->
-<div class="xl:w-1/5 w-1/4 h-full bg-white border-e border-gray-200">
-<div class="pt-7 pb-10 overflow-y-auto">
-    <div class="px-4">
-        <a asp-action="Index" asp-controller="Driver" class="flex flex-row items-center gap-x-2 text-xl font-semibold text-ok-boss-5" aria-label="Brand">
-            <img class="w-10 h-10" src="~/images/ok-boss.svg" alt="Brand">
-            OK Boss Express
-        </a>
+<div id="navBtn" class="block md:hidden absolute top-0 left-0 z-50">
+    <div class="bg-ok-boss-2 px-2 py-2.5 rounded rounded-3 m-2 cursor-pointer hover:bg-ok-boss-3" onclick="handleNavToggle()">
+        <svg t="1720715219784" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3370" width="18" height="18"><path d="M913.6 135.2H380.2c-26.7 0-44.4 17.8-44.4 44.4V224c0 26.7 17.8 44.4 44.4 44.4h533.3c26.7 0 44.4-17.8 44.4-44.4v-44.4c0.1-26.6-17.7-44.4-44.3-44.4zM158 135.2h-44.4c-22.2 0-44.4 22.2-44.4 44.4V224c0 22.2 22.2 44.4 44.4 44.4H158c22.2 0 44.4-22.2 44.4-44.4v-44.4c0.1-22.2-22.1-44.4-44.4-44.4zM158 446.3h-44.4c-22.2 0-44.4 22.2-44.4 44.4v44.4c0 22.2 22.2 44.4 44.4 44.4H158c22.2 0 44.4-22.2 44.4-44.4v-44.4c0.1-22.2-22.1-44.4-44.4-44.4zM913.6 446.3H380.2c-26.7 0-44.4 17.8-44.4 44.4v44.4c0 26.7 17.8 44.4 44.4 44.4h533.3c26.7 0 44.4-17.8 44.4-44.4v-44.4c0.1-26.6-17.7-44.4-44.3-44.4zM158 757.4h-44.4c-22.2 0-44.4 22.2-44.4 44.4v44.4c0 22.2 22.2 44.4 44.4 44.4H158c22.2 0 44.4-22.2 44.4-44.4v-44.4c0.1-22.2-22.1-44.4-44.4-44.4zM913.6 757.4H380.2c-26.7 0-44.4 17.8-44.4 44.4v44.4c0 26.7 17.8 44.4 44.4 44.4h533.3c26.7 0 44.4-17.8 44.4-44.4v-44.4c0.1-26.6-17.7-44.4-44.3-44.4z" fill="#374151" p-id="3371"></path></svg>
     </div>
-    <nav class="p-4 w-full flex flex-col flex-wrap mt-4">
-        <ul class="space-y-1.5">
-            <li>
-                <a asp-action="Index" asp-controller="Driver" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg text-gray-700">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
-                    Dashboard
-                </a>
-            </li>
+</div>
 
-            <li>
-                <a asp-action="Shipment" asp-controller="Driver" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
-                    Shipment
-                </a>
-            </li>
-            
-            <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/DriverProfile" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-cog"><path d="M2 21a8 8 0 0 1 10.434-7.62" /><circle cx="10" cy="8" r="5" /><circle cx="18" cy="18" r="3" /><path d="m19.5 14.3-.4.9" /><path d="m16.9 20.8-.4.9" /><path d="m21.7 19.5-.9-.4" /><path d="m15.2 16.9-.9-.4" /><path d="m21.7 16.5-.9.4" /><path d="m15.2 19.1-.9.4" /><path d="m19.5 21.7-.4-.9" /><path d="m16.9 15.2-.4-.9" /></svg>
-                    Account
-                </a>
-            </li>
+<div id="navBar" class="xl:w-1/5 md:w-1/4 h-full bg-white border-e border-gray-200 hidden md:block absolute top-0 left-0 z-10 md:z-0">
+    <div class="w-full flex justify-end block md:hidden">
+        <svg t="1720716385990" id="navClose" onclick="handleNavToggle()" class="icon mt-5 mb-3 mr-5 cursor-pointer" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4495" width="12" height="12"><path d="M602.512147 511.99738l402.747939-402.747939a63.999673 63.999673 0 0 0-90.509537-90.509537L512.00261 421.487843 109.254671 18.749904a63.999673 63.999673 0 0 0-90.509537 90.509537L421.493073 511.99738 18.755134 914.745319a63.999673 63.999673 0 0 0 90.509537 90.509537L512.00261 602.506917l402.747939 402.747939a63.999673 63.999673 0 0 0 90.509537-90.509537z" p-id="4496" fill="#99000a"></path></svg>
+    </div>
+    <div class="md:pt-7 pb-10 overflow-y-auto">
+        <div class="px-4">
+            <a asp-action="Index" asp-controller="Driver" class="flex flex-row items-center gap-x-2 text-xl font-semibold text-ok-boss-5" aria-label="Brand">
+                <img class="w-10 h-10" src="~/images/ok-boss.svg" alt="Brand">
+                OK Boss Express
+            </a>
+        </div>
+        <nav class="p-4 w-full flex flex-col flex-wrap mt-4">
+            <ul class="space-y-1.5">
+                <li>
+                    <a asp-action="Index" asp-controller="Driver" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg text-gray-700">
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+                        Dashboard
+                    </a>
+                </li>
 
-            <li>
-                <form id="logoutForm" class="py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2"
-                    asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area ="" })">
+                <li>
+                    <a asp-action="Shipment" asp-controller="Driver" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
+                        Shipment
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-area="Identity" asp-page="/Account/Manage/DriverProfile" class="sidebar-item flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-cog"><path d="M2 21a8 8 0 0 1 10.434-7.62" /><circle cx="10" cy="8" r="5" /><circle cx="18" cy="18" r="3" /><path d="m19.5 14.3-.4.9" /><path d="m16.9 20.8-.4.9" /><path d="m21.7 19.5-.9-.4" /><path d="m15.2 16.9-.9-.4" /><path d="m21.7 16.5-.9.4" /><path d="m15.2 19.1-.9.4" /><path d="m19.5 21.7-.4-.9" /><path d="m16.9 15.2-.4-.9" /></svg>
+                        Account
+                    </a>
+                </li>
+
+                <li>
+                    <form id="logoutForm" class="py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-ok-boss-2"
+                          asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area ="" })">
                         <button type="submit" class="flex items-center gap-x-3.5 ">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></svg>
                             Logout
                         </button>
-                </form>
-            </li>
-        </ul>
-    </nav>
-</div>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 
 <script>
@@ -62,4 +71,26 @@
             }
         })
     })
+
+    // toggle nav bar
+    function handleNavToggle() {
+        console.log('click')
+        const navBar = document.querySelector('#navBar');
+        const navBtn = document.querySelector('#navBtn');
+
+        if (navBar.classList.contains('hidden')) {
+            navBar.classList.remove('hidden');
+            navBar.classList.add('block');
+
+            navBtn.classList.add('hidden');
+            navBtn.classList.remove('block');
+        } else {
+            navBar.classList.remove('block');
+            navBar.classList.add('hidden');
+
+            navBtn.classList.add('block');
+            navBtn.classList.remove('hidden');
+        }
+    }
+
 </script>

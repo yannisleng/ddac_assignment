@@ -4,12 +4,12 @@
     List<String> shipmentStatus = new List<string> { "All", "Pending", "Picked Up", "In Transit", "Delivered", "Returned" };
 }
 
-<div class="h-[10%]">
-    <h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129]">Shipments</h1>
+<div class="md:h-[10%]">
+    <h1 class="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight text-[#1d2129] mt-5 md:mt-0">Shipments</h1>
     <p class="text-sm text-gray-600 dark:text-neutral-400">Update, track, and manage shipment statuses.</p>
 </div>
 
-<div class="flex flex-col my-4 py-2 h-[90%]">
+<div class="flex flex-col my-4 py-2 md:h-[90%]">
     <div class="-m-1.5 overflow-x-auto">
         <div class="p-1.5 min-w-full inline-block align-middle">
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
@@ -130,44 +130,5 @@
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/shipment-functions.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#searchTerm').on('keyup', function () {
-            var searchTerm = $(this).val().trim();
-            loadShipmentData(searchTerm);
-        });
-
-        $('#bthAll').on('click', function () {
-            loadShipmentData("");
-        });
-
-        $('#hs-as-table-table-filter-dropdown').click(function () {
-            $('.hs-dropdown-menu').toggleClass('hidden opacity-0');
-        });
-
-        $('input[type="checkbox"]').change(function () {
-            $('input[type="checkbox"]').not(this).prop('checked', false);
-            var filter = $(this).next('span').text().trim();
-            loadShipmentData(filter === "All" ? "" : filter);
-        });
-
-        showPage(currentPage);
-        $('span.results-count').text(totalRows);
-        updatePaginationButtons();
-
-        $('button.next').on('click', function () {
-            if (currentPage < totalPages) {
-                currentPage++;
-                showPage(currentPage);
-            }
-        });
-
-        $('button.prev').on('click', function () {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
-            }
-        });
-    });
-</script>
+<script src="~/js/shipment_functions.js"></script>
+<script src="~/js/shipment.js"></script>
