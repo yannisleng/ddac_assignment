@@ -195,10 +195,5 @@ namespace ddat_assignment.Controllers
 
             return uniqueTransitions;
         }
-
-        public IActionResult PaymentMethod()
-        {
-            return View();
-        }
     }
 }
