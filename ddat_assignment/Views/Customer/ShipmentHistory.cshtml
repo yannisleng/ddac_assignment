@@ -32,9 +32,21 @@ else
                                 <p class="text-[#F69F73]">@shipment.DeliveryAddress.Replace("||", ",")</p>
                             </div>
                             <div class="ml-0 mt-4 md:ml-4 md:mt-0">
-                                <span class="bg-[#FFECE8] text-[#C74F88] flex h-12 w-24 items-center justify-center rounded-md px-4 py-2 text-xs font-semibold">
+                                @*<span class="bg-[#FFECE8] text-[#C74F88] text-ml flex h-12 w-24 items-center justify-center rounded-md px-4 py-2 font-semibold">
                                     @shipment.ShipmentStatus
-                                </span>
+                                </span>*@
+                                @{
+                                    string ShipmentStatus = shipment.ShipmentStatus;
+                                    string className = "";
+                                    if (ShipmentStatus == "Delivered") className = "bg-[#AFF0B5] text-[#00B42A]";
+                                    else if (ShipmentStatus == "Pending") className = "bg-[#FFE4BA] text-[#D25F00]";
+                                    else if (ShipmentStatus == "Picked Up") className = "bg-[#E8F3FF] text-[#0E42D2]";
+                                    else if (ShipmentStatus == "Returned") className = "bg-ok-boss-3 text-ok-boss-8";
+                                    else className = "bg-ok-boss-1 text-ok-boss-7";
+                                }
+                                <div class="rounded-lg p-2 px-3 text-sm @className">
+                                    @shipment.ShipmentStatus
+                                </div>
                             </div>
                         </div>
                     </div>
