@@ -10,6 +10,7 @@ function loadShipmentData(searchTerm) {
         type: 'GET',
         data: { searchTerm: searchTerm },
         success: function (data) {
+            $('#shipmentTable').empty();
             $('#shipmentTable').html(data);
             updateTableData();
         },

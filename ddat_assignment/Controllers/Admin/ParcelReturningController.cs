@@ -31,15 +31,14 @@ namespace ddat_assignment.Controllers.Admin
             shipment.ShipmentStatus = "Returned";
             _context.ShipmentModel.Update(shipment);
 
+            
             ShipmentModel newShipment = new()
             {
                 ShipmentId = Guid.NewGuid(),
                 ParcelId = shipment.ParcelId,
                 Parcel = shipment.Parcel,
-                SenderId = shipment.ReceiverId,
                 SenderName = shipment.ReceiverName,
                 SenderPhoneNumber = shipment.ReceiverPhoneNumber,
-                ReceiverId = shipment.SenderId,
                 ReceiverName = shipment.SenderName,
                 ReceiverPhoneNumber = shipment.SenderPhoneNumber,
                 PickupAddress = shipment.DeliveryAddress,
@@ -48,6 +47,11 @@ namespace ddat_assignment.Controllers.Admin
                 ShipmentStatus = "Pending",
                 Cost = shipment.Cost, 
             };
+            var user = await _context.Users.Where(u => u.PhoneNumber == shipment.ReceiverPhoneNumber).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                newShipment.SenderId = user.Id;
+            }
             _context.ShipmentModel.Add(newShipment);
             await _context.SaveChangesAsync();
 

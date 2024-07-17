@@ -8,124 +8,207 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="~/images/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="~/images/ok-boss.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ddat_assignment.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <style>
+        .max-h-0 {
+            max-height: 0;
+        }
+
+        .max-h-full {
+            max-height: 500px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="bg-primary flex justify-between items-center text-white h-16 px-10">
-                <div class="flex items-center">
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="flex flex-row items-center gap-x-2" aria-label="Brand">
-                        <img class="w-10 h-10" src="~/images/ok-boss.svg" alt="Brand">
-                        OK Boss Express
-                    </a>
-                    <ul class="flex justify-between ml-10">
+        <nav class="bg-primary flex h-16 items-center justify-between px-4 text-white md:px-10">
+            <div class="flex items-center space-x-2">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="flex items-center gap-x-2" aria-label="Brand">
+                    <img class="h-10 w-10" src="~/images/ok-boss.svg" alt="Brand">
+                    <span class="block">OK Boss Express</span>
+                </a>
+
+                <ul class="hidden space-x-7 md:flex items-center" id="nav-links">
                     @{
                         if (User.IsInRole("Driver"))
                         {
                             <li>
-                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-action="Index" asp-controller="Driver">DASHBOARD</a>
+                                <a class="cursor-pointer text-sm hover:text-ok-boss-1 ml-3" asp-action="Index" asp-controller="Driver">DASHBOARD</a>
                             </li>
-                            <li class="ml-7">
-                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-action="Shipment" asp-controller="Driver">SHIPMENT</a>
+                            <li>
+                                <a class="cursor-pointer text-sm hover:text-ok-boss-1" asp-action="Shipment" asp-controller="Driver">SHIPMENT</a>
                             </li>
                         }
                         else
                         {
-                            <li>
-                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm">SHIPPING</a>
-                            </li>
-                            <li class="ml-7">
-                                <a class="cursor-pointer hover:text-ok-boss-1 hidden sm:block text-sm" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN AS DRIVER</a>
-                            </li>
+                            if (User.IsInRole("Customer"))
+                            {
+                                <li class="relative ml-5">
+                                    <span class="mb-0 cursor-pointer text-sm hover:text-ok-boss-1" id="dropdownToggle">Services</span>
+                                    <ul class="absolute left-0 z-50 mt-2 max-h-0 w-40 overflow-hidden bg-white transition-all duration-500 ease-in-out" id="dropdownMenu">
+                                        <li class="flex flex-row items-center p-4 hover:bg-ok-boss-5 hover:text-white">
+                                            <svg class="mr-2 h-4 w-4 text-black hover:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="m7.5 4.27 9 5.15" />
+                                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                                <path d="m3.3 7 8.7 5 8.7-5" />
+                                                <path d="M12 22V12" />
+                                            </svg>
+                                            <a asp-action="CreateShipment" asp-controller="Customer" class="block text-sm text-black hover:text-white">Create Shipment</a>
+                                        </li>
+                                        <li class="flex flex-row items-center p-4 hover:text-white hover:hover:bg-ok-boss-5">
+                                            <svg class="mr-2 h-4 w-4 text-black hover:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="m7.5 4.27 9 5.15" />
+                                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                                <path d="m3.3 7 8.7 5 8.7-5" />
+                                                <path d="M12 22V12" />
+                                            </svg>
+                                            <a asp-action="ShipmentHistory" asp-controller="Customer" class="block text-sm text-black hover:text-white">Shipment History</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li>
+                                    <a class="cursor-pointer text-sm hover:text-ok-boss-1 ml-3" asp-area="Identity" asp-page="/Account/DriverRegister">JOIN AS DRIVER</a>
+                                </li>
+                            }
                         }
                     }
-                        @* @if (User.IsInRole("Warehouse"))
-                        {
-                            <li>
-                            <a class="ml-7 cursor-pointer hover:opacity-90">TESTING</a>
-                            </li>
-                        } *@
-                        @* <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li> *@
-                    </ul>
-                </div>
-                <partial name="_LoginPartial" />    
-        </nav>
-    </header>
-    <main class="min-h-screen">@RenderBody()</main>
-    <footer class="min-h-[55vh] bg-white py-3 flex flex-col">
-         <div>
-            <div class="flex flex-col lg:flex-row justify-around m-10">
-                <div>
-                    <h4 class="mb-4 font-bold text-lg lg:mt-0">About</h4>
-                    <div class="footer-content text-slate-500">
-                        Ok Boss Express is your trusted partner in fast, reliable, and efficient delivery services,
-                        ensuring your shipments arrive on time, every time, with a boss-level commitment to excellence.
-                    </div>
-                </div>
-                <div">
-                    <h4 class="mb-4 font-bold text-lg mt-7 lg:mt-0">Useful Links</h4>
-                    <div class="flex flex-col text-slate-500">
-                        <a href="/shipment" class="text-decoration-none text-muted mb-3 hover:text-ok-boss-6">Shipping</a>
-                        <a href="/join-us" class="text-decoration-none text-muted mb-3 hover:text-ok-boss-6">Join as Driver</a>
-                    </div>
+            </ul>
+            </div>
+
+            <div class="flex items-center">
+                <div class="flex items-center">
+                    <partial name="_LoginPartial" />
                 </div>
 
-                <div>
-                <h4 class="mb-4 font-bold text-lg mt-7 lg:mt-0">Contact</h4>
-                <div class="footer-content mb-4 text-slate-500">
-                        Asia Pacific University of Technology & Innovation (APU)<br />
-                        Jalan Teknologi 5, Taman Teknologi Malaysia,<br />
-                        57000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur
-                    </div>
-                    <a href="mailto:info@apu.edu.my" class="flex text-decoration-none text-muted items-center font-light">
-                        <svg t="1717820983620" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4301" 
-                        xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
-                        <path d="M838.954667 234.666667H170.666667c-3.626667 0-7.168 0.448-10.56 1.322666l323.690666 323.669334a21.333333 21.333333 0 0 0 
-                                 30.165334 0L838.954667 234.666667z m46.144 14.186666l-260.693334 260.693334 262.933334 262.912c5.44-7.168 8.661333-16.106667 
-                                 8.661333-25.792V277.333333c0-10.944-4.117333-20.906667-10.88-28.48zM843.861333 789.333333l-249.6-249.621333-50.133333 50.133333a64 
-                                 64 0 0 1-90.517333 0l-50.112-50.133333L156.373333 786.88c4.48 1.578667 9.28 2.453333 14.314667 2.453333h673.194667zM128.661333 
-                                 754.218667L373.333333 509.525333 129.578667 265.813333A42.709333 42.709333 0 0 0 128 277.333333v469.333334c0 2.56 0.213333 
-                                 5.098667 0.661333 7.552zM170.666667 192h682.666666a85.333333 85.333333 0 0 1 85.333334 85.333333v469.333334a85.333333 85.333333 
-                                 0 0 1-85.333334 85.333333H170.666667a85.333333 85.333333 0 0 1-85.333334-85.333333V277.333333a85.333333 85.333333 0 0 1 
-                                 85.333334-85.333333z" fill="#6C747D" p-id="4302">
-                        </path></svg>
-                        &nbsp;&nbsp;&nbsp;info@apu.edu.my
-                    </a>
-                    <a href="tel:03-8996 1000" class="flex text-decoration-none text-muted items-center mt-2 font-light hover:text-secondary">
-                        <svg t="1717821131832" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5917" 
-                        xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
-                        <path d="M448 917.376C448 917.333333 576 917.333333 576 917.333333c0.085333 0 0-42.709333 0-42.709333C576 874.666667 448 874.666667 
-                                 448 874.666667c-0.085333 0 0 42.709333 0 42.709333z m371.349333-173.034667C809.6 745.877333 799.573333 746.666667 789.333333 
-                                 746.666667a21.333333 21.333333 0 0 1-21.333333-21.333334V384a21.333333 21.333333 0 0 1 21.333333-21.333333 191.146667 191.146667 
-                                 0 0 1 92.373334 23.637333C828.202667 234.517333 681.045333 128 511.296 128 341.290667 128 193.749333 234.816 140.458667 
-                                 387.328A191.125333 191.125333 0 0 1 234.666667 362.666667a21.333333 21.333333 0 0 1 21.333333 21.333333v341.333333a21.333333 
-                                 21.333333 0 0 1-21.333333 21.333334 192 192 0 0 1-148.906667-313.216 21.269333 21.269333 0 0 1 0.042667-8.682667C127.36 228.288 
-                                 304.469333 85.333333 511.274667 85.333333c209.706667 0 388.544 146.944 427.008 347.093334l0.213333 1.344A191.210667 191.210667 
-                                 0 0 1 981.333333 554.666667c0 70.4-37.909333 131.968-94.421333 165.397333-57.642667 100.693333-154.752 174.762667-268.778667 
-                                 204.074667A42.517333 42.517333 0 0 1 576 960h-128c-23.573333 0-42.666667-19.157333-42.666667-42.624v-42.752c0-23.552 
-                                 18.922667-42.624 42.666667-42.624h128c23.573333 0 42.666667 19.157333 42.666667 42.624v5.141333a392.810667 392.810667 0 0 0 
-                                 200.682666-135.424zM85.333333 554.666667c0.298667 133.589333 128 148.949333 128 148.949333V406.144s-128.298667 14.933333-128 
-                                 148.522667z m853.333334 0c0.298667-133.589333-128-148.522667-128-148.522667v297.472s127.701333-15.36 128-148.949333z" 
-                                 fill="#6C747D" p-id="5918"></path></svg>
-                        &nbsp;&nbsp;&nbsp;03-8996 1000
-                    </a>
-                </div>
+                @{
+                    if (User.IsInRole("Customer"))
+                    {
+                        <button id="burger-menu" class="text-white md:hidden ml-7">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                    }
+                }
             </div>
-            <hr />
-            <h6 class="ml-10 mt-3 font-light">© 2024 OK Boss Express. All rights reserved.</h6>
-    </footer>
+        </nav>
+
+        <div id="mobile-menu" class="bg-primary hidden p-4 text-white">
+            <ul class="space-y-4">
+                <li>
+                    <a class="block text-sm hover:text-ok-boss-1" id="mobile-titre">Services</a>
+                    <ul class="hidden space-y-2 bg-gray-800 text-white" id="mobile-dropdown">
+                        <li class="p-4 hover:bg-red-600">
+                            <a asp-action="CreateShipment" asp-controller="Customer" class="block">Create Shipment</a>
+                        </li>
+                        <li class="p-4 hover:bg-red-600">
+                            <a asp-action="ShipmentHistory" asp-controller="Customer" class="block">Shipment History</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <main class="min-h-screen">@RenderBody()</main>
+    @{
+        if (!User.IsInRole("Customer") && !User.IsInRole("Driver"))
+        {
+            <footer class="min-h-[55vh] flex flex-col bg-white py-3">
+                <div>
+                    <div class="m-10 flex flex-col justify-around lg:flex-row">
+                        <div>
+                            <h4 class="mb-4 text-lg font-bold lg:mt-0">About</h4>
+                            <div class="footer-content text-slate-500">
+                                Ok Boss Express is your trusted partner in fast, reliable, and efficient delivery services,
+                                ensuring your shipments arrive on time, every time, with a boss-level commitment to excellence.
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="mb-4 mt-7 text-lg font-bold lg:mt-0">Useful Links</h4>
+                            <div class="flex flex-col text-slate-500">
+                                <a href="/shipment" class="text-decoration-none text-muted mb-3 hover:text-ok-boss-6">Shipping</a>
+                                <a href="/join-us" class="text-decoration-none text-muted mb-3 hover:text-ok-boss-6">Join as Driver</a>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="mb-4 mt-7 text-lg font-bold lg:mt-0">Contact</h4>
+                            <div class="footer-content mb-4 text-slate-500">
+                                Asia Pacific University of Technology & Innovation (APU)<br />
+                                Jalan Teknologi 5, Taman Teknologi Malaysia,<br />
+                                57000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur
+                            </div>
+                            <a href="mailto:info@apu.edu.my" class="text-decoration-none text-muted flex items-center font-light">
+                                <svg t="1717820983620" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4301" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
+                                    <path d="M838.954667 234.666667H170.666667c-3.626667 0-7.168 0.448-10.56 1.322666l323.690666 323.669334a21.333333 21.333333 0 0 0 30.165334 0L838.954667 234.666667z m46.144 14.186666l-260.693334 260.693334 262.933334 262.912c5.44-7.168 8.661333-16.106667 8.661333-25.792V277.333333c0-10.944-4.117333-20.906667-10.88-28.48zM843.861333 789.333333l-249.6-249.621333-50.133333 50.133333a64 64 0 0 1-90.517333 0l-50.112-50.133333L156.373333 786.88c4.48 1.578667 9.28 2.453333 14.314667 2.453333h673.194667zM128.661333 754.218667L373.333333 509.525333 129.578667 265.813333A42.709333 42.709333 0 0 0 128 277.333333v469.333334c0 2.56 0.213333 5.098667 0.661333 7.552zM170.666667 192h682.666666a85.333333 85.333333 0 0 1 85.333334 85.333333v469.333334a85.333333 85.333333 0 0 1-85.333334 85.333333H170.666667a85.333333 85.333333 0 0 1-85.333334-85.333333V277.333333a85.333333 85.333333 0 0 1 85.333334-85.333333z" fill="#6C747D" p-id="4302"></path>
+                                </svg>
+                                &nbsp;&nbsp;&nbsp;info@apu.edu.my
+                            </a>
+                            <a href="tel:03-8996 1000" class="text-decoration-none text-muted mt-2 flex items-center font-light hover:text-secondary">
+                                <svg t="1717821131832" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5917" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
+                                    <path d="M448 917.376C448 917.333333 576 917.333333 576 917.333333c0.085333 0 0-42.709333 0-42.709333C576 874.666667 448 874.666667 448 874.666667c-0.085333 0 0 42.709333 0 42.709333z m371.349333-173.034667C809.6 745.877333 799.573333 746.666667 789.333333 746.666667a21.333333 21.333333 0 0 1-21.333333-21.333334V384a21.333333 21.333333 0 0 1 21.333333-21.333333 191.146667 191.146667 0 0 1 92.373334 23.637333C828.202667 234.517333 681.045333 128 511.296 128 341.290667 128 193.749333 234.816 140.458667 387.328A191.125333 191.125333 0 0 1 234.666667 362.666667a21.333333 21.333333 0 0 1 21.333333 21.333333v341.333333a21.333333 21.333333 0 0 1-21.333333 21.333334 192 192 0 0 1-148.906667-313.216 21.269333 21.269333 0 0 1 0.042667-8.682667C127.36 228.288 304.469333 85.333333 511.274667 85.333333c209.706667 0 388.544 146.944 427.008 347.093334l0.213333 1.344A191.210667 191.210667 0 0 1 981.333333 554.666667c0 70.4-37.909333 131.968-94.421333 165.397333-57.642667 100.693333-154.752 174.762667-268.778667 204.074667A42.517333 42.517333 0 0 1 576 960h-128c-23.573333 0-42.666667-19.157333-42.666667-42.624v-42.752c0-23.552 18.922667-42.624 42.666667-42.624h128c23.573333 0 42.666667 19.157333 42.666667 42.624v5.141333a392.810667 392.810667 0 0 0 200.682666-135.424zM85.333333 554.666667c0.298667 133.589333 128 148.949333 128 148.949333V406.144s-128.298667 14.933333-128 148.522667z m853.333334 0c0.298667-133.589333-128-148.522667-128-148.522667v297.472s127.701333-15.36 128-148.949333z" fill="#6C747D" p-id="5918"></path>
+                                </svg>
+                                &nbsp;&nbsp;&nbsp;03-8996 1000
+                            </a>
+                        </div>
+                    </div>
+                    <hr />
+                    <h6 class="ml-10 mt-3 font-light">© 2024 OK Boss Express. All rights reserved.</h6>
+                </div>
+            </footer>
+        }
+    }
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownToggle = document.getElementById('dropdownToggle');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            dropdownToggle.addEventListener('mouseenter', function () {
+                dropdownMenu.classList.remove('max-h-0');
+                dropdownMenu.classList.add('max-h-full');
+            });
+
+            dropdownToggle.addEventListener('mouseleave', function () {
+                dropdownMenu.classList.add('max-h-0');
+                dropdownMenu.classList.remove('max-h-full');
+            });
+
+            dropdownMenu.addEventListener('mouseleave', function () {
+                dropdownMenu.classList.add('max-h-0');
+                dropdownMenu.classList.remove('max-h-full');
+            });
+
+            dropdownMenu.addEventListener('mouseenter', function () {
+                dropdownMenu.classList.remove('max-h-0');
+                dropdownMenu.classList.add('max-h-full');
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById("burger-menu").addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+
+        document.getElementById("mobile-titre").addEventListener("click", function () {
+            document.getElementById("mobile-dropdown").classList.toggle("hidden");
+        });
+    </script>
+
 </body>
 </html>

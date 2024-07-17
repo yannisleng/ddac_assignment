@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="~/images/ok-boss.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @{
+        <title>@ViewData["Title"] - Driver</title>
+    }
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ddat_assignment.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="flex flex-row h-screen max-h-screen">
+        @{
+            <partial name="_DriverSidebar" />
+        }
+        <main role="main" class="p-8 xl:w-4/5 w-full md:w-3/4 h-full max-h-screen sm:overflow-hidden absolute top-0 right-0 z-0">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @* <script src="~/js/admin_sidebar.js" asp-append-version="true"></script> *@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

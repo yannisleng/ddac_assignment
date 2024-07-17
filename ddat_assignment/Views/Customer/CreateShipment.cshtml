@@ -1,0 +1,209 @@
+﻿﻿@{
+    ViewData["Title"] = "CreateShipment";
+    List<string> states = new List<string> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kuala Lumpur", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+    List<string> paymentMethods = new List<string> { "Credit Card", "Debit Card", "E-wallet", "Online Transfer" };
+}
+
+@model CreateShipmentModel
+
+<h1 class="text-[#A82F38] mx-8 mb-2 scroll-m-20 pb-2 text-3xl font-bold tracking-tight">Standard Shipping</h1>
+
+<form asp-controller="CreateShipment" asp-action="AddShipment" method="post" class="mx-8 my-4 flex flex-col gap-y-4 py-2 pe-2">
+    <div class="rounded-lg border bg-white shadow">
+        <div class="bg-ok-boss-1 flex flex-col gap-y-2 rounded-t-lg px-4 py-2">
+            <div class="text-ok-boss-7 flex flex-row items-center gap-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
+                <div class="text-sm font-semibold">Sender details</div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-4 rounded-b-lg bg-white p-4 lg:flex-row">
+            <div class="flex-1 flex flex-col gap-y-3">
+                <div>
+                    <label for="sender-name" class="text-[#86909c] mb-2 text-xs">Sender name</label>
+                    <input name="sender-name"
+                           type="text" placeholder="Name"
+                           value="@Model.FullName"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           readonly />
+                </div>
+                <div>
+                    <label for="sender-phone-number" class="text-[#86909c] mb-2 text-xs">Phone number</label>
+                    <input name="sender-phone-number"
+                           type="text" placeholder="Phone number"
+                           value="@Model.PhoneNumber"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           readonly />
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col gap-y-3">
+                <div>
+                    <label for="sender-address-line-1" class="text-[#86909c] mb-2 text-xs">Address line 1</label>
+                    <input name="sender-address-line-1"
+                           type="text" placeholder="Address line 1"
+                           value="@Model.AddressLine1"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           required />
+                </div>
+                <div>
+                    <label for="sender-address-line-2" class="text-[#86909c] mb-2 text-xs">Address line 2</label>
+                    <input name="sender-address-line-2"
+                           type="text" placeholder="Address line 2"
+                           value="@Model.AddressLine2"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5" />
+                </div>
+                <div class="grid-cols-3 grid gap-2.5">
+                    <div>
+                        <label for="sender-postcode" class="text-[#86909c] mb-2 text-xs">Postcode</label>
+                        <input name="sender-postcode"
+                               type="text" placeholder="Postcode"
+                               value="@Model.Postcode"
+                               class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                               required />
+                    </div>
+                    <div>
+                        <label for="sender-city" class="text-[#86909c] mb-2 text-xs">City</label>
+                        <input name="sender-city"
+                               type="text" placeholder="City"
+                               value="@Model.City"
+                               class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                               required />
+                    </div>
+                    <div>
+                        <label for="sender-state" class="text-[#86909c] mb-2 text-xs">State</label>
+                        <select name="sender-state" class="apperance-none w-full rounded-lg border border-gray-200 px-4 py-3 pe-9 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                            <option value="@Model.State" selected>@Model.State</option>
+                            @foreach (var state in states)
+                            {
+                                <option value="@state">@state</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-lg border bg-white shadow">
+        <div class="bg-ok-boss-1 flex flex-col gap-y-2 rounded-t-lg px-4 py-2">
+            <div class="text-ok-boss-7 flex flex-row items-center gap-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-check"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /><path d="m16 19 2 2 4-4" /></svg>
+                <div class="text-sm font-semibold">Receiver details</div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-4 rounded-b-lg bg-white p-4 lg:flex-row">
+            <div class="flex-1 flex flex-col gap-y-3">
+                <div>
+                    <label for="receiver-name" class="text-[#86909c] mb-2 text-xs">Receiver name</label>
+                    <input name="receiver-name"
+                           type="text" placeholder="Name"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           required />
+                </div>
+                <div>
+                    <label for="receiver-phone-number" class="text-[#86909c] mb-2 text-xs">Phone number</label>
+                    <input name="receiver-phone-number"
+                           type="text" placeholder="Phone number"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           required />
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col gap-y-3">
+                <div>
+                    <label for="receiver-address-line-1" class="text-[#86909c] mb-2 text-xs">Address line 1</label>
+                    <input name="receiver-address-line-1"
+                           type="text" placeholder="Address line 1"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           required />
+                </div>
+                <div>
+                    <label for="receiver-address-line-2" class="text-[#86909c] mb-2 text-xs">Address line 2</label>
+                    <input name="receiver-address-line-2"
+                           type="text" placeholder="Address line 2"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5" />
+                </div>
+                <div class="grid-cols-3 grid gap-2.5">
+                    <div>
+                        <label for="receiver-postcode" class="text-[#86909c] mb-2 text-xs">Postcode</label>
+                        <input name="receiver-postcode"
+                               type="text" placeholder="Postcode"
+                               class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                               required />
+                    </div>
+                    <div>
+                        <label for="receiver-city" class="text-[#86909c] mb-2 text-xs">City</label>
+                        <input name="receiver-city"
+                               type="text" placeholder="City"
+                               class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                               required />
+                    </div>
+                    <div>
+                        <label for="receiver-state" class="text-[#86909c] mb-2 text-xs">State</label>
+                        <select name="receiver-state" class="apperance-none w-full rounded-lg border border-gray-200 px-4 py-3 pe-9 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                            @{
+                                foreach (var state in states)
+                                {
+                                    <option value="@state">@state</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="rounded-lg border bg-white shadow">
+        <div class="bg-ok-boss-1 flex flex-col gap-y-2 rounded-t-lg px-4 py-2">
+            <div class="text-ok-boss-7 flex flex-row items-center gap-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
+                <div class="text-sm font-semibold">Parcel details</div>
+            </div>
+        </div>
+        <div class="flex flex-row rounded-b-lg bg-white p-4">
+            <div class="flex w-full flex-col gap-y-4">
+                <div class="flex flex-col">
+                    <label for="goods-name" class="text-[#86909c] mb-2 text-xs">Goods name</label>
+                    <input name="goods-name"
+                           type="text" placeholder="Goods Name"
+                           class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                           required />
+                </div>
+                <div class="grid-cols-2 grid gap-4">
+                    <div class="flex flex-col">
+                        <label for="goods-weight" class="text-[#86909c] mb-2 text-xs">Weight (KG)</label>
+                        <input id="goods-weight" name="goods-weight" min="0" max="100" type="number" placeholder="Weight (KG)"
+                               class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                               required />
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="goods-price" class="text-[#86909c] mb-2 text-xs">Parcel values</label>
+                        <input id="goods-price" name="goods-price" type="text" placeholder="Parcel values"
+                               class="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5" />
+                    </div>
+                </div>
+                <div class="grid-cols-2 grid gap-4">
+                    <div class="flex flex-col">
+                        <label for="goods-type" class="text-[#86909c] mb-2 text-xs">Goods Type</label>
+                        <select name="goods-type" class="apperance-none w-full rounded-lg border border-gray-200 px-4 py-3 pe-9 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                            <option value="Parcel" selected>Parcel</option>
+                            <option value="Document">Document</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="payment-method" class="text-[#86909c] mb-2 text-xs">Payment Method</label>
+                        <select name="payment-method" class="apperance-none w-full rounded-lg border border-gray-200 px-4 py-3 pe-9 text-sm focus:border-ok-boss-5 focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5">
+                            @foreach (var paymentMethod in paymentMethods)
+                            {
+                                <option value="@paymentMethod">@paymentMethod</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-4 flex w-full justify-center">
+        <button type="submit" class="bg-ok-boss-4 w-1/2 rounded-3xl px-6 py-3 text-sm font-medium text-white hover:bg-ok-boss-6">
+            Submit
+        </button>
+    </div>
+</form>

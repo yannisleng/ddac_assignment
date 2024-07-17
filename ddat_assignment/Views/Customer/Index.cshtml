@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+@model ShipmentResultModel
+
+<div class="flex min-h-screen flex-col items-center">
+    <div class="mt-16 flex w-full flex-col items-center">
+        <form asp-action="Shipment" asp-controller="Customer" method="get" class="flex w-3/4 flex-row items-center space-x-4">
+            <div class="flex flex-col m-auto w-">
+                <div class="mb-6">
+                    <span class="text-4xl text-ok-boss-7 font-montserrat font-semibold mb-2">Shipment Tracking</span>
+                    <div class="text-[#272e3b] font-medium">Know where your package is, every step of the way. </div>
+                </div>
+                <div class="flex flex-row gap-3">
+                    <div class="relative ml-auto w-10/12">
+                        <input name="searchQuery"
+                               type="text"
+                               class="border-2 border-[#c9cdd4] w-full rounded-xl py-2 pe-4 ps-8 font-medium focus:ring-ok-boss-5 focus-visible:outline-ok-boss-5"
+                               placeholder="Shipment number"
+                               required />
+                        <svg class="top-[10px] left-[9px] text-[#86909c] absolute" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /><circle cx="18.5" cy="15.5" r="2.5" /><path d="M20.27 17.27 22 19" /></svg>
+                    </div>
+            
+                    <button class="bg-ok-boss-3 w-24 cursor-pointer rounded-md px-4 py-2 text-sm hover:bg-ok-boss-5 hover:text-white" type="submit">
+                    Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    @if (Model != null)
+    {
+        <div class="mt-8 w-3/4">
+            @await Html.PartialAsync("~/Views/Shared/_ShipmentResultPartial.cshtml", Model)
+        </div>
+    }
+</div>

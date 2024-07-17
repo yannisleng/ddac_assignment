@@ -2,14 +2,14 @@
 @model ddat_assignment.Areas.Identity.Pages.Account.DriverRegisterModel
 @{
     ViewData["Title"] = "Driver Registration";
-    List<String> genders = new List<String> { "Male", "Female", "Other" };
+    List<String> genders = new List<String> { "Male", "Female", "Rather not say" };
     List<String> licenseTypes = new List<String> { "B2", "D", "E", "GDL" };
     List<String> workingDays = new List<String> { "Weekday", "Weekend" };
     List<String> vehicleTypes = new List<String> { "Motorcycle", "Car (5 Seats)", "Car (7 Seats)", "Van", "Lorry" };
-    List<String> states = new List<String> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+    List<String> states = new List<String> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kuala Lumpur", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
 }
 
-<div data-hs-stepper="" class="w-2/3 mx-auto px-20 py-10 min-h-screen">
+<div data-hs-stepper="" class="md:w-4/5 mx-auto sm:px-20 px-10 py-10 min-h-screen">
     <h1 class="text-4xl font-semibold mb-7">Driver Registration</h1>
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
@@ -68,12 +68,12 @@
                                     </div>
                                     <div class="mb-4">
                                         <label asp-for="Input.PhoneNumber" class="block text-sm font-medium mb-2 dark:text-white">Phone Number</label>
-                                        <input asp-for="Input.PhoneNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Phone Number" />
+                                        <input asp-for="Input.PhoneNumber" placeholder="0123456789" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Phone Number" />
                                         <span asp-validation-for="Input.PhoneNumber" class="text-sm text-red-600 mt-2"></span>
                                     </div>
                                     <div class="mb-4">
                                         <label asp-for="Input.Email" class="block text-sm font-medium mb-2 dark:text-white">Email</label>
-                                        <input asp-for="Input.Email" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Email Address" />
+                                        <input asp-for="Input.Email" placeholder="example@okbossexpress.com" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Email Address" />
                                         <span asp-validation-for="Input.Email" class="text-sm text-red-600 mt-2"></span>
                                     </div>
                                     <div class="mb-4">
@@ -91,7 +91,7 @@
                                     <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
                                     <div class="mb-4">
                                         <label asp-for="Input.IdentityCardNumber" class="block text-sm font-medium mb-2 dark:text-white">Identity Card Number</label>
-                                        <input asp-for="Input.IdentityCardNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="XXXXXX-XX-XXXX" />
+                                        <input asp-for="Input.IdentityCardNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="xxxxxx-xx-xxxx" />
                                         <span asp-validation-for="Input.IdentityCardNumber" class="text-sm text-red-600 mt-2"></span>
                                     </div>
                                     <div class="mb-4">
@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <label asp-for="Input.DateOfBirth" class="block text-sm font-medium mb-2 dark:text-white">Date of Birth</label>
-                                        <input asp-for="Input.DateOfBirth" type="date" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
+                                        <input asp-for="Input.DateOfBirth" type="date" max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
                                         <span asp-validation-for="Input.DateOfBirth" class="text-sm text-red-600 mt-2"></span>
                                     </div>
                                 </div>
@@ -121,15 +121,9 @@
                                     <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 mb-4" role="alert"></div>
                                     <div class="mb-4">
                                         <label asp-for="Input.LicenseId" class="block text-sm font-medium mb-2 dark:text-white">License ID</label>
-                                        <input asp-for="Input.LicenseId" accept="image/png, image/gif, image/jpeg" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="License ID Number" />
+                                        <input asp-for="Input.LicenseId" placeholder="xxxxxx-xx-xxxx" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="License ID Number" />
                                         <span asp-validation-for="Input.LicenseId" class="text-sm text-red-600 mt-2"></span>
                                     </div>
-
-                                    @* <div class="mb-4">
-                        <label asp-for="Input.LicenseImage" class="block text-sm font-medium mb-2 dark:text-white">Upload License Image</label>
-                        <input asp-for="Input.LicenseImage" type="file" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 dark:file:bg-neutral-700 dark:file:text-neutral-400">
-                        <span asp-validation-for="Input.LicenseImage" class="text-sm text-red-600 mt-2"></span>
-                        </div> *@
 
                                     <div class="mb-4">
                                         <label asp-for="Input.DrivingLicenseType" class="block text-sm font-medium mb-2 dark:text-white">License Type</label>
@@ -149,7 +143,7 @@
 
                                     <div class="mb-4">
                                         <label asp-for="Input.DrivingLicenseExpiryDate" class="block text-sm font-medium mb-2 dark:text-white">License Expiry Date</label>
-                                        <input asp-for="Input.DrivingLicenseExpiryDate" type="date" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
+                                        <input asp-for="Input.DrivingLicenseExpiryDate" type="date" min="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
                                         <span asp-validation-for="Input.DrivingLicenseExpiryDate" class="text-sm text-red-600 mt-2"></span>
                                     </div>
 
@@ -171,7 +165,7 @@
 
                                     <div class="mb-4">
                                         <label asp-for="Input.VehiclePlateNumber" class="block text-sm font-medium mb-2 dark:text-white">Vehicle Plate Number</label>
-                                        <input asp-for="Input.VehiclePlateNumber" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Vehicle Plate Number" />
+                                        <input asp-for="Input.VehiclePlateNumber" placeholder="ABC1234" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Vehicle Plate Number" />
                                         <span asp-validation-for="Input.VehiclePlateNumber" class="text-sm text-red-600 mt-2"></span>
                                     </div>
                                 </div>
@@ -185,7 +179,7 @@
 
                                     <div class="mb-4">
                                         <label asp-for="Input.StartDate" class="block text-sm font-medium mb-2 dark:text-white">Start Date</label>
-                                        <input asp-for="Input.StartDate" type="date" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
+                                        <input asp-for="Input.StartDate" type="date" min="@DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" />
                                         <span asp-validation-for="Input.StartDate" class="text-sm text-red-600 mt-2"></span>
                                     </div>
 
@@ -234,13 +228,13 @@
 
                                     <div class="mb-4">
                                         <label asp-for="Input.EmergencyContactPhone" class="block text-sm font-medium mb-2 dark:text-white">Phone</label>
-                                        <input asp-for="Input.EmergencyContactPhone" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Emergency Contact Number" />
+                                        <input asp-for="Input.EmergencyContactPhone" placeholder="0123456789" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Emergency Contact Number" />
                                         <span asp-validation-for="Input.EmergencyContactPhone" class="text-sm text-red-600 mt-2"></span>
                                     </div>
 
                                     <div class="mb-4">
                                         <label asp-for="Input.EmergencyContactRelationship" class="block text-sm font-medium mb-2 dark:text-white">Relationship</label>
-                                        <input asp-for="Input.EmergencyContactRelationship" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Relationship" />
+                                        <input asp-for="Input.EmergencyContactRelationship" placeholder="Father" class="py-3 px-4 block w-full border-gray-300 rounded-lg text-sm focus:border-primary focus:ring-primary dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400" aria-required="true" placeholder="Relationship" />
                                         <span asp-validation-for="Input.EmergencyContactRelationship" class="text-sm text-red-600 mt-2"></span>
                                     </div>
                                 </div>

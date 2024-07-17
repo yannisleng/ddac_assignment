@@ -32,7 +32,16 @@
             </div>
         </div>
         <div class="flex-1 flex flex-row justify-end">
-            <div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-sm">
+            @{
+                string ShipmentStatus = Model.ShipmentStatus;
+                string className = "";
+                if (ShipmentStatus == "Delivered") className = "bg-[#AFF0B5] text-[#00B42A]";
+                else if (ShipmentStatus == "Pending") className = "bg-[#FFE4BA] text-[#D25F00]";
+                else if (ShipmentStatus == "Picked Up") className = "bg-[#E8F3FF] text-[#0E42D2]";
+                else if (ShipmentStatus == "Returned") className = "bg-ok-boss-3 text-ok-boss-8";
+                else className = "bg-ok-boss-1 text-ok-boss-7";
+            }
+            <div class="p-2 px-3 rounded-lg text-sm @className">
                 @Model.ShipmentStatus
             </div>
         </div>

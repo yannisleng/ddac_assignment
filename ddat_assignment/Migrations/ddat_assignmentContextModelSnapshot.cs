@@ -416,9 +416,6 @@ namespace ddat_assignment.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ReceiverId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ReceiverName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -455,8 +452,6 @@ namespace ddat_assignment.Migrations
                     b.HasIndex("DriverId");
 
                     b.HasIndex("ParcelId");
-
-                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -647,10 +642,6 @@ namespace ddat_assignment.Migrations
                         .WithMany()
                         .HasForeignKey("ParcelId");
 
-                    b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId");
-
                     b.HasOne("ddat_assignment.Areas.Identity.Data.ddat_assignmentUser", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
@@ -662,8 +653,6 @@ namespace ddat_assignment.Migrations
                     b.Navigation("Driver");
 
                     b.Navigation("Parcel");
-
-                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });

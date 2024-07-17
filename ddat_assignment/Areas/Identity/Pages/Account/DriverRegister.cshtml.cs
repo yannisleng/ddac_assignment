@@ -86,103 +86,75 @@ namespace ddat_assignment.Areas.Identity.Pages.Account
             // ASP.NET Core Identity properties
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
-            // Additional properties
             [Required]
-            [StringLength(100)]
-            [Display(Name = "First Name")]
+            [StringLength(100, MinimumLength = 2)]
+            [RegularExpression(@"^[a-zA-Z\s']+$", ErrorMessage = "First name must contain only letters.")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(100)]
-            [Display(Name = "Last Name")]
+            [StringLength(100, MinimumLength = 2)]
+            [RegularExpression(@"^[a-zA-Z\s']+$", ErrorMessage = "Last name must contain only letters.")]
             public string LastName { get; set; }
 
             [Required]
-            [StringLength(20)]
-            [Phone(ErrorMessage = "Invalid phone number format.")]
-            [Display(Name = "Phone Number")]
+            [RegularExpression(@"^0\d{8,10}$", ErrorMessage = "Phone number must start with 0 and be 9-11 digits long.")]
             public string PhoneNumber { get; set; }
 
             [Required]
-            [StringLength(255)]
-            [Display(Name = "Address")]
+            [StringLength(200, MinimumLength = 2)]
             public string Address { get; set; }
 
             [Required]
-            [StringLength(50)]
-            [Display(Name = "Identity Card Number")]
+            [RegularExpression(@"^\d{6}-\d{2}-\d{4}$", ErrorMessage = "Identity Card Number must be in the format xxxxxx-xx-xxxx and contain only digits.")]
             public string IdentityCardNumber { get; set; }
 
             [Required]
-            [StringLength(10)]
             [Display(Name = "Gender")]
             public string Gender { get; set; }
 
             [Required]
             [DataType(DataType.Date)]
-            [Display(Name = "Date of Birth")]
             public DateTime DateOfBirth { get; set; }
 
             [Required]
-            [StringLength(50)]
-            [Display(Name = "License ID")]
+            [RegularExpression(@"^\d{6}-\d{2}-\d{4}$", ErrorMessage = "License ID must be in the format xxxxxx-xx-xxxx and contain only digits.")]
             public string LicenseId { get; set; }
 
-            //[Required]
-            //[Display(Name = "Driving License Image")]
-            //public byte[] LicenseImage { get; set; }
-
             [Required]
-            [StringLength(50)]
-            [Display(Name = "Driving License Type")]
             public string DrivingLicenseType { get; set; }
 
             [Required]
-            [Display(Name = "Driving License Expiry Date")]
-            public DateTime? DrivingLicenseExpiryDate { get; set; }
+            public DateTime DrivingLicenseExpiryDate { get; set; }
 
             [Required]
-            [StringLength(50)]
-            [Display(Name = "Vehicle Type")]
             public string VehicleType { get; set; }
 
             [Required]
-            [StringLength(50)]
-            [Display(Name = "Vehicle Plate Number")]
+            [StringLength(7, MinimumLength = 3)]
             public string VehiclePlateNumber { get; set; }
 
             [Required]
-            [Display(Name = "Start Date")]
-            [DataType(DataType.Date)]
-            public DateTime? StartDate { get; set; }
+            public DateTime StartDate { get; set; }
 
             [Required]
-            [StringLength(50)]
-            [Display(Name = "Preferred Working Day")]
             public string PreferredWorkingDay { get; set; }
 
             [Required]
-            [StringLength(100)]
-            [Display(Name = "Preferred Working Location")]
             public string PreferredWorkingLocation { get; set; }
 
             [Required]
-            [StringLength(100)]
-            [Display(Name = "Emergency Contact Name")]
+            [StringLength(100, MinimumLength = 2)]
+            [RegularExpression(@"^[a-zA-Z\s']+$", ErrorMessage = "Emergency contact name must contain only letters, spaces, and apostrophes.")]
             public string EmergencyContactName { get; set; }
 
             [Required]
-            [StringLength(20)]
-            [Phone(ErrorMessage = "Invalid phone number format.")]
-            [Display(Name = "Emergency Contact Phone")]
+            [RegularExpression(@"^0\d{8,10}$", ErrorMessage = "Emergency contact number must start with 0 and be 9-11 digits long.")]
             public string EmergencyContactPhone { get; set; }
             
             [Required]
-            [StringLength(50)]
-            [Display(Name = "Emergency Contact Relationship")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Emergency contact relationship must contain only letters.")]
             public string EmergencyContactRelationship { get; set; }
         }
 

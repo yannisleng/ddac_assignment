@@ -1,0 +1,182 @@
+﻿@page
+@model CustomerProfileModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    List<String> states = new List<String> { "Selangor", "Sabah", "Sarawak", "Peris", "Penang", "Perak", "Johor", "Kelantan", "Kuantan", "Kuala Lumpur", "Kedah", "Melaka", "Negeri Sembilan", "Pahang", "Terengganu" };
+}
+
+<div class="mx-2 mx-auto my-3 rounded-3xl px-5">
+    <h3 class="text-[#A82F38] mb-6 text-3xl font-bold">@ViewData["Title"]</h3>
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <div class="w-full border-b p-4 md:w-1/4 md:border-b-0 md:border-r">
+            <ul class="flex flex-col space-y-2 md:flex-col">
+                <li>
+                    <button id="personal-info-button" class="w-full cursor-pointer rounded bg-gray-700 px-4 py-2 text-white hover:bg-ok-boss-5 hover:text-white">Personal Information</button>
+                </li>
+                <li>
+                    <button id="address-button" class="w-full cursor-pointer rounded bg-gray-700 px-4 py-2 text-white hover:bg-ok-boss-5 hover:text-white">Address</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Personal Info Form -->
+        <div class="w-full rounded bg-white p-6 shadow-md md:w-3/4" id="personal-info-form">
+            <form id="profile-form" method="post" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="mb-4 text-red-500" role="alert"></div>
+
+                <div class="grid-cols-1 grid gap-4 md:grid-cols-2">
+                    <div>
+                        <label asp-for="CustomerPersonalInfo.FirstName" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                        <input asp-for="CustomerPersonalInfo.FirstName" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                        <span asp-validation-for="CustomerPersonalInfo.FirstName" class="text-sm text-red-500"></span>
+                    </div>
+                    <div>
+                        <label asp-for="CustomerPersonalInfo.LastName" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                        <input asp-for="CustomerPersonalInfo.LastName" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                        <span asp-validation-for="CustomerPersonalInfo.LastName" class="text-sm text-red-500"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label asp-for="CustomerPersonalInfo.Email" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="CustomerPersonalInfo.Email" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                    <span asp-validation-for="CustomerPersonalInfo.Email" class="text-sm text-red-500"></span>
+                </div>
+
+                <div>
+                    <label asp-for="CustomerPersonalInfo.DateOfBirth" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="CustomerPersonalInfo.DateOfBirth" type="date" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                    <span asp-validation-for="CustomerPersonalInfo.DateOfBirth" class="text-sm text-red-500"></span>
+                </div>
+
+                <!-- Password Section -->
+                <div>
+                    <a href="#" id="change-password-link" class="text-blue-500 underline">Change Password</a>
+                </div>
+
+                <div id="password-section" class="hidden space-y-6">
+                    <div>
+                        <label asp-for="CustomerPersonalInfo.Password" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                        <input asp-for="CustomerPersonalInfo.Password" type="password" autocomplete="new-password" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                        <span asp-validation-for="CustomerPersonalInfo.Password" class="text-sm text-red-500"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CustomerPersonalInfo.ConfirmPassword" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                        <input asp-for="CustomerPersonalInfo.ConfirmPassword" type="password" autocomplete="new-password" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                        <span asp-validation-for="CustomerPersonalInfo.ConfirmPassword" class="text-sm text-red-500"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label asp-for="CustomerPersonalInfo.IdentityCardNumber" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="CustomerPersonalInfo.IdentityCardNumber" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                    <span asp-validation-for="CustomerPersonalInfo.IdentityCardNumber" class="text-sm text-red-500"></span>
+                </div>
+
+                <div>
+                    <label asp-for="CustomerPersonalInfo.PhoneNumber" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <input asp-for="CustomerPersonalInfo.PhoneNumber" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+                    <span asp-validation-for="CustomerPersonalInfo.PhoneNumber" class="text-sm text-red-500"></span>
+                </div>
+
+                <div>
+                    <label asp-for="CustomerPersonalInfo.Gender" class="mb-2 block text-sm font-bold text-gray-700"></label>
+                    <div class="flex items-center">
+                        <label class="mr-4 inline-flex items-center">
+                            <input asp-for="CustomerPersonalInfo.Gender" type="radio" value="Male" class="form-radio text-blue-600" />
+                            <span class="ml-2">Male</span>
+                        </label>
+                        <label class="mr-4 inline-flex items-center">
+                            <input asp-for="CustomerPersonalInfo.Gender" type="radio" value="Female" class="form-radio text-blue-600" />
+                            <span class="ml-2">Female</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input asp-for="CustomerPersonalInfo.Gender" type="radio" value="Other" class="form-radio text-blue-600" />
+                            <span class="ml-2">Other</span>
+                        </label>
+                    </div>
+                    <span asp-validation-for="CustomerPersonalInfo.Gender" class="text-sm text-red-500"></span>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button type="button" class="rounded bg-gray-300 px-4 py-2 text-gray-800">Cancel</button>
+                    <button type="submit" class="rounded bg-red-500 px-4 py-2 text-white">Save changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Address Form -->
+        <div class="hidden w-full rounded bg-white p-6 shadow-md md:w-3/4" id="address-form">
+            <form id="address-form" method="post" class="space-y-6" asp-page-handler="UpdateAddress">
+                <div class="grid-cols-1 grid gap-y-4">
+                    <div>
+                        <label asp-for="Address.Address1" class="text-[#86909c] mb-2 text-xs">Address line 1</label>
+                        <input asp-for="Address.Address1" class="w-full rounded-lg border border-gray-200 px-4 py-3" />
+                        <span asp-validation-for="Address.Address1" class="text-sm text-red-500"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Address.Address2" class="text-[#86909c] mb-2 text-xs">Address line 2</label>
+                        <input asp-for="Address.Address2" class="w-full rounded-lg border border-gray-200 px-4 py-3" />
+                        <span asp-validation-for="Address.Address2" class="text-sm text-red-500"></span>
+                    </div>
+                    <div class="grid-cols-1 grid gap-y-4 md:grid-cols-3 md:gap-2.5">
+                        <div>
+                            <label asp-for="Address.Postcode" class="text-[#86909c] mb-2 text-xs">Postcode</label>
+                            <input asp-for="Address.Postcode" class="w-full rounded-lg border border-gray-200 px-4 py-3" />
+                            <span asp-validation-for="Address.Postcode" class="text-sm text-red-500"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Address.City" class="text-[#86909c] mb-2 text-xs">City</label>
+                            <input asp-for="Address.City" class="w-full rounded-lg border border-gray-200 px-4 py-3" />
+                            <span asp-validation-for="Address.City" class="text-sm text-red-500"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Address.State" class="text-[#86909c] mb-2 text-xs">State</label>
+                            <select asp-for="Address.State" class="w-full rounded-lg border border-gray-200 px-4 py-3">
+                                @foreach (var state in states)
+                                {
+                                    <option value="@state">@state</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Address.State" class="text-sm text-red-500"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" class="rounded bg-gray-300 px-4 py-2 text-gray-800">Cancel</button>
+                    <button type="submit" class="rounded bg-red-500 px-4 py-2 text-white">Save Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById("change-password-link").addEventListener("click", function (event) {
+            event.preventDefault();
+            var passwordSection = document.getElementById("password-section");
+            if (passwordSection.classList.contains("hidden")) {
+                passwordSection.classList.remove("hidden");
+            } else {
+                passwordSection.classList.add("hidden");
+            }
+        });
+
+        document.getElementById("address-button").addEventListener("click", function () {
+            document.getElementById("personal-info-form").classList.add("hidden");
+            document.getElementById("address-form").classList.remove("hidden");
+        });
+
+        document.getElementById("personal-info-button").addEventListener("click", function () {
+            document.getElementById("address-form").classList.add("hidden");
+            document.getElementById("personal-info-form").classList.remove("hidden");
+        });
+    </script>
+}
