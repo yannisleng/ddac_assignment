@@ -1,33 +1,78 @@
-﻿@{
-    ViewData["Title"] = "PaymentMethod";
+﻿@model PaymentMethodViewModel
+
+@{
+    ViewData["Title"] = "Payment Method";
 }
 
-<h1>Invoice</h1>
 <div class="mx-auto mt-8 max-w-md rounded-lg bg-white p-6 shadow-lg">
     <form asp-controller="Payment" asp-action="ProcessPayment" method="post">
         <div class="mb-4">
-            <img src="~/images/credit_cards.png" alt="Credit Cards" class="mx-auto" />
+            <label class="mb-2 block text-sm font-bold text-gray-700">Shipment ID:</label>
+            <p>@Model.ShipmentId</p>
+            <input type="hidden" name="ShipmentId" value="@Model.ShipmentId" />
         </div>
         <div class="mb-4">
-            <label class="mb-2 block text-sm font-bold text-gray-700" for="card-number">Card number</label>
-            <input name="card-number" type="text" placeholder="1234 5678 9012 3456" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
+            <label class="mb-2 block text-sm font-bold text-gray-700">Shipment Fee:</label>
+            <p>@Model.ShipmentFee</p>
+            <input type="hidden" name="ShipmentFee" value="@Model.ShipmentFee" />
         </div>
         <div class="mb-4">
-            <label class="mb-2 block text-sm font-bold text-gray-700" for="name-on-card">Name on card</label>
-            <input name="name-on-card" type="text" placeholder="Ex. John Website" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
+            <label class="mb-2 block text-sm font-bold text-gray-700">Payment Method:</label>
+            <p>@Model.PaymentMethod</p>
+            <input type="hidden" name="PaymentMethod" value="@Model.PaymentMethod" />
         </div>
-        <div class="mb-4 flex">
-            <div class="mr-2 w-1/2">
-                <label class="mb-2 block text-sm font-bold text-gray-700" for="expiry-date">Expiry date</label>
-                <input name="expiry-date" type="text" placeholder="01/19" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
-            </div>
-            <div class="ml-2 w-1/2">
-                <label class="mb-2 block text-sm font-bold text-gray-700" for="security-code">Security code</label>
-                <input name="security-code" type="password" placeholder="•••" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
-            </div>
+        <div class="mb-4">
+            <label class="mb-2 block text-sm font-bold text-gray-700">Parcel Name:</label>
+            <p>@Model.ParcelName</p>
+            <input type="hidden" name="ParcelName" value="@Model.ParcelName" />
         </div>
+        <div class="mb-4">
+            <label class="mb-2 block text-sm font-bold text-gray-700">Parcel Weight:</label>
+            <p>@Model.ParcelWeight</p>
+            <input type="hidden" name="ParcelWeight" value="@Model.ParcelWeight" />
+        </div>
+
+        @if (Model.PaymentMethod == "Credit Card" || Model.PaymentMethod == "Debit Card")
+        {
+            <div class="mb-4">
+                <label class="mb-2 block text-sm font-bold text-gray-700" for="CardNumber">Card number</label>
+                <input id="CardNumber" name="CardNumber" type="text" placeholder="1234 5678 9012 3456" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
+            </div>
+            <div class="mb-4">
+                <label class="mb-2 block text-sm font-bold text-gray-700" for="NameOnCard">Name on card</label>
+                <input id="NameOnCard" name="NameOnCard" type="text" placeholder="Ex. John Website" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
+            </div>
+            <div class="mb-4 flex">
+                <div class="mr-2 w-1/2">
+                    <label class="mb-2 block text-sm font-bold text-gray-700" for="ExpiryDate">Expiry date</label>
+                    <input id="ExpiryDate" name="ExpiryDate" type="text" placeholder="01/19" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
+                </div>
+                <div class="ml-2 w-1/2">
+                    <label class="mb-2 block text-sm font-bold text-gray-700" for="SecurityCode">Security code</label>
+                    <input id="SecurityCode" name="SecurityCode" type="password" placeholder="•••" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" required />
+                </div>
+            </div>
+        }
+        else if (Model.PaymentMethod == "Online Transfer")
+        {
+            <div class="mb-4">
+                <label class="mb-2 block text-sm font-bold text-gray-700" for="BankName">Recipient Bank Name</label>
+                <input id="BankName" name="BankName" type="text" placeholder="RHB Bank" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+            </div>
+            <div class="mb-4">
+                <label class="mb-2 block text-sm font-bold text-gray-700" for="AccountNumber">Account Number</label>
+                <input id="AccountNumber" name="AccountNumber" type="text" placeholder="1234567890" class="w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none focus:shadow-outline" />
+            </div>
+        }
+        else if (Model.PaymentMethod == "E-wallet")
+        {
+            <div class="mb-4">
+                <img src="~/images/qr_sample.png" alt="sample_QR" class="w-40 h-40" />
+            </div>
+        }
+
         <div class="flex items-center justify-between">
-            <button class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none focus:shadow-outline" type="submit">
+            <button class="bg-ok-boss-3 w-24 cursor-pointer rounded-md px-4 py-2 text-sm hover:bg-ok-boss-5 hover:text-white" type="submit">
                 Next
             </button>
         </div>

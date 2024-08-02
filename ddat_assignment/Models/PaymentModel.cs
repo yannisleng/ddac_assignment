@@ -10,7 +10,7 @@ namespace ddat_assignment.Models
         public int PaymentId { get; set; }
 
         [ForeignKey("ShipmentModel")]
-        public Guid ? ShipmentId { get; set; }
+        public Guid? ShipmentId { get; set; }
 
         public virtual ShipmentModel? Shipment { get; set; }
 
