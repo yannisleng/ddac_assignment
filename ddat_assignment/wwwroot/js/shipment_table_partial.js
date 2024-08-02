@@ -12,12 +12,11 @@ $(document).ready(function () {
 
         if (shipmentStatus === 'Delivered' && hasPod) {
             $.ajax({
-                url: '/Driver/GetProofOfDelivery',
+                url: '/api/files/get-by-key',
                 type: 'GET',
-                data: { shipmentId: shipmentId },
-                dataType: 'json',
+                data: { bucketName: "okbossexpresspodbucket", key: `${shipmentId}.jpg` },
                 success: function (data) {
-                    var img = $('<img>').attr('src', 'data:' + data.contentType + ';base64,' + data.image).addClass('max-w-full h-auto');
+                    var img = $('<img>').attr('src', data.presignedUrl).addClass('max-w-full h-auto');
                     var dateDisplay = $('<p class="text-sm font-light mt-5">').text('Delivered on ' + new Date(data.deliveryDate).toLocaleString());
                     $('#modalBody').empty().append(img).append(dateDisplay);
                     $('#saveChangesButton').hide();
