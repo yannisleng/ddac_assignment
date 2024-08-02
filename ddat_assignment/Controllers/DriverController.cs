@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace ddat_assignment.Controllers
 {
@@ -13,11 +15,13 @@ namespace ddat_assignment.Controllers
 	{
 		private readonly UserManager<ddat_assignmentUser> _userManager;
 		private readonly ddat_assignmentContext _context;
+        private readonly IHttpClientFactory _clientFactory;
 
-		public DriverController(UserManager<ddat_assignmentUser> userManager, ddat_assignmentContext context)
+        public DriverController(UserManager<ddat_assignmentUser> userManager, ddat_assignmentContext context, IHttpClientFactory clientFactory)
 		{
 			_userManager = userManager;
 			_context = context;
+            _clientFactory = clientFactory;
 		}
 
 		public async Task<IActionResult> Index()
@@ -276,20 +280,26 @@ namespace ddat_assignment.Controllers
             if (newStatus == "Delivered")
             {
                 var file = Request.Form.Files.GetFile("proofOfDelivery");
-                if (file != null && file.Length > 0)
+
+                if (file == null || file.Length == 0)
+                    return BadRequest("No file uploaded.");
+
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+
+                var client = _clientFactory.CreateClient();
+                var content = new MultipartFormDataContent();
+                var fileContent = new ByteArrayContent(memoryStream.ToArray());
+                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+                content.Add(fileContent, "file", shipmentId.ToString());
+                content.Add(new StringContent("okbossexpresspodbucket"), "bucketName");
+
+                var response = await client.PostAsync("http://localhost:5000/api/files/upload", content);
+                if (!response.IsSuccessStatusCode)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(memoryStream);
-                        shipment.ProofOfDelivery = memoryStream.ToArray();
-                        shipment.ProofOfDeliveryFileName = file.FileName;
-                        shipment.ProofOfDeliveryContentType = file.ContentType;
-                    }
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, $"Error uploading proof of delivery: {errorContent}");
                 }
-                //else
-                //{
-                //    return BadRequest("Proof of delivery is required for 'Delivered' status.");
-                //}
             }
 
             try
@@ -303,31 +313,6 @@ namespace ddat_assignment.Controllers
             {
                 return StatusCode(500, "An error occurred while updating the database.");
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetProofOfDelivery(string shipmentId)
-        {
-            if (!Guid.TryParse(shipmentId, out Guid parsedShipmentId))
-            {
-                return BadRequest("Invalid shipment ID.");
-            }
-
-            var shipment = await _context.ShipmentModel.FindAsync(parsedShipmentId);
-            if (shipment?.ProofOfDelivery == null)
-            {
-                return NotFound();
-            }
-
-            var response = new
-            {
-                Image = Convert.ToBase64String(shipment.ProofOfDelivery),
-                ContentType = shipment.ProofOfDeliveryContentType,
-                FileName = shipment.ProofOfDeliveryFileName,
-                DeliveryDate = shipment.DeliveryDate 
-            };
-
-            return Json(response);
         }
     }
 }
