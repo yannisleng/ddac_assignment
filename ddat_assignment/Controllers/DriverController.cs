@@ -280,25 +280,21 @@ namespace ddat_assignment.Controllers
             if (newStatus == "Delivered")
             {
                 var file = Request.Form.Files.GetFile("proofOfDelivery");
-
                 if (file == null || file.Length == 0)
                     return BadRequest("No file uploaded.");
 
-                using var memoryStream = new MemoryStream();
-                await file.CopyToAsync(memoryStream);
-
-                var client = _clientFactory.CreateClient();
-                var content = new MultipartFormDataContent();
-                var fileContent = new ByteArrayContent(memoryStream.ToArray());
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
-                content.Add(fileContent, "file", shipmentId.ToString());
-                content.Add(new StringContent("okbossexpresspodbucket"), "bucketName");
-
-                var response = await client.PostAsync("http://localhost:5000/api/files/upload", content);
-                if (!response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    return StatusCode((int)response.StatusCode, $"Error uploading proof of delivery: {errorContent}");
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://4oo79wvu43.execute-api.us-east-1.amazonaws.com/s3uploadpod");
+                    request.Headers.Add("filename", $"{shipmentId}.jpg");
+                    request.Content = new StreamContent(file.OpenReadStream());
+
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        return StatusCode((int)response.StatusCode, $"Error: {errorContent}");
+                    }
                 }
             }
 
