@@ -27,7 +27,7 @@
                         @{
                             foreach (var state in states)
                             {
-                                <option value="@state" selected="@(state == selectedState)">@state</option>
+                                                            <option value="@state" selected="@(state == selectedState)">@state</option>
                             }
                         }
                     </select>
@@ -43,19 +43,19 @@
                     @{
                         foreach (var shipment in Model.Shipments)
                         {
-                            <div class="checkbox-card border shadow p-4 rounded-lg bg-white cursor-pointer">
-                                <div class="flex flex-row w-full items-center gap-x-4">
-                                    <input type="checkbox" name="shipmentIds" value="@shipment.ShipmentId" disabled />
-                                    <div class="flex flex-col gap-y-1 w-full">
-                                        <div>#Parcel ID:</div>
-                                        <div class="text-xs text-ok-boss-7">@shipment.ParcelId</div>
-                                        <div class="flex flex-row justify-between items-end mt-2">
-                                            <div class="text-xs text-[#86909c]">@formatDate(shipment.ShipmentDate)</div>
-                                            <div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-xs">@shipment.ShipmentStatus</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                                        <div class="checkbox-card border shadow p-4 rounded-lg bg-white cursor-pointer">
+                                                            <div class="flex flex-row w-full items-center gap-x-4">
+                                                                <input type="checkbox" name="shipmentIds" value="@shipment.ShipmentId" disabled />
+                                                                <div class="flex flex-col gap-y-1 w-full">
+                                                                    <div>#Parcel ID:</div>
+                                                                    <div class="text-xs text-ok-boss-7">@shipment.ParcelId</div>
+                                                                    <div class="flex flex-row justify-between items-end mt-2">
+                                                                        <div class="text-xs text-[#86909c]">@formatDate(shipment.ShipmentDate)</div>
+                                                                        <div class="p-2 px-3 rounded-lg bg-ok-boss-1 text-ok-boss-7 text-xs">@shipment.ShipmentStatus</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                         }
                     }
                 </div>
@@ -151,13 +151,22 @@ function updateHiddenInput() {
         .join(',');
 }
 
+//Listener added for a 'DOMSubtreeModified' mutation event. Support for this event type has been removed, and this event will no longer be fired.
 const arrangeButton = document.querySelector('#arrange-btn');
-shipmentsContainer.addEventListener('DOMSubtreeModified', () => {
-    if (shipmentsContainer.children.length > 0) {
-        arrangeButton.disabled = false;
-    } else {
-        arrangeButton.disabled = true;
+const config = { attributes: true, childList: true, subtree: true };
+const callback = (mutationList, observer) => {
+    for (const mutation of mutationList) {
+        if (mutation.type === "childList") {
+            if (mutation.addedNodes.length > 0) {
+                arrangeButton.disabled = false;
+            }
+            else if (mutation.removedNodes.length > 0 && shipmentsContainer.children.length === 0) {
+                arrangeButton.disabled = true;
+            }
+        }
     }
-});
+}
+const observer = new MutationObserver(callback);
+observer.observe(shipmentsContainer, config);
 
 </script>
