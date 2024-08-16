@@ -11,22 +11,10 @@ $(document).ready(function () {
         $('#modalTitle').text(shipmentStatus === 'Delivered' ? 'Proof of Delivery' : 'Update Shipment');
 
         if (shipmentStatus === 'Delivered' && hasPod) {
-            $.ajax({
-                url: '/Driver/GetProofOfDelivery',
-                type: 'GET',
-                data: { shipmentId: shipmentId },
-                dataType: 'json',
-                success: function (data) {
-                    var img = $('<img>').attr('src', 'data:' + data.contentType + ';base64,' + data.image).addClass('max-w-full h-auto');
-                    var dateDisplay = $('<p class="text-sm font-light mt-5">').text('Delivered on ' + new Date(data.deliveryDate).toLocaleString());
-                    $('#modalBody').empty().append(img).append(dateDisplay);
-                    $('#saveChangesButton').hide();
-                },
-                error: function () {
-                    $('#modalBody').html('<p>No proof of image provided.</p>');
-                    $('#saveChangesButton').hide();
-                }
-            });
+            var imageUrl = `https://vjkdf9ljle.execute-api.us-east-1.amazonaws.com/s3getpod?filename=${shipmentId}.jpg`;
+            var img = $('<img>').attr('src', imageUrl).addClass('max-w-full h-auto');
+            $('#modalBody').empty().append(img);
+            $('#saveChangesButton').hide();
         } else {
             $('#modalBody').html(`
                     <form id="shipmentUpdateForm" enctype="multipart/form-data">

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace ddat_assignment.Controllers
 {
@@ -13,15 +15,18 @@ namespace ddat_assignment.Controllers
 	{
 		private readonly UserManager<ddat_assignmentUser> _userManager;
 		private readonly ddat_assignmentContext _context;
+        private readonly IHttpClientFactory _clientFactory;
 
-		public DriverController(UserManager<ddat_assignmentUser> userManager, ddat_assignmentContext context)
+        public DriverController(UserManager<ddat_assignmentUser> userManager, ddat_assignmentContext context, IHttpClientFactory clientFactory)
 		{
 			_userManager = userManager;
 			_context = context;
+            _clientFactory = clientFactory;
 		}
 
 		public async Task<IActionResult> Index()
 		{
+            // get this week's shipments
 			var shipmentSlotModels = await GetShipmentSlotModels(GetWeekOfFirstDate(), GetWeekOfLastDate());
 			return View(shipmentSlotModels);
 		}
@@ -30,24 +35,29 @@ namespace ddat_assignment.Controllers
 		{
             var user = await _userManager.GetUserAsync(User);
 
+            // get driver's shipment slots
             var shipmentSlots = await _context.ShipmentSlotModel
 			 .Where(ss => ss.Driver!.User.Id == user!.Id)
 			 .ToListAsync();
 
+            // get all shipment ids
             var shipmentIds = shipmentSlots.SelectMany(ss => ss.ShipmentIds!).ToList();
 
+            // get all shipments by ids
             var shipments = await _context.ShipmentModel
                 .Include(s => s.Sender)
                 .Where(s => shipmentIds.Contains(s.ShipmentId))
 				.OrderByDescending(s => s.ShipmentDate)
                 .ToListAsync();
 
+            // get all transitions by ids
             var transitions = await _context.TransitionModel
 				.Where(t => shipmentIds.Contains(t.ShipmentId))
 				.GroupBy(t => t.ShipmentId)
 				.Select(g => g.OrderByDescending(t => t.Timestamp).First())
 				.ToListAsync();
 
+            // store the retrieve shipments, shipment slots, and transitions into the model
             ManageShipmentModel manageShipmentModels = new()
             {
                 Shipments = shipments ?? [],
@@ -55,9 +65,11 @@ namespace ddat_assignment.Controllers
                 Transitions = transitions ?? new List<TransitionModel>()
             };
 
+            // pass the model into view
             return View(manageShipmentModels);
         }
 
+        // get shipments within a range of date to schedule partial view
 		[HttpGet]
 		public async Task<IActionResult> LoadShipmentSchedule(DateTime startDate, DateTime endDate)
 		{
@@ -66,6 +78,7 @@ namespace ddat_assignment.Controllers
 			return PartialView("_ShipmentSchedulePartial", shipmentSlotModels);
 		}
 
+        // get driver's shipments within a date range
 		private async Task<List<ShipmentSlotModel>> GetShipmentSlotModels(DateTime startDate, DateTime endDate)
 		{
 			var user = await _userManager.GetUserAsync(User);
@@ -91,6 +104,7 @@ namespace ddat_assignment.Controllers
             return shipmentSlotModels;
 		}
 
+        // get the first day's date of the week
         private DateTime GetWeekOfFirstDate()
         {
             DateTime today = DateTime.Today;
@@ -105,6 +119,7 @@ namespace ddat_assignment.Controllers
             return today.AddDays(-daysUntilStartOfWeek);
         }
 
+        // get the last day's date of the week
         private DateTime GetWeekOfLastDate()
         {
             DateTime today = DateTime.Today;
@@ -123,22 +138,29 @@ namespace ddat_assignment.Controllers
         [HttpGet]
         public async Task<IActionResult> LoadShipmentData(string searchTerm = "")
         {
+            // get user details
             var user = await _userManager.GetUserAsync(User);
 
+            // get driver's shipment slots
             var shipmentSlotsQuery = _context.ShipmentSlotModel
                 .Where(ss => ss.Driver!.User.Id == user!.Id);
 
+            // create empty shipment slot list
             var shipmentSlotsQueryResult = new List<ShipmentSlotModel>();
 
+            // if search string is not empty
             if (!string.IsNullOrEmpty(searchTerm))
             {
+                // filter shipment slots by shipment slot id or shipment date
                 shipmentSlotsQueryResult = await shipmentSlotsQuery.Where(ss =>
                     EF.Functions.Like(ss.ShipmentSlotId.ToString(), $"%{searchTerm}%") ||
                     EF.Functions.Like(ss.ShipmentDate.ToString(), $"%{searchTerm}%")
                 ).ToListAsync();
 
+                // if found
                 if (shipmentSlotsQueryResult.Count > 0)
                 {
+                    // store the query into shipment slot query
                     shipmentSlotsQuery = shipmentSlotsQuery.Where(ss =>
                         EF.Functions.Like(ss.ShipmentSlotId.ToString(), $"%{searchTerm}%") ||
                         EF.Functions.Like(ss.ShipmentDate.ToString(), $"%{searchTerm}%")
@@ -146,21 +168,29 @@ namespace ddat_assignment.Controllers
                 }
             }
 
+            // get driver's shipment ids
             var shipmentIdsQuery = shipmentSlotsQuery
                 .SelectMany(ss => ss.ShipmentIds!);
 
+            // get transitions by shipment ids
             var transitionsQuery = _context.TransitionModel
                 .Where(t => shipmentIdsQuery.Contains(t.ShipmentId));
 
+            // store the query into shipment query
             var shipmentsQuery = _context.ShipmentModel
                 .Include(s => s.Sender)
                 .Where(s => shipmentIdsQuery.Contains(s.ShipmentId));
 
+            // create empty shipment list
             var shipmentQueryResult = new List<ShipmentModel>();
+
+            // create empty transition list
             var transitionQueryResult = new List<TransitionModel>();
 
+            // if search string is not empty and shipment slot list is empty
             if (!string.IsNullOrEmpty(searchTerm) && shipmentSlotsQueryResult.Count == 0)
             {
+                // filter shipment by shipment id, receiver name, delivery address, receiver phone number, or shipment status
                 shipmentQueryResult = await shipmentsQuery.Where(s =>
                     EF.Functions.Like(s.ShipmentId.ToString(), $"%{searchTerm}%") ||
                     EF.Functions.Like(s.ReceiverName, $"%{searchTerm}%") ||
@@ -169,6 +199,7 @@ namespace ddat_assignment.Controllers
                     EF.Functions.Like(s.ShipmentStatus, $"%{searchTerm}%")
                 ).ToListAsync();
 
+                // filter transition by address
                 transitionQueryResult = await transitionsQuery
                     .Where(t => EF.Functions.Like(t.Address, $"%{searchTerm}%")
                         && t.Timestamp == transitionsQuery
@@ -176,14 +207,19 @@ namespace ddat_assignment.Controllers
                         .Max(t2 => t2.Timestamp)
                 ).ToListAsync();
 
+                // merge shipments and transitions
                 var matchingShipmentIds = shipmentQueryResult.Select(s => s.ShipmentId)
                         .Union(transitionQueryResult.Select(t => t.ShipmentId))
                         .Distinct();
 
+                // store the query into shipment query
                 shipmentsQuery = shipmentsQuery.Where(s => matchingShipmentIds.Contains(s.ShipmentId));
+
+                // store the query into transition query
                 transitionsQuery = transitionsQuery.Where(t => matchingShipmentIds.Contains(t.ShipmentId));
             }
 
+            // final shipment slot, shipment, and transition query
             var shipmentSlots = await shipmentSlotsQuery.ToListAsync();
             var shipments = await shipmentsQuery.OrderByDescending(s => s.ShipmentDate).ToListAsync();
             var transitions = await transitionsQuery
@@ -191,6 +227,7 @@ namespace ddat_assignment.Controllers
                 .Select(g => g.OrderByDescending(t => t.Timestamp).First())
                 .ToListAsync();
 
+            // store the query result into manage shipment model
             ManageShipmentModel manageShipmentModels = new ManageShipmentModel
             {
                 Shipments = shipments ?? new List<ShipmentModel>(),
@@ -198,6 +235,7 @@ namespace ddat_assignment.Controllers
                 Transitions = transitions ?? new List<TransitionModel>()
             };
 
+            // pass the manage shipment model into partial view
             return PartialView("_ShipmentTablePartial", manageShipmentModels);
         }
 
@@ -242,20 +280,22 @@ namespace ddat_assignment.Controllers
             if (newStatus == "Delivered")
             {
                 var file = Request.Form.Files.GetFile("proofOfDelivery");
-                if (file != null && file.Length > 0)
+                if (file == null || file.Length == 0)
+                    return BadRequest("No file uploaded.");
+
+                using (var client = new HttpClient())
                 {
-                    using (var memoryStream = new MemoryStream())
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://4oo79wvu43.execute-api.us-east-1.amazonaws.com/s3uploadpod");
+                    request.Headers.Add("filename", $"{shipmentId}.jpg");
+                    request.Content = new StreamContent(file.OpenReadStream());
+
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
                     {
-                        await file.CopyToAsync(memoryStream);
-                        shipment.ProofOfDelivery = memoryStream.ToArray();
-                        shipment.ProofOfDeliveryFileName = file.FileName;
-                        shipment.ProofOfDeliveryContentType = file.ContentType;
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        return StatusCode((int)response.StatusCode, $"Error: {errorContent}");
                     }
                 }
-                //else
-                //{
-                //    return BadRequest("Proof of delivery is required for 'Delivered' status.");
-                //}
             }
 
             try
@@ -269,31 +309,6 @@ namespace ddat_assignment.Controllers
             {
                 return StatusCode(500, "An error occurred while updating the database.");
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetProofOfDelivery(string shipmentId)
-        {
-            if (!Guid.TryParse(shipmentId, out Guid parsedShipmentId))
-            {
-                return BadRequest("Invalid shipment ID.");
-            }
-
-            var shipment = await _context.ShipmentModel.FindAsync(parsedShipmentId);
-            if (shipment?.ProofOfDelivery == null)
-            {
-                return NotFound();
-            }
-
-            var response = new
-            {
-                Image = Convert.ToBase64String(shipment.ProofOfDelivery),
-                ContentType = shipment.ProofOfDeliveryContentType,
-                FileName = shipment.ProofOfDeliveryFileName,
-                DeliveryDate = shipment.DeliveryDate 
-            };
-
-            return Json(response);
         }
     }
 }

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ddat_assignment.Data;
 using ddat_assignment.Areas.Identity.Data;
 using Microsoft.AspNetCore.Http.Features;
+using Amazon.S3;
+using Microsoft.OpenApi.Models;
 
 public class Program
 {
@@ -24,10 +26,30 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
 
+        // Add Swagger/OpenAPI services
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+        });
+
+        // Add AWS & S3
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+        builder.Services.AddAWSService<IAmazonS3>();
+
+        builder.Services.AddHttpClient();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+        }
+        else
         {
             app.UseExceptionHandler("/Home/Error");
         }
